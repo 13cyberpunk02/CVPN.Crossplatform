@@ -119,7 +119,10 @@ jobs:
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
           ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
         run: |
+          # -p:Version - версия сборок: по ней приложение сравнивает себя с релизом.
+          # Без неё было бы 1.0.0, и проверка обновлений всегда видела бы новую версию
           dotnet publish CVPN.Android/CVPN.Android.csproj -c Release \
+            -p:Version=${{ needs.version.outputs.value }} \
             -p:ApplicationDisplayVersion=${{ needs.version.outputs.value }} \
             -p:ApplicationVersion=${{ github.run_number }} \
             ${{ steps.sign.outputs.args }} -o android-out

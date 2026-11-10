@@ -15,8 +15,8 @@ public sealed record ReleaseInfo(string Version, string Url, string Notes);
 /// </summary>
 public static class UpdateChecker
 {
-    /// <summary>Замените на свой репозиторий.</summary>
-    private const string Repository = "13CyberPunk02/CVPN";
+    /// <summary>Репозиторий кроссплатформенной версии. Прежний WPF-клиент живёт в 13CyberPunk02/CVPN, его релизы сюда не относятся.</summary>
+    private const string Repository = "13cyberpunk02/CVPN.Crossplatform";
 
     private static readonly HttpClient Http = new() { Timeout = TimeSpan.FromSeconds(15) };
 

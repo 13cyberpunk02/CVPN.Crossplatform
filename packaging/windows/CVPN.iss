@@ -1,6 +1,6 @@
 #define AppName "CVPN"
 #define AppPublisher "CVPN"
-#define AppUrl "https://github.com/13CyberPunk02/CVPN"
+#define AppUrl "https://github.com/13cyberpunk02/CVPN.Crossplatform"
 #define AppExe "CVPN.exe"
 #ifndef AppVersion
   #define AppVersion "1.0.0"
