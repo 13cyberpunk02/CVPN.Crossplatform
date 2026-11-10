@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+    <!-- Служба туннеля: служба Windows и юнит systemd на Linux, один код -->
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <OutputType>Exe</OutputType>
+        <RootNamespace>CVPN.Service</RootNamespace>
+        <AssemblyName>CVPN.Service</AssemblyName>
+        <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(SelfContained)' == 'true'">
+        <PublishTrimmed>true</PublishTrimmed>
+        <TrimMode>partial</TrimMode>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Hosting" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\CVPN.Shared\CVPN.Shared.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="CVPN.Tests" />
+    </ItemGroup>
+</Project>

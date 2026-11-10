@@ -17,7 +17,7 @@ public static class ServiceClient
         try
         {
             using var pipe = new NamedPipeClientStream(
-                ".", IpcContract.PipeName, PipeDirection.InOut, PipeOptions.Asynchronous);
+                ".", IpcContract.PipeAddress, PipeDirection.InOut, PipeOptions.Asynchronous);
 
             using var cts = CancellationTokenSource.CreateLinkedTokenSource(ct);
             cts.CancelAfter(timeoutMs);

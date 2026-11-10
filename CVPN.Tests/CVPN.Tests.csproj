@@ -13,11 +13,9 @@
     </ItemGroup>
     <ItemGroup>
         <Using Include="Xunit" />
-        <!-- Тесты на ещё не перенесённый код (служба, адаптеры Windows) -->
-        <Compile Remove="Pending/**" />
-        <None Include="Pending/**" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\CVPN.Core\CVPN.Core.csproj" />
+        <ProjectReference Include="..\CVPN.Service\CVPN.Service.csproj" />
     </ItemGroup>
 </Project>

@@ -238,6 +238,56 @@ public class ConfigSanitizerTests : IDisposable
         Assert.Throws<InvalidDataException>(() => ConfigSanitizer.Sanitize("[1,2,3]", _dataDir));
     }
 
+    /// <summary>Веб-панель Clash отдаёт по HTTP любой каталог - а служба читает всё.</summary>
+    [Fact]
+    public void Панель_Clash_вырезается()
+    {
+        const string json = """
+                            { "experimental": { "clash_api": {
+                                "external_controller": "127.0.0.1:9090",
+                                "external_ui": "/etc",
+                                "external_ui_download_url": "https://evil.example/ui.zip",
+                                "external_ui_download_detour": "direct" } } }
+                            """;
+
+        var api = Sanitize(json).GetProperty("experimental").GetProperty("clash_api");
+
+        Assert.False(api.TryGetProperty("external_ui", out _));
+        Assert.False(api.TryGetProperty("external_ui_download_url", out _));
+        Assert.False(api.TryGetProperty("external_ui_download_detour", out _));
+        Assert.Equal("127.0.0.1:9090", api.Str("external_controller"));
+    }
+
+    /// <summary>
+    /// certificate_path, key_path и прочие *_path читают файл с правами службы:
+    /// через сертификат входящего TLS можно было бы выдать наружу чужой файл.
+    /// </summary>
+    [Fact]
+    public void Пути_к_файлам_в_tls_вырезаются_на_любой_глубине()
+    {
+        const string json = """
+                            {
+                              "inbounds": [{ "type": "mixed", "tag": "in",
+                                "tls": { "enabled": true, "certificate_path": "/etc/shadow", "key_path": "/root/.ssh/id_rsa",
+                                         "ech": { "enabled": true, "key_path": "/etc/ssl/private/x" } } }],
+                              "outbounds": [{ "type": "vless", "tag": "proxy", "server": "de.example.net",
+                                "tls": { "enabled": true, "server_name": "de.example.net", "certificate_path": "C:\\secret.pem" } }]
+                            }
+                            """;
+
+        var result = Sanitize(json);
+        var inTls = result.GetProperty("inbounds")[0].GetProperty("tls");
+        var outTls = result.GetProperty("outbounds")[0].GetProperty("tls");
+
+        Assert.False(inTls.TryGetProperty("certificate_path", out _));
+        Assert.False(inTls.TryGetProperty("key_path", out _));
+        Assert.False(inTls.GetProperty("ech").TryGetProperty("key_path", out _));
+        Assert.False(outTls.TryGetProperty("certificate_path", out _));
+
+        // Остальное в TLS - на месте
+        Assert.Equal("de.example.net", outTls.Str("server_name"));
+    }
+
     /// <summary>Остальные секции конфига трогать нельзя - иначе туннель не поднимется.</summary>
     [Fact]
     public void Выходы_и_маршруты_остаются_нетронутыми()

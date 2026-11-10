@@ -1062,4 +1062,16 @@ Restart CVPN now?</value>
   <data name="Settings_RecreateTask" xml:space="preserve">
     <value>Recreate task</value>
   </data>
+  <data name="Linux_ServiceRelogin" xml:space="preserve">
+    <value>the service is installed, but your account joins the cvpn group only after you log out and back in</value>
+  </data>
+  <data name="Linux_NoPkexec" xml:space="preserve">
+    <value>pkexec not found: install polkit or run the command from the terminal with sudo</value>
+  </data>
+  <data name="Linux_KillSwitchByeDpi" xml:space="preserve">
+    <value>on Linux the kill switch lets through only the core traffic: sites routed through ByeDPI will not open while it is on</value>
+  </data>
+  <data name="Linux_AuthCancelled" xml:space="preserve">
+    <value>authorisation cancelled</value>
+  </data>
 </root>

@@ -63,7 +63,10 @@ internal sealed class Program
 
         if (OperatingSystem.IsLinux())
         {
-            // Служба systemd и kill switch на nftables - этап 3
+            static string CorePath() => App.Shell?.Settings.CorePath ?? "";
+
+            var service = new LinuxServiceManager(CorePath);
+
             return new PlatformServices
             {
                 Ui = common.Ui,
@@ -72,10 +75,12 @@ internal sealed class Program
                 Clipboard = common.Clipboard,
                 Launcher = launcher,
                 Lifetime = lifetime,
-                Tunnel = new DesktopTunnelProvider(Unsupported.Instance),
-                TunPrivileges = new LinuxTunPrivileges(() => App.Shell?.Settings.CorePath ?? ""),
+                Tunnel = new DesktopTunnelProvider(service),
+                TunPrivileges = new LinuxTunPrivileges(CorePath),
                 SystemProxy = new GnomeSystemProxy(),
-                AutoStart = new LinuxAutoStart()
+                KillSwitch = new LinuxKillSwitch(Log),
+                AutoStart = new LinuxAutoStart(),
+                Service = service
             };
         }
 

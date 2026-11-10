@@ -14,6 +14,21 @@ public static class IpcContract
 
     public const string ServiceName = "CVPNTunnel";
 
+    /// <summary>
+    /// Сокет службы на Linux. Каталог /run/cvpn создаёт systemd (RuntimeDirectory),
+    /// сам сокет доступен только группе cvpn - в неё установщик добавляет пользователя.
+    /// </summary>
+    public const string UnixSocketPath = "/run/cvpn/tunnel.sock";
+
+    /// <summary>Группа, которой разрешено управлять службой на Linux.</summary>
+    public const string UnixGroup = "cvpn";
+
+    /// <summary>
+    /// Адрес канала для NamedPipe*Stream: на Windows - имя канала, на Unix -
+    /// полный путь к сокету (.NET берёт его как есть, без /tmp/CoreFxPipe_).
+    /// </summary>
+    public static string PipeAddress => OperatingSystem.IsWindows() ? PipeName : UnixSocketPath;
+
     public static readonly JsonSerializerOptions Json = new()
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,

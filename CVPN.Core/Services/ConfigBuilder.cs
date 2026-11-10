@@ -474,7 +474,19 @@ public static class ConfigBuilder
 
         if (byeDpi) route["find_process"] = true;
 
+        ApplyKillSwitchMark(route, settings, OperatingSystem.IsLinux());
+
         return route;
+    }
+
+    /// <summary>
+    /// Kill switch на Linux пропускает только помеченный трафик ядра (см. NftKillSwitch).
+    /// На Windows правило брандмауэра стоит на программу, метка там не нужна.
+    /// Платформа передаётся параметром - чтобы проверять это тестом на любой ОС.
+    /// </summary>
+    internal static void ApplyKillSwitchMark(JsonObject route, AppSettings settings, bool linux)
+    {
+        if (linux && settings.KillSwitch) route["default_mark"] = NftKillSwitch.Mark;
     }
 
     private static JsonObject? ToRouteRule(

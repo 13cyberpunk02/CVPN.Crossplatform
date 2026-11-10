@@ -1062,4 +1062,16 @@
   <data name="Settings_RecreateTask" xml:space="preserve">
     <value>Пересоздать задачу</value>
   </data>
+  <data name="Linux_ServiceRelogin" xml:space="preserve">
+    <value>служба установлена, но доступ к ней появится после выхода из системы и повторного входа (группа cvpn)</value>
+  </data>
+  <data name="Linux_NoPkexec" xml:space="preserve">
+    <value>pkexec не найден: установите polkit или выполните команду в терминале через sudo</value>
+  </data>
+  <data name="Linux_KillSwitchByeDpi" xml:space="preserve">
+    <value>на Linux kill switch пропускает только трафик ядра: сайты через ByeDPI при нём открываться не будут</value>
+  </data>
+  <data name="Linux_AuthCancelled" xml:space="preserve">
+    <value>авторизация отменена</value>
+  </data>
 </root>

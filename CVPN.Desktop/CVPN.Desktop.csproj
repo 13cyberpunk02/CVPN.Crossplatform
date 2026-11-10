@@ -16,5 +16,21 @@
   <ItemGroup>
     <ProjectReference Include="..\CVPN\CVPN.csproj" />
     <ProjectReference Include="..\CVPN.Core\CVPN.Core.csproj" />
+    <!-- Служба собирается вместе с приложением, но в него не подключается: кладётся в service/ -->
+    <ProjectReference Include="..\CVPN.Service\CVPN.Service.csproj" ReferenceOutputAssembly="false" Private="false" />
   </ItemGroup>
+
+  <!-- Linux: юнит systemd и скрипт установки службы лежат рядом с приложением -->
+  <ItemGroup>
+    <None Include="Linux\**" CopyToOutputDirectory="PreserveNewest" LinkBase="linux" />
+  </ItemGroup>
+
+  <Target Name="CopyServiceOutput" AfterTargets="Build">
+    <ItemGroup>
+      <ServiceFiles Include="..\CVPN.Service\bin\$(Configuration)\$(TargetFramework)\**\*"
+                    Exclude="..\CVPN.Service\bin\$(Configuration)\$(TargetFramework)\**\*.pdb" />
+    </ItemGroup>
+    <Copy SourceFiles="@(ServiceFiles)" DestinationFolder="$(OutDir)service\%(RecursiveDir)"
+          SkipUnchangedFiles="true" Condition="'@(ServiceFiles)' != ''" />
+  </Target>
 </Project>
