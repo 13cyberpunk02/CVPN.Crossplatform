@@ -12,6 +12,11 @@ internal sealed class Program
     [STAThread]
     public static void Main(string[] args)
     {
+        // Отдельный каталог данных: для проверок без риска для настоящих профилей
+        // и для портативного запуска с флешки
+        var dataDir = Environment.GetEnvironmentVariable("CVPN_DATA_DIR");
+        if (!string.IsNullOrWhiteSpace(dataDir)) Services.AppPaths.Configure(dataDir: dataDir);
+
         App.ConfigurePlatform = Configure;
 
         BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
@@ -27,7 +32,7 @@ internal sealed class Program
     /// <summary>Сервисы десктопа: общие из UI-проекта плюс свои для Windows или Linux.</summary>
     private static PlatformServices Configure(CommonServices common)
     {
-        var dialogs = new BasicDialogService(common.TopLevel, common.Clipboard);
+        var dialogs = common.Dialogs;
         var launcher = new AvaloniaLauncher(common.TopLevel, canOpenFiles: true);
         var lifetime = new DesktopLifetime();
 

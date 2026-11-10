@@ -1,0 +1,88 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:CVPN.ViewModels"
+             xmlns:models="using:CVPN.Models"
+             xmlns:loc="using:CVPN.Localization"
+             x:Class="CVPN.Views.ConnectionsView"
+             x:DataType="vm:ConnectionsViewModel"
+             x:Name="Root">
+
+    <Grid Classes="page" RowDefinitions="Auto,*">
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+            <StackPanel>
+                <TextBlock Classes="title" Text="{loc:T Nav_Connections}" />
+                <TextBlock Classes="secondary" Text="{loc:T Connections_Subtitle}" Margin="0,4,0,0" TextWrapping="Wrap" />
+                <TextBlock Classes="status" Text="{Binding Status}" Margin="0,6,0,0" />
+            </StackPanel>
+            <TextBlock Grid.Column="1" Classes="mono" FontSize="{StaticResource Size.Caption}" Margin="10,4,0,0">
+                <Run Text="{Binding Connections.Count, Mode=OneWay}" />
+                <Run Text="{loc:T Common_Active}" />
+            </TextBlock>
+        </Grid>
+
+        <!-- Пустой список при отключённом туннеле - не ошибка, а нормальное состояние -->
+        <TextBlock Grid.Row="1" Classes="secondary" Text="{loc:T Connections_Empty}"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                   TextWrapping="Wrap" MaxWidth="320" TextAlignment="Center"
+                   IsVisible="{Binding Connections.Count, Converter={StaticResource Eq}, ConverterParameter=0}" />
+
+        <ListBox Grid.Row="1" Classes="plain tight" Margin="0,16,0,0" ItemsSource="{Binding Connections}">
+            <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="models:ConnectionInfo">
+                    <Border Background="{StaticResource Surface}" CornerRadius="{StaticResource Radius}" Padding="14,10">
+                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                            <StackPanel Grid.Column="0">
+                                <StackPanel Orientation="Horizontal" Spacing="9">
+                                    <!-- Цвет метки выхода - главное, что читается взглядом -->
+                                    <Border Classes="tag" Classes.direct="{Binding IsDirect}">
+                                        <TextBlock FontFamily="{StaticResource Font.Mono}" Text="{Binding Outbound}" />
+                                    </Border>
+                                    <TextBlock Classes="mono" Foreground="{StaticResource Text}" Text="{Binding Endpoint}"
+                                               VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                                </StackPanel>
+                                <WrapPanel Margin="0,5,0,0">
+                                    <TextBlock Classes="caption" Text="{Binding Rule}" TextTrimming="CharacterEllipsis"
+                                               MaxWidth="260" Margin="0,0,10,0" />
+                                    <TextBlock Classes="caption" Foreground="{StaticResource TextFaint}"
+                                               Text="{Binding Process}" Margin="0,0,10,0" />
+                                    <TextBlock Classes="caption" Foreground="{StaticResource TextFaint}"
+                                               Text="{Binding Network}" />
+                                </WrapPanel>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="12,0,0,0">
+                                <TextBlock Classes="mono" FontSize="{StaticResource Size.Caption}"
+                                           Text="{Binding TrafficLabel}" HorizontalAlignment="Right" />
+                                <TextBlock Classes="caption" Foreground="{StaticResource TextFaint}"
+                                           Text="{Binding DurationLabel}" HorizontalAlignment="Right" Margin="0,3,0,0" />
+                            </StackPanel>
+
+                            <!-- Предлагаем противоположное тому, что происходит сейчас:
+                                 для прокси - «напрямую», для прямого - «через прокси» -->
+                            <WrapPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="0,6,0,0">
+                                <Button Classes="ghost small" Content="{loc:T Connections_MakeDirect}"
+                                        ToolTip.Tip="{loc:T Connections_MakeDirectHint}"
+                                        IsVisible="{Binding !IsDirect}"
+                                        Command="{Binding #Root.((vm:ConnectionsViewModel)DataContext).RuleDirect}"
+                                        CommandParameter="{Binding}" />
+                                <Button Classes="ghost small" Content="{loc:T Connections_MakeProxy}"
+                                        ToolTip.Tip="{loc:T Connections_MakeProxyHint}"
+                                        IsVisible="{Binding IsDirect}"
+                                        Command="{Binding #Root.((vm:ConnectionsViewModel)DataContext).RuleProxy}"
+                                        CommandParameter="{Binding}" />
+                                <Button Classes="ghost small" Content="{loc:T Connections_MakeBlock}"
+                                        ToolTip.Tip="{loc:T Connections_MakeBlockHint}"
+                                        Command="{Binding #Root.((vm:ConnectionsViewModel)DataContext).RuleBlock}"
+                                        CommandParameter="{Binding}" />
+                                <Button Classes="ghost small" Content="✕"
+                                        ToolTip.Tip="{loc:T Connections_CloseHint}"
+                                        Command="{Binding #Root.((vm:ConnectionsViewModel)DataContext).CloseConnection}"
+                                        CommandParameter="{Binding}" />
+                            </WrapPanel>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</UserControl>

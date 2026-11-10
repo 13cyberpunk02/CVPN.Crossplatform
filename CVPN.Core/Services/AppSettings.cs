@@ -126,7 +126,8 @@ public sealed class AppSettings : ObservableObject
     public string Language
     {
         get;
-        set => Set(ref field, value);
+        // null приходит от выпадающего списка, пока он не нашёл пункт: это не смена языка
+        set => Set(ref field, value ?? string.Empty);
     } = string.Empty;
 
     /// <summary>Проверять новую версию на GitHub при запуске.</summary>

@@ -1,0 +1,161 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--
+        Палитра из WPF-клиента. Литеральных цветов вне этого файла нет.
+        Ниже - переопределение ресурсов Fluent: так стандартные контролы
+        (кнопки, поля, списки) сразу выглядят в нашей теме и сохраняют
+        поведение - фокус, клавиатуру, касания на телефоне.
+    -->
+
+    <!-- Поверхности -->
+    <Color x:Key="Clr.Bg">#FF0B0E13</Color>
+    <Color x:Key="Clr.Surface">#FF12161E</Color>
+    <Color x:Key="Clr.SurfaceRaised">#FF171C26</Color>
+    <Color x:Key="Clr.SurfaceHover">#FF1D2330</Color>
+    <Color x:Key="Clr.Console">#FF090C11</Color>
+
+    <!-- Линии -->
+    <Color x:Key="Clr.Line">#FF1B212C</Color>
+    <Color x:Key="Clr.LineStrong">#FF2A3242</Color>
+    <Color x:Key="Clr.LineHover">#FF39445A</Color>
+
+    <!-- Текст -->
+    <Color x:Key="Clr.Text">#FFE7EBF2</Color>
+    <Color x:Key="Clr.TextSecondary">#FFB9C1D1</Color>
+    <Color x:Key="Clr.TextMuted">#FF79839A</Color>
+    <Color x:Key="Clr.TextFaint">#FF5D6679</Color>
+    <Color x:Key="Clr.OnAccent">#FF0B0E13</Color>
+
+    <!-- Роли -->
+    <Color x:Key="Clr.Accent">#FF7A5CFF</Color>
+    <Color x:Key="Clr.AccentHover">#FF8E75FF</Color>
+    <Color x:Key="Clr.AccentPress">#FF6449E0</Color>
+    <Color x:Key="Clr.Connected">#FF34D399</Color>
+    <Color x:Key="Clr.Warning">#FFF5B342</Color>
+    <Color x:Key="Clr.Danger">#FFFF5C5C</Color>
+    <Color x:Key="Clr.DangerLine">#FF3A2530</Color>
+    <Color x:Key="Clr.Scrim">#B3000000</Color>
+
+    <SolidColorBrush x:Key="Bg" Color="{StaticResource Clr.Bg}" />
+    <SolidColorBrush x:Key="Surface" Color="{StaticResource Clr.Surface}" />
+    <SolidColorBrush x:Key="SurfaceRaised" Color="{StaticResource Clr.SurfaceRaised}" />
+    <SolidColorBrush x:Key="SurfaceHover" Color="{StaticResource Clr.SurfaceHover}" />
+    <SolidColorBrush x:Key="Console" Color="{StaticResource Clr.Console}" />
+
+    <SolidColorBrush x:Key="Line" Color="{StaticResource Clr.Line}" />
+    <SolidColorBrush x:Key="LineStrong" Color="{StaticResource Clr.LineStrong}" />
+    <SolidColorBrush x:Key="LineHover" Color="{StaticResource Clr.LineHover}" />
+
+    <SolidColorBrush x:Key="Text" Color="{StaticResource Clr.Text}" />
+    <SolidColorBrush x:Key="TextSecondary" Color="{StaticResource Clr.TextSecondary}" />
+    <SolidColorBrush x:Key="TextMuted" Color="{StaticResource Clr.TextMuted}" />
+    <SolidColorBrush x:Key="TextFaint" Color="{StaticResource Clr.TextFaint}" />
+    <SolidColorBrush x:Key="OnAccent" Color="{StaticResource Clr.OnAccent}" />
+
+    <SolidColorBrush x:Key="Accent" Color="{StaticResource Clr.Accent}" />
+    <SolidColorBrush x:Key="AccentHover" Color="{StaticResource Clr.AccentHover}" />
+    <SolidColorBrush x:Key="AccentPress" Color="{StaticResource Clr.AccentPress}" />
+    <SolidColorBrush x:Key="Connected" Color="{StaticResource Clr.Connected}" />
+    <SolidColorBrush x:Key="Warning" Color="{StaticResource Clr.Warning}" />
+    <SolidColorBrush x:Key="Danger" Color="{StaticResource Clr.Danger}" />
+    <SolidColorBrush x:Key="DangerLine" Color="{StaticResource Clr.DangerLine}" />
+    <SolidColorBrush x:Key="Scrim" Color="{StaticResource Clr.Scrim}" />
+
+    <!-- Тонкие подложки под статусы -->
+    <SolidColorBrush x:Key="Tint.Accent" Color="{StaticResource Clr.Accent}" Opacity="0.14" />
+    <SolidColorBrush x:Key="Tint.Connected" Color="{StaticResource Clr.Connected}" Opacity="0.14" />
+    <SolidColorBrush x:Key="Tint.Danger" Color="{StaticResource Clr.Danger}" Opacity="0.14" />
+    <SolidColorBrush x:Key="Tint.Warning" Color="{StaticResource Clr.Warning}" Opacity="0.14" />
+
+    <!--
+        Типографика. Санс - то, чем управляет человек; моно - всё машинное:
+        адреса, порты, скорости, UUID, логи. Inter поставляется с приложением,
+        моноширинный берём системный: на каждой ОС свой.
+    -->
+    <FontFamily x:Key="Font.Mono">Cascadia Mono, Consolas, DejaVu Sans Mono, Liberation Mono, Roboto Mono, monospace</FontFamily>
+
+    <x:Double x:Key="Size.Caption">11</x:Double>
+    <x:Double x:Key="Size.Small">12</x:Double>
+    <x:Double x:Key="Size.Body">13</x:Double>
+    <x:Double x:Key="Size.Heading">16</x:Double>
+    <x:Double x:Key="Size.Title">21</x:Double>
+
+    <CornerRadius x:Key="Radius">8</CornerRadius>
+    <CornerRadius x:Key="RadiusCard">12</CornerRadius>
+
+    <!-- ===================== Fluent ===================== -->
+    <Color x:Key="SystemAccentColor">#FF7A5CFF</Color>
+    <Color x:Key="SystemAccentColorLight1">#FF8E75FF</Color>
+    <Color x:Key="SystemAccentColorLight2">#FFA48FFF</Color>
+    <Color x:Key="SystemAccentColorLight3">#FFBBAAFF</Color>
+    <Color x:Key="SystemAccentColorDark1">#FF6449E0</Color>
+    <Color x:Key="SystemAccentColorDark2">#FF5038C0</Color>
+    <Color x:Key="SystemAccentColorDark3">#FF3D29A0</Color>
+
+    <CornerRadius x:Key="ControlCornerRadius">8</CornerRadius>
+    <CornerRadius x:Key="OverlayCornerRadius">8</CornerRadius>
+
+    <!-- Кнопки: прозрачные с обводкой -->
+    <StaticResource x:Key="ButtonBackground" ResourceKey="Bg" />
+    <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="SurfaceHover" />
+    <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="SurfaceRaised" />
+    <StaticResource x:Key="ButtonBackgroundDisabled" ResourceKey="Bg" />
+    <StaticResource x:Key="ButtonForeground" ResourceKey="TextSecondary" />
+    <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="Text" />
+    <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="Text" />
+    <StaticResource x:Key="ButtonForegroundDisabled" ResourceKey="TextFaint" />
+    <StaticResource x:Key="ButtonBorderBrush" ResourceKey="LineStrong" />
+    <StaticResource x:Key="ButtonBorderBrushPointerOver" ResourceKey="LineHover" />
+    <StaticResource x:Key="ButtonBorderBrushPressed" ResourceKey="LineHover" />
+    <StaticResource x:Key="ButtonBorderBrushDisabled" ResourceKey="Line" />
+
+    <!-- Поля ввода -->
+    <StaticResource x:Key="TextControlBackground" ResourceKey="Bg" />
+    <StaticResource x:Key="TextControlBackgroundPointerOver" ResourceKey="Bg" />
+    <StaticResource x:Key="TextControlBackgroundFocused" ResourceKey="Bg" />
+    <StaticResource x:Key="TextControlBorderBrush" ResourceKey="LineStrong" />
+    <StaticResource x:Key="TextControlBorderBrushPointerOver" ResourceKey="LineHover" />
+    <StaticResource x:Key="TextControlBorderBrushFocused" ResourceKey="Accent" />
+    <StaticResource x:Key="TextControlForeground" ResourceKey="Text" />
+    <StaticResource x:Key="TextControlForegroundPointerOver" ResourceKey="Text" />
+    <StaticResource x:Key="TextControlForegroundFocused" ResourceKey="Text" />
+    <StaticResource x:Key="TextControlPlaceholderForeground" ResourceKey="TextFaint" />
+    <StaticResource x:Key="TextControlPlaceholderForegroundPointerOver" ResourceKey="TextFaint" />
+    <StaticResource x:Key="TextControlPlaceholderForegroundFocused" ResourceKey="TextFaint" />
+    <StaticResource x:Key="TextControlSelectionHighlightColor" ResourceKey="AccentPress" />
+
+    <!-- Выпадающие списки -->
+    <StaticResource x:Key="ComboBoxBackground" ResourceKey="Bg" />
+    <StaticResource x:Key="ComboBoxBackgroundPointerOver" ResourceKey="Bg" />
+    <StaticResource x:Key="ComboBoxBackgroundPressed" ResourceKey="Bg" />
+    <StaticResource x:Key="ComboBoxBackgroundFocused" ResourceKey="Bg" />
+    <StaticResource x:Key="ComboBoxBorderBrush" ResourceKey="LineStrong" />
+    <StaticResource x:Key="ComboBoxBorderBrushPointerOver" ResourceKey="LineHover" />
+    <StaticResource x:Key="ComboBoxBorderBrushPressed" ResourceKey="Accent" />
+    <StaticResource x:Key="ComboBoxBorderBrushFocused" ResourceKey="Accent" />
+    <StaticResource x:Key="ComboBoxForeground" ResourceKey="Text" />
+    <StaticResource x:Key="ComboBoxDropDownBackground" ResourceKey="SurfaceRaised" />
+    <StaticResource x:Key="ComboBoxDropDownBorderBrush" ResourceKey="LineStrong" />
+    <StaticResource x:Key="ComboBoxItemBackgroundPointerOver" ResourceKey="SurfaceHover" />
+    <StaticResource x:Key="ComboBoxItemBackgroundSelected" ResourceKey="SurfaceHover" />
+    <StaticResource x:Key="ComboBoxItemBackgroundSelectedPointerOver" ResourceKey="SurfaceHover" />
+    <StaticResource x:Key="ComboBoxItemForegroundPointerOver" ResourceKey="Text" />
+    <StaticResource x:Key="ComboBoxItemForegroundSelected" ResourceKey="Text" />
+
+    <!-- Переключатель -->
+    <StaticResource x:Key="ToggleSwitchFillOff" ResourceKey="LineStrong" />
+    <StaticResource x:Key="ToggleSwitchFillOffPointerOver" ResourceKey="LineHover" />
+    <StaticResource x:Key="ToggleSwitchStrokeOff" ResourceKey="LineStrong" />
+    <StaticResource x:Key="ToggleSwitchStrokeOffPointerOver" ResourceKey="LineHover" />
+    <StaticResource x:Key="ToggleSwitchKnobFillOff" ResourceKey="TextMuted" />
+    <StaticResource x:Key="ToggleSwitchKnobFillOffPointerOver" ResourceKey="TextSecondary" />
+    <StaticResource x:Key="ToggleSwitchFillOn" ResourceKey="Accent" />
+    <StaticResource x:Key="ToggleSwitchFillOnPointerOver" ResourceKey="AccentHover" />
+    <StaticResource x:Key="ToggleSwitchKnobFillOn" ResourceKey="OnAccent" />
+    <StaticResource x:Key="ToggleSwitchKnobFillOnPointerOver" ResourceKey="OnAccent" />
+
+    <!-- Подсказки -->
+    <StaticResource x:Key="ToolTipBackground" ResourceKey="SurfaceRaised" />
+    <StaticResource x:Key="ToolTipBorderBrush" ResourceKey="LineStrong" />
+    <StaticResource x:Key="ToolTipForeground" ResourceKey="TextSecondary" />
+</ResourceDictionary>

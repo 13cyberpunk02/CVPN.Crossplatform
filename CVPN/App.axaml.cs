@@ -16,6 +16,7 @@ namespace CVPN;
 public partial class App : Application
 {
     private TopLevel? _topLevel;
+    private OverlayDialogService? _dialogs;
     private bool _shutdownDone;
 
     /// <summary>
@@ -48,10 +49,14 @@ public partial class App : Application
 
         HookExceptions();
 
+        var clipboard = new AvaloniaClipboard(() => _topLevel);
+        _dialogs = new OverlayDialogService(clipboard);
+
         var common = new CommonServices(
             new AvaloniaUiDispatcher(),
             new AvaloniaFilePicker(() => _topLevel),
-            new AvaloniaClipboard(() => _topLevel),
+            clipboard,
+            _dialogs,
             () => _topLevel);
 
         var configure = ConfigurePlatform
@@ -64,11 +69,21 @@ public partial class App : Application
 
         Shell = new MainViewModel(platform);
 
+#if DEBUG
+        // --page=routing - сразу открыть страницу: удобно проверять вёрстку
+        var page = Environment.GetCommandLineArgs()
+            .FirstOrDefault(a => a.StartsWith("--page=", StringComparison.Ordinal))?["--page=".Length..];
+        var target = Shell.NavItems.FirstOrDefault(n => n.Key == page);
+        if (target is not null) Shell.SelectedNav = target;
+#endif
+
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             var window = new MainWindow { DataContext = Shell };
             _topLevel = window;
+            _dialogs.Attach(window.Main.Overlay);
             desktop.MainWindow = window;
+            ScheduleSnapshot();
 
             window.Opened += async (_, _) => await Shell.StartupAsync();
             desktop.ShutdownRequested += OnShutdownRequested;
@@ -86,9 +101,50 @@ public partial class App : Application
         base.OnFrameworkInitializationCompleted();
     }
 
+    /// <summary>
+    /// Debug: --snapshot=путь.png[:ширина] - отрисовать окно в картинку и выйти.
+    /// Рисуется только наше дерево элементов, а не экран: в кадр не попадёт
+    /// ничего постороннего. Нужно, чтобы проверять вёрстку без ручных кликов.
+    /// </summary>
+    [System.Diagnostics.Conditional("DEBUG")]
+    private void ScheduleSnapshot()
+    {
+        var arg = Environment.GetCommandLineArgs()
+            .FirstOrDefault(a => a.StartsWith("--snapshot=", StringComparison.Ordinal));
+        if (arg is null || _topLevel is not Window window) return;
+
+        var spec = arg["--snapshot=".Length..];
+        var width = 980;
+        var sep = spec.LastIndexOf('|');
+        if (sep > 0 && int.TryParse(spec[(sep + 1)..], out var w))
+        {
+            width = w;
+            spec = spec[..sep];
+        }
+
+        window.Width = width;
+        window.Height = width < 720 ? 820 : 660;
+
+        window.Opened += async (_, _) =>
+        {
+            await Task.Delay(1500);
+
+            var size = new PixelSize((int)window.Bounds.Width, (int)window.Bounds.Height);
+            using var bitmap = new Avalonia.Media.Imaging.RenderTargetBitmap(size);
+            bitmap.Render(window);
+            // Отладочный код: PNG по умолчанию устраивает, новая перегрузка с параметрами кодека не нужна
+#pragma warning disable CS0618
+            bitmap.Save(spec);
+#pragma warning restore CS0618
+
+            (ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.Shutdown();
+        };
+    }
+
     private Control CreateMainView()
     {
         var view = new MainView { DataContext = Shell };
+        _dialogs?.Attach(view.Overlay);
         view.AttachedToVisualTree += (_, _) => _topLevel = TopLevel.GetTopLevel(view);
         return view;
     }

@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="using:CVPN.Localization"
+             x:Class="CVPN.Views.ExportView"
+             Focusable="True">
+    <StackPanel>
+        <TextBlock x:Name="Header" Classes="title" Text="{loc:T Export_Title}" />
+        <TextBlock x:Name="Subtitle" Classes="secondary" Margin="0,4,0,0" TextWrapping="Wrap" />
+
+        <!-- Белая подложка обязательна: сканеры плохо читают инвертированный код -->
+        <Border x:Name="QrFrame" Background="White" CornerRadius="{StaticResource RadiusCard}" Padding="12"
+                HorizontalAlignment="Center" Margin="0,20,0,0">
+            <Image x:Name="QrImage" Width="260" Height="260" RenderOptions.BitmapInterpolationMode="None" />
+        </Border>
+
+        <TextBlock Classes="label" Text="{loc:T Export_Link}" Margin="0,20,0,7" />
+        <TextBox x:Name="LinkBox" IsReadOnly="True" MinHeight="72" MaxHeight="160"
+                 TextWrapping="Wrap" AcceptsReturn="True" VerticalContentAlignment="Top" />
+
+        <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,18,0,0">
+            <Button Classes="ghost" Content="{loc:T Common_Close}" Click="OnClose" />
+            <Button x:Name="CopyButton" Grid.Column="2" Classes="primary" Content="{loc:T Export_CopyLink}"
+                    Click="OnCopy" />
+        </Grid>
+    </StackPanel>
+</UserControl>

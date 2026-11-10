@@ -15,7 +15,7 @@ internal static class AndroidPlatform
     public static PlatformServices Configure(CommonServices common) => new()
     {
         Ui = common.Ui,
-        Dialogs = new BasicDialogService(common.TopLevel, common.Clipboard),
+        Dialogs = common.Dialogs,
         Files = common.Files,
         Clipboard = common.Clipboard,
         Launcher = new AvaloniaLauncher(common.TopLevel, canOpenFiles: false),
@@ -24,7 +24,8 @@ internal static class AndroidPlatform
         TunPrivileges = new VpnNotReady(),
 
         // Ядро и ciadpi - только из поставки: запускать можно лишь то, что лежит в nativeLibraryDir
-        CanPickBinaries = false
+        CanPickBinaries = false,
+        IsDesktop = false
     };
 
     private sealed class ProxyOnlyProvider : ITunnelBackendProvider

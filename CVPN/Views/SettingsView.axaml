@@ -1,0 +1,222 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:CVPN.ViewModels"
+             xmlns:loc="using:CVPN.Localization"
+             x:Class="CVPN.Views.SettingsView"
+             x:DataType="vm:SettingsViewModel">
+
+    <!--
+        Разделы, которых на платформе нет (служба, задача планировщика, трей,
+        kill switch на Android), скрыты по флагам Show* из SettingsViewModel.
+    -->
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Classes="page" Spacing="10">
+            <StackPanel Margin="0,0,0,8">
+                <TextBlock Classes="title" Text="{loc:T Nav_Settings}" />
+                <TextBlock Classes="secondary" Text="{loc:T Settings_Subtitle}" Margin="0,4,0,0" TextWrapping="Wrap" />
+                <TextBlock Classes="status" Text="{Binding Status}" Margin="0,6,0,0" />
+            </StackPanel>
+
+            <!-- Ядро -->
+            <Border Classes="card" IsVisible="{Binding ShowCorePicker}">
+                <StackPanel>
+                    <TextBlock Classes="label" Text="{loc:T Settings_CorePath}" />
+                    <Grid ColumnDefinitions="*,Auto" Margin="0,8,0,0">
+                        <TextBox Text="{Binding Settings.CorePath}" />
+                        <Button Grid.Column="1" Content="{loc:T Common_Browse}" Command="{Binding BrowseCore}"
+                                Margin="8,0,0,0" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Подключение -->
+            <Border Classes="card">
+                <StackPanel>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Margin="0,0,12,0">
+                            <TextBlock Text="{loc:T Settings_Tun}" />
+                            <TextBlock Classes="caption" Text="{loc:T Settings_TunHint}" Margin="0,3,0,0" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <ToggleSwitch Grid.Column="1" IsChecked="{Binding Settings.TunEnabled}" />
+                    </Grid>
+
+                    <Border Classes="divider" />
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Margin="0,0,12,0">
+                            <TextBlock Text="{loc:T Settings_MixedPort}" />
+                            <TextBlock Classes="caption" Text="{loc:T Settings_MixedPortHint}" Margin="0,3,0,0" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <TextBox Grid.Column="1" Width="96" Text="{Binding Settings.MixedPort}" VerticalAlignment="Center" />
+                    </Grid>
+
+                    <StackPanel IsVisible="{Binding ShowTunAdvanced}">
+                        <Border Classes="divider" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel Margin="0,0,12,0">
+                                <TextBlock Text="{loc:T Settings_StrictRoute}" />
+                                <TextBlock Classes="caption" Text="{loc:T Settings_StrictRouteHint}" Margin="0,3,0,0" TextWrapping="Wrap" />
+                            </StackPanel>
+                            <ToggleSwitch Grid.Column="1" IsChecked="{Binding Settings.StrictRoute}" />
+                        </Grid>
+
+                        <Border Classes="divider" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel Margin="0,0,12,0">
+                                <TextBlock Text="{loc:T Settings_TunIpv6}" />
+                                <TextBlock Classes="caption" Text="{loc:T Settings_TunIpv6Hint}" Margin="0,3,0,0" TextWrapping="Wrap" />
+                            </StackPanel>
+                            <ToggleSwitch Grid.Column="1" IsChecked="{Binding Settings.TunIpv6}" />
+                        </Grid>
+                    </StackPanel>
+
+                    <StackPanel IsVisible="{Binding ShowKillSwitch}">
+                        <Border Classes="divider" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel Margin="0,0,12,0">
+                                <TextBlock Text="{loc:T Settings_KillSwitch}" />
+                                <TextBlock Classes="caption" Text="{loc:T Settings_KillSwitchHint}" Margin="0,3,0,0" TextWrapping="Wrap" />
+                                <TextBlock Classes="caption warning" Text="{loc:T Settings_KillSwitchWarning}" Margin="0,5,0,0" TextWrapping="Wrap" />
+                            </StackPanel>
+                            <ToggleSwitch Grid.Column="1" IsChecked="{Binding Settings.KillSwitch}" />
+                        </Grid>
+                        <Button Content="{loc:T Settings_RestoreNetwork}" ToolTip.Tip="{loc:T Settings_RestoreNetworkHint}"
+                                Command="{Binding RestoreNetwork}" HorizontalAlignment="Left" Margin="0,12,0,0" />
+                    </StackPanel>
+
+                    <Border Classes="divider" />
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Margin="0,0,12,0">
+                            <TextBlock Text="{loc:T Settings_AutoSelect}" />
+                            <TextBlock Classes="caption" Text="{loc:T Settings_AutoSelectHint}" Margin="0,3,0,0" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <ToggleSwitch Grid.Column="1" IsChecked="{Binding Settings.AutoSelectFastest}" />
+                    </Grid>
+
+                    <Border Classes="divider" />
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Margin="0,0,12,0">
+                            <TextBlock Text="{loc:T Settings_VerboseLog}" />
+                            <TextBlock Classes="caption" Text="{loc:T Settings_VerboseLogHint}" Margin="0,3,0,0" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <ToggleSwitch Grid.Column="1" IsChecked="{Binding Settings.VerboseLog}" />
+                    </Grid>
+
+                    <StackPanel IsVisible="{Binding ShowCloseToTray}">
+                        <Border Classes="divider" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel Margin="0,0,12,0">
+                                <TextBlock Text="{loc:T Settings_CloseToTray}" />
+                                <TextBlock Classes="caption" Text="{loc:T Settings_CloseToTrayHint}" Margin="0,3,0,0" TextWrapping="Wrap" />
+                            </StackPanel>
+                            <ToggleSwitch Grid.Column="1" IsChecked="{Binding Settings.CloseToTray}" />
+                        </Grid>
+                    </StackPanel>
+
+                    <StackPanel IsVisible="{Binding ShowAutoStart}">
+                        <Border Classes="divider" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel Margin="0,0,12,0">
+                                <TextBlock Text="{loc:T Settings_AutoStart}" />
+                                <TextBlock Classes="caption" Text="{loc:T Settings_AutoStartHint}" Margin="0,3,0,0" TextWrapping="Wrap" />
+                            </StackPanel>
+                            <ToggleSwitch Grid.Column="1" IsChecked="{Binding Settings.AutoStart}" />
+                        </Grid>
+                    </StackPanel>
+
+                    <Border Classes="divider" />
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Margin="0,0,12,0">
+                            <TextBlock Text="{loc:T Settings_AutoConnect}" />
+                            <TextBlock Classes="caption" Text="{loc:T Settings_AutoConnectHint}" Margin="0,3,0,0" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <ToggleSwitch Grid.Column="1" IsChecked="{Binding Settings.AutoConnect}" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Язык -->
+            <Border Classes="card">
+                <StackPanel>
+                    <TextBlock Classes="label" Text="{loc:T Settings_Language}" />
+                    <ComboBox Margin="0,10,0,0" ItemsSource="{Binding Languages}"
+                              SelectedValue="{Binding Settings.Language}" SelectedValueBinding="{Binding Code}"
+                              DisplayMemberBinding="{Binding Name}" />
+                    <TextBlock Classes="caption warning" Text="{loc:T Settings_LanguageHint}" Margin="0,8,0,0" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+            <!-- Версия и обновления -->
+            <Border Classes="card">
+                <StackPanel>
+                    <TextBlock Classes="label" Text="{loc:T Settings_Version}" />
+                    <Grid ColumnDefinitions="*,Auto" Margin="0,10,0,0">
+                        <StackPanel Margin="0,0,12,0">
+                            <TextBlock Text="{Binding UpdateLabel}"
+                                       Classes.accent="{Binding HasUpdate}" />
+                            <TextBlock Classes="caption" Text="{loc:T Settings_CheckUpdates}" Margin="0,3,0,0" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <ToggleSwitch Grid.Column="1" IsChecked="{Binding Settings.CheckUpdates}" />
+                    </Grid>
+
+                    <Border Classes="divider" />
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Margin="0,0,12,0">
+                            <TextBlock Text="{loc:T Settings_AutoSubscription}" />
+                            <TextBlock Classes="caption" Text="{loc:T Settings_AutoSubscriptionHint}" Margin="0,3,0,0" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <ToggleSwitch Grid.Column="1" IsChecked="{Binding Settings.AutoUpdateSubscription}" />
+                    </Grid>
+
+                    <WrapPanel Margin="0,12,0,0">
+                        <Button Content="{loc:T Settings_CheckNow}" Command="{Binding CheckUpdate}" Margin="0,0,8,0" />
+                        <Button Classes="primary" Content="{loc:T Settings_OpenRelease}" Command="{Binding OpenRelease}"
+                                IsVisible="{Binding HasUpdate}" />
+                    </WrapPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Служба и задача планировщика -->
+            <Border Classes="card" IsVisible="{Binding ShowPrivileged}">
+                <StackPanel>
+                    <StackPanel IsVisible="{Binding ShowService}">
+                        <TextBlock Classes="label" Text="{loc:T Settings_Service}" />
+                        <TextBlock Classes="caption" Text="{loc:T Settings_ServiceHint}" Margin="0,8,0,0" TextWrapping="Wrap" />
+                        <Grid ColumnDefinitions="*,Auto" Margin="0,12,0,0">
+                            <StackPanel Margin="0,0,12,0">
+                                <TextBlock Text="{loc:T Settings_UseService}" />
+                                <TextBlock Classes="caption" Text="{Binding ServiceStatus}" Margin="0,3,0,0" TextWrapping="Wrap" />
+                            </StackPanel>
+                            <ToggleSwitch Grid.Column="1" IsChecked="{Binding Settings.UseService}" />
+                        </Grid>
+                        <WrapPanel Margin="0,12,0,0">
+                            <Button Content="{loc:T Settings_InstallService}" Command="{Binding InstallService}" Margin="0,0,8,0" />
+                            <Button Classes="ghost" Content="{loc:T Settings_UninstallService}" Command="{Binding UninstallService}" />
+                        </WrapPanel>
+                    </StackPanel>
+
+                    <StackPanel IsVisible="{Binding ShowElevatedTask}">
+                        <Border Classes="divider" Margin="0,16" />
+                        <TextBlock Classes="label" Text="{loc:T Settings_Task}" />
+                        <TextBlock Classes="caption" Text="{loc:T Settings_TaskHint}" Margin="0,8,0,0" TextWrapping="Wrap" />
+                        <TextBlock Classes="caption" Foreground="{StaticResource TextSecondary}" Text="{Binding TaskStatus}"
+                                   Margin="0,6,0,0" TextWrapping="Wrap" />
+                        <WrapPanel Margin="0,12,0,0">
+                            <Button Content="{loc:T Settings_CreateTask}" Command="{Binding InstallTask}" Margin="0,0,8,0" />
+                            <Button Classes="ghost" Content="{loc:T Settings_DeleteTask}" Command="{Binding UninstallTask}" />
+                        </WrapPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- DNS -->
+            <Border Classes="card">
+                <StackPanel>
+                    <TextBlock Classes="label" Text="dns" />
+                    <TextBox Text="{Binding Settings.RemoteDns}" Margin="0,8,0,0" />
+                    <TextBlock Classes="caption" Text="{loc:T Settings_DnsHint}" Margin="0,8,0,0" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,111 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:CVPN.ViewModels"
+             xmlns:loc="using:CVPN.Localization"
+             x:Class="CVPN.Views.ProfileEditorView"
+             x:DataType="vm:ProfileEditorViewModel"
+             Focusable="True">
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock.label">
+            <Setter Property="Margin" Value="0,14,0,7" />
+        </Style>
+    </UserControl.Styles>
+
+    <StackPanel>
+        <TextBlock Classes="title" Text="{Binding Header}" />
+        <TextBlock Classes="secondary" Text="{loc:T Editor_Subtitle}" Margin="0,4,0,0" TextWrapping="Wrap" />
+
+        <!-- ===== общее ===== -->
+        <TextBlock Classes="label" Text="{loc:T Editor_Name}" Margin="0,20,0,7" />
+        <TextBox Text="{Binding Draft.Name}" PlaceholderText="Amsterdam" />
+
+        <TextBlock Classes="label" Text="{loc:T Editor_Protocol}" />
+        <ComboBox ItemsSource="{Binding ProtocolOptions}" SelectedIndex="{Binding ProtocolIndex}" />
+
+        <Grid ColumnDefinitions="*,100,76" Margin="0,0,0,0">
+            <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                <TextBlock Classes="label" Text="{loc:T Editor_Host}" />
+                <TextBox Text="{Binding Draft.Host}" PlaceholderText="nl-01.example.net" />
+            </StackPanel>
+            <StackPanel Grid.Column="1" Margin="0,0,10,0">
+                <TextBlock Classes="label" Text="{loc:T Editor_Port}" />
+                <TextBox Text="{Binding Draft.Port}" PlaceholderText="443" />
+            </StackPanel>
+            <StackPanel Grid.Column="2">
+                <TextBlock Classes="label" Text="{loc:T Editor_Country}" />
+                <TextBox Text="{Binding Draft.CountryCode}" PlaceholderText="NL" MaxLength="2" />
+            </StackPanel>
+        </Grid>
+
+        <TextBlock Classes="label" Text="{loc:T Editor_Sni}" />
+        <TextBox Text="{Binding Draft.Sni}" PlaceholderText="www.google.com" />
+
+        <!-- ===== отпечаток TLS ===== -->
+        <StackPanel IsVisible="{Binding ShowFingerprint}">
+            <TextBlock Classes="label" Text="{loc:T Editor_Fingerprint}" />
+            <ComboBox ItemsSource="{Binding FingerprintOptions}" SelectedIndex="{Binding FingerprintIndex}" />
+            <TextBlock Classes="caption" Text="{loc:T Editor_FingerprintHint}" Margin="0,6,0,0" TextWrapping="Wrap" />
+        </StackPanel>
+
+        <!-- ===== VLESS ===== -->
+        <StackPanel IsVisible="{Binding ShowVless}">
+            <TextBlock Classes="label" Text="uuid" />
+            <TextBox Text="{Binding Draft.Uuid}" PlaceholderText="8f1ce66e-719d-48b8-9ee6-804b52887082" />
+        </StackPanel>
+
+        <!-- ===== Reality ===== -->
+        <StackPanel IsVisible="{Binding ShowReality}">
+            <TextBlock Classes="label" Text="public key · pbk" />
+            <TextBox Text="{Binding Draft.PublicKey}" PlaceholderText="A32t3s5q0ea82zSZKJOtT-HrXKwkwa9r9pjgnRveVT8" />
+
+            <Grid ColumnDefinitions="*,*">
+                <StackPanel Margin="0,0,10,0">
+                    <TextBlock Classes="label" Text="short id · sid" />
+                    <TextBox Text="{Binding Draft.ShortId}" PlaceholderText="f40fa49adab4f9a9" />
+                </StackPanel>
+                <StackPanel Grid.Column="1">
+                    <TextBlock Classes="label" Text="flow" />
+                    <TextBox Text="{Binding Draft.Flow}" PlaceholderText="xtls-rprx-vision" />
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+
+        <!-- ===== WebSocket ===== -->
+        <StackPanel IsVisible="{Binding ShowWs}">
+            <TextBlock Classes="label" Text="{loc:T Editor_WsPath}" />
+            <TextBox Text="{Binding Draft.Path}" PlaceholderText="/ws" />
+        </StackPanel>
+
+        <!-- ===== XHTTP ===== -->
+        <StackPanel IsVisible="{Binding ShowXhttp}">
+            <TextBlock Classes="label" Text="{loc:T Editor_XhttpPath}" />
+            <TextBox Text="{Binding Draft.Path}" PlaceholderText="/" />
+
+            <TextBlock Classes="label" Text="{loc:T Editor_XhttpHost}" />
+            <TextBox Text="{Binding Draft.HttpHost}" PlaceholderText="example.com" />
+
+            <TextBlock Classes="label" Text="{loc:T Editor_XhttpMode}" />
+            <ComboBox ItemsSource="{Binding ModeOptions}" SelectedIndex="{Binding ModeIndex}" />
+        </StackPanel>
+
+        <!-- ===== логин ===== -->
+        <StackPanel IsVisible="{Binding ShowUser}">
+            <TextBlock Classes="label" Text="{loc:T Editor_Username}" />
+            <TextBox Text="{Binding Draft.Username}" PlaceholderText="user" />
+        </StackPanel>
+
+        <StackPanel IsVisible="{Binding ShowPassword}">
+            <TextBlock Classes="label" Text="{loc:T Editor_Password}" />
+            <TextBox Text="{Binding Draft.Password}" PlaceholderText="••••••••" />
+        </StackPanel>
+
+        <TextBlock Classes="caption danger" Text="{Binding Error}" Margin="0,14,0,0" TextWrapping="Wrap"
+                   IsVisible="{Binding HasError}" />
+
+        <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,22,0,0">
+            <Button Classes="ghost" Content="{loc:T Common_Cancel}" Click="OnCancel" />
+            <Button Grid.Column="2" Classes="primary" Content="{loc:T Common_Save}" Click="OnSave" />
+        </Grid>
+    </StackPanel>
+</UserControl>

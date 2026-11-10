@@ -1,52 +1,120 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:CVPN.ViewModels"
+             xmlns:views="using:CVPN.Views"
              xmlns:loc="using:CVPN.Localization"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="CVPN.Views.MainView"
-             x:DataType="vm:MainViewModel">
+             x:DataType="vm:MainViewModel"
+             Background="{StaticResource Bg}"
+             Foreground="{StaticResource Text}"
+             FontSize="{StaticResource Size.Body}">
 
     <!--
-        Временный экран этапа 1: проверка, что оболочка, платформенные сервисы
-        и подключение работают. Настоящие страницы, тема и круг подключения -
-        этап 2.
+        Оболочка. Широкий экран - меню слева, как в WPF-клиенте. Узкий (телефон,
+        маленькое окно) - меню внизу. Переключает класс narrow в code-behind,
+        он же уменьшает поля страниц (см. .narrow .page в Controls.axaml).
     -->
-    <Grid RowDefinitions="Auto,Auto,Auto,*" Margin="16">
-        <StackPanel Grid.Row="0" Spacing="4">
-            <TextBlock Text="{Binding StateLabel}" FontSize="22" FontWeight="SemiBold" />
-            <TextBlock Text="{Binding ActiveName}" />
-            <TextBlock Text="{Binding ModeTitle}" Opacity="0.7" />
-            <TextBlock Text="{Binding SingBoxVersion}" Opacity="0.7" />
-        </StackPanel>
 
-        <WrapPanel Grid.Row="1" Margin="0,12">
-            <Button Content="{Binding PrimaryActionLabel}" Command="{Binding ToggleConnection}" Margin="0,0,8,8" />
-            <Button Content="{loc:T Common_Check}" Command="{Binding CheckConfig}" Margin="0,0,8,8" />
-            <ComboBox ItemsSource="{Binding Profiles}" SelectedItem="{Binding Active}" MinWidth="200" Margin="0,0,8,8">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-        </WrapPanel>
+    <UserControl.DataTemplates>
+        <!-- Страница выбирается по типу вьюмодели, как DataTemplate в WPF -->
+        <DataTemplate DataType="vm:MainViewModel">
+            <views:ConnectionView />
+        </DataTemplate>
+        <DataTemplate DataType="vm:ProfilesViewModel">
+            <views:ProfilesView />
+        </DataTemplate>
+        <DataTemplate DataType="vm:RoutingViewModel">
+            <views:RoutingView />
+        </DataTemplate>
+        <DataTemplate DataType="vm:ConnectionsViewModel">
+            <views:ConnectionsView />
+        </DataTemplate>
+        <DataTemplate DataType="vm:LogsViewModel">
+            <views:LogsView />
+        </DataTemplate>
+        <DataTemplate DataType="vm:ByeDpiViewModel">
+            <views:ByeDpiView />
+        </DataTemplate>
+        <DataTemplate DataType="vm:SettingsViewModel">
+            <views:SettingsView />
+        </DataTemplate>
+    </UserControl.DataTemplates>
 
-        <StackPanel Grid.Row="2" Spacing="6" Margin="0,0,0,12">
-            <Grid ColumnDefinitions="*,Auto">
-                <TextBox Text="{Binding ProfilesPage.LinkText}" PlaceholderText="vless://… anytls://… naive+https://…" />
-                <Button Grid.Column="1" Margin="8,0,0,0" Content="{loc:T Common_Add}"
-                        Command="{Binding ProfilesPage.ImportLink}" />
-            </Grid>
-            <TextBlock Text="{Binding Status}" TextWrapping="Wrap" Foreground="OrangeRed" />
-            <TextBlock>
-                <Run Text="↓" /><Run Text="{Binding Download}" /><Run Text=" " /><Run Text="{Binding DownloadUnit}" />
-                <Run Text="   ↑" /><Run Text="{Binding Upload}" /><Run Text=" " /><Run Text="{Binding UploadUnit}" />
-                <Run Text="   " /><Run Text="{Binding Uptime}" />
-            </TextBlock>
-        </StackPanel>
+    <UserControl.Styles>
+        <Style Selector="TextBlock#ModeTitle">
+            <Setter Property="Foreground" Value="{StaticResource TextMuted}" />
+        </Style>
+        <Style Selector="TextBlock#ModeTitle.active">
+            <Setter Property="Foreground" Value="{StaticResource Text}" />
+        </Style>
+    </UserControl.Styles>
 
-        <ListBox Grid.Row="3" ItemsSource="{Binding Log}" FontFamily="Consolas,Menlo,monospace" FontSize="12" />
-    </Grid>
+    <Panel>
+        <Grid ColumnDefinitions="Auto,*" RowDefinitions="*,Auto">
+
+            <!-- ===== боковое меню ===== -->
+            <Border x:Name="Sidebar" Grid.Column="0" Grid.Row="0" Width="186"
+                    BorderBrush="{StaticResource Line}" BorderThickness="0,0,1,0">
+                <Grid RowDefinitions="Auto,Auto,*,Auto">
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="10" Margin="18,16,0,6">
+                        <Rectangle Width="14" Height="14" Fill="{StaticResource Accent}" RadiusX="4" RadiusY="4" />
+                        <TextBlock Text="CVPN" FontSize="{StaticResource Size.Small}" VerticalAlignment="Center" />
+                    </StackPanel>
+
+                    <ListBox Grid.Row="1" Classes="nav" Margin="0,8,0,0"
+                             ItemsSource="{Binding NavItems}" SelectedItem="{Binding SelectedNav}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="vm:NavItem">
+                                <TextBlock Text="{Binding Title}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <!-- Режим: что перехватывает трафик в этой сессии -->
+                    <Border Grid.Row="3" BorderBrush="{StaticResource Line}" BorderThickness="0,1,0,0" Padding="18,12">
+                        <StackPanel>
+                            <TextBlock Classes="label" Text="{loc:T Common_Mode}" />
+                            <StackPanel Orientation="Horizontal" Spacing="7" Margin="0,5,0,0">
+                                <Ellipse Classes="dot" Classes.connected="{Binding ModeActive}" />
+                                <TextBlock x:Name="ModeTitle" Text="{Binding ModeTitle}"
+                                           Classes.active="{Binding ModeActive}" />
+                            </StackPanel>
+                            <TextBlock Classes="mono" FontSize="{StaticResource Size.Caption}"
+                                       Text="{Binding ModeDetail}" Margin="13,2,0,0" TextTrimming="CharacterEllipsis" />
+                            <TextBlock Classes="caption warning" Text="{Binding ModePendingHint}" Margin="13,5,0,0"
+                                       TextWrapping="Wrap" IsVisible="{Binding ModePending}" />
+                            <TextBlock Classes="label" Text="{Binding SingBoxVersion}" Margin="0,10,0,0"
+                                       TextTrimming="CharacterEllipsis" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- ===== страница ===== -->
+            <ContentControl Grid.Column="1" Grid.Row="0" Content="{Binding SelectedNav.Page}" />
+
+            <!-- ===== нижнее меню (узкий экран) ===== -->
+            <Border x:Name="BottomBar" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" IsVisible="False"
+                    Background="{StaticResource Surface}" BorderBrush="{StaticResource Line}" BorderThickness="0,1,0,0">
+                <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled">
+                    <ListBox Classes="nav bottomnav" Margin="4,4"
+                             ItemsSource="{Binding NavItems}" SelectedItem="{Binding SelectedNav}">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="vm:NavItem">
+                                <TextBlock Text="{Binding Title}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+
+        <!-- Слой диалогов: редактор профиля, экспорт, вопросы -->
+        <Panel x:Name="OverlayLayer" IsVisible="False" />
+    </Panel>
 </UserControl>

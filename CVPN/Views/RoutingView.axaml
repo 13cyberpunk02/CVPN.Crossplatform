@@ -1,0 +1,131 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:CVPN.ViewModels"
+             xmlns:models="using:CVPN.Models"
+             xmlns:loc="using:CVPN.Localization"
+             x:Class="CVPN.Views.RoutingView"
+             x:DataType="vm:RoutingViewModel"
+             x:Name="Root">
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock.test">
+            <Setter Property="FontSize" Value="{StaticResource Size.Caption}" />
+            <Setter Property="Foreground" Value="{StaticResource Accent}" />
+        </Style>
+        <Style Selector="TextBlock.test.direct">
+            <Setter Property="Foreground" Value="{StaticResource Connected}" />
+        </Style>
+        <Style Selector="TextBlock.test.block">
+            <Setter Property="Foreground" Value="{StaticResource Danger}" />
+        </Style>
+        <Style Selector="TextBlock.test.byedpi">
+            <Setter Property="Foreground" Value="{StaticResource Warning}" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid Classes="page" RowDefinitions="Auto,Auto,Auto,Auto,*,Auto">
+        <StackPanel Grid.Row="0">
+            <TextBlock Classes="title" Text="{loc:T Nav_Routing}" />
+            <TextBlock Classes="secondary" Text="{loc:T Routing_Subtitle}" Margin="0,4,0,0" TextWrapping="Wrap" />
+            <TextBlock Classes="status" Text="{Binding Status}" Margin="0,6,0,0" />
+        </StackPanel>
+
+        <!-- Набор правил -->
+        <Grid Grid.Row="1" ColumnDefinitions="*,Auto,Auto" Margin="0,12,0,0">
+            <ComboBox ItemsSource="{Binding RoutingProfiles}" SelectedItem="{Binding ActiveRouting}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="models:RoutingProfile">
+                        <TextBlock Text="{Binding Name}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Button Grid.Column="1" Content="{loc:T Common_New}" Command="{Binding AddSet}" Margin="8,0,0,0" />
+            <Button Grid.Column="2" Classes="ghost" Content="{loc:T Common_Delete}" Command="{Binding RemoveSet}"
+                    Margin="6,0,0,0" />
+        </Grid>
+
+        <!-- Новое правило -->
+        <Border Grid.Row="2" Classes="card" Margin="0,12,0,0" Padding="14">
+            <StackPanel Spacing="8">
+                <Grid ColumnDefinitions="164,*">
+                    <ComboBox ItemsSource="{Binding MatchOptions}" SelectedIndex="{Binding NewMatchIndex}" />
+                    <TextBox Grid.Column="1" Margin="8,0,0,0" Text="{Binding NewValue}"
+                             PlaceholderText="{Binding ValueHint}" />
+                </Grid>
+                <Grid ColumnDefinitions="164,*,Auto">
+                    <ComboBox ItemsSource="{Binding ActionOptions}" SelectedIndex="{Binding NewActionIndex}" />
+                    <Button Grid.Column="1" HorizontalAlignment="Left" Margin="8,0,0,0"
+                            Content="{loc:T Routing_PickSrs}" Command="{Binding PickSrs}"
+                            IsVisible="{Binding ShowPickSrs}" />
+                    <Button Grid.Column="2" Classes="primary" Content="{loc:T Common_Add}"
+                            Command="{Binding AddNewRule}" />
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <!-- Проверка домена до сохранения правил -->
+        <Border Grid.Row="3" Classes="card" Margin="0,10,0,0" Padding="14,12">
+            <StackPanel>
+                <Grid ColumnDefinitions="*,Auto">
+                    <TextBox Text="{Binding TestInput}" PlaceholderText="{loc:T Routing_TestHint}" />
+                    <Button Grid.Column="1" Content="{loc:T Common_Check}" Command="{Binding TestDomain}"
+                            Margin="8,0,0,0" />
+                </Grid>
+                <TextBlock Classes="test" Text="{Binding TestResult}" Margin="0,10,0,0" TextWrapping="Wrap"
+                           IsVisible="{Binding HasTestResult}"
+                           Classes.direct="{Binding TestOutcome, Converter={StaticResource Eq}, ConverterParameter=Direct}"
+                           Classes.block="{Binding TestOutcome, Converter={StaticResource Eq}, ConverterParameter=Block}"
+                           Classes.byedpi="{Binding TestOutcome, Converter={StaticResource Eq}, ConverterParameter=ByeDpi}" />
+            </StackPanel>
+        </Border>
+
+        <ListBox Grid.Row="4" Classes="plain tight" Margin="0,14,0,0" ItemsSource="{Binding Rules}">
+            <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="models:RouteRule">
+                    <Border Background="{StaticResource Surface}" CornerRadius="{StaticResource Radius}" Padding="14,10">
+                        <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+                            <ToggleSwitch IsChecked="{Binding Enabled}" HorizontalAlignment="Left" />
+
+                            <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
+                                <TextBlock Classes="mono" FontSize="{StaticResource Size.Small}"
+                                           Foreground="{StaticResource TextFaint}" Text="{Binding MatchLabel}" />
+                                <TextBlock Classes="mono" Foreground="{StaticResource Text}" Text="{Binding DisplayValue}"
+                                           ToolTip.Tip="{Binding Value}" TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+
+                            <Border Grid.Column="2" Classes="tag" Margin="8,0,0,0"
+                                    Classes.direct="{Binding Action, Converter={StaticResource Eq}, ConverterParameter=Direct}"
+                                    Classes.block="{Binding Action, Converter={StaticResource Eq}, ConverterParameter=Block}"
+                                    Classes.byedpi="{Binding Action, Converter={StaticResource Eq}, ConverterParameter=ByeDpi}">
+                                <TextBlock Text="{Binding ActionLabel}" />
+                            </Border>
+
+                            <StackPanel Grid.Column="3" Orientation="Horizontal" Margin="6,0,0,0">
+                                <Button Classes="ghost small" Content="▲" ToolTip.Tip="{loc:T Routing_MoveUpHint}"
+                                        Command="{Binding #Root.((vm:RoutingViewModel)DataContext).MoveUp}"
+                                        CommandParameter="{Binding}" />
+                                <Button Classes="ghost small" Content="▼" ToolTip.Tip="{loc:T Routing_MoveDownHint}"
+                                        Command="{Binding #Root.((vm:RoutingViewModel)DataContext).MoveDown}"
+                                        CommandParameter="{Binding}" />
+                                <Button Classes="ghost small" Content="✕"
+                                        Command="{Binding #Root.((vm:RoutingViewModel)DataContext).RemoveRule}"
+                                        CommandParameter="{Binding}" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Border Grid.Row="5" Classes="card" Padding="14,12" Margin="0,4,0,0" BorderThickness="0">
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Margin="0,0,10,0">
+                    <TextBlock Text="{loc:T Routing_Fallback}" />
+                    <TextBlock Classes="caption" Text="{loc:T Routing_FallbackHint}" Margin="0,3,0,0" TextWrapping="Wrap" />
+                </StackPanel>
+                <ComboBox Grid.Column="1" Width="164" ItemsSource="{Binding FallbackOptions}"
+                          SelectedIndex="{Binding FallbackIndex}" VerticalAlignment="Center" />
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

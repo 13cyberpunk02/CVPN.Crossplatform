@@ -174,11 +174,53 @@ public sealed class MainViewModel : ObservableObject
             if (!Set(ref _tunnel, value)) return;
             Raise(nameof(StateLabel));
             Raise(nameof(IsConnected));
+            Raise(nameof(IsConnecting));
+            Raise(nameof(IsFailing));
             Raise(nameof(PrimaryActionLabel));
         }
     }
 
     public bool IsConnected => State == TunnelState.Connected;
+
+    // Отдельные флаги - для классов в разметке Avalonia (Classes.connected="{Binding IsConnected}")
+    public bool IsConnecting => State == TunnelState.Connecting;
+    public bool IsFailing => State == TunnelState.Failing;
+
+    // ===================== навигация =====================
+
+    /// <summary>Пункты меню. Страницы живут всё время работы, переход меняет только разметку.</summary>
+    public IReadOnlyList<NavItem> NavItems => _navItems ??=
+    [
+        new("connection", Loc.T("Nav_Connection"), this),
+        new("profiles", Loc.T("Nav_Profiles"), ProfilesPage),
+        new("routing", Loc.T("Nav_Routing"), RoutingPage),
+        new("connections", Loc.T("Nav_Connections"), ConnectionsPage),
+        new("logs", Loc.T("Nav_Logs"), LogsPage),
+        new("byedpi", Loc.T("Nav_ByeDpi"), ByeDpiPage),
+        new("settings", Loc.T("Nav_Settings"), SettingsPage)
+    ];
+
+    private IReadOnlyList<NavItem>? _navItems;
+    private NavItem? _selectedNav;
+
+    /// <summary>
+    /// Выбранный пункт. Уход со страницы останавливает её таймеры, приход -
+    /// запускает: раньше это делали Loaded/Unloaded каждой вьюхи.
+    /// </summary>
+    public NavItem SelectedNav
+    {
+        get => _selectedNav ??= NavItems[0];
+        set
+        {
+            if (value is null || ReferenceEquals(value, _selectedNav)) return;
+
+            (SelectedNav.Page as PageViewModel)?.Deactivate();
+            _selectedNav = value;
+            (value.Page as PageViewModel)?.Activate();
+
+            Raise();
+        }
+    }
 
     /// <summary>Доступ к Clash API для страниц.</summary>
     public ClashApiClient? Api => _stats;

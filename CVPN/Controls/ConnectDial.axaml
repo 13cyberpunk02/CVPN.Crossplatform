@@ -1,0 +1,149 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:CVPN.ViewModels"
+             x:Class="CVPN.Controls.ConnectDial"
+             x:DataType="vm:MainViewModel"
+             Width="240" Height="240">
+
+    <!--
+        Круг подключения. Обод показывает состояние, центр им управляет.
+        Контекст - MainViewModel: в WPF у контрола был десяток свойств-зеркал,
+        здесь он читает оболочку напрямую.
+    -->
+    <UserControl.Styles>
+        <!-- Дуга состояния: серая - отключено, акцент с бегущим сегментом - подключение,
+             зелёная - подключено, красная - ошибка -->
+        <Style Selector="Arc#StateArc">
+            <Setter Property="Stroke" Value="{StaticResource TextFaint}" />
+            <Setter Property="SweepAngle" Value="300" />
+        </Style>
+        <Style Selector="Arc#StateArc.connected">
+            <Setter Property="Stroke" Value="{StaticResource Connected}" />
+            <Setter Property="SweepAngle" Value="360" />
+        </Style>
+        <Style Selector="Arc#StateArc.failing">
+            <Setter Property="Stroke" Value="{StaticResource Danger}" />
+            <Setter Property="SweepAngle" Value="360" />
+        </Style>
+        <Style Selector="Arc#StateArc.connecting">
+            <Setter Property="Stroke" Value="{StaticResource Accent}" />
+            <Setter Property="SweepAngle" Value="70" />
+            <Style.Animations>
+                <Animation Duration="0:0:1.4" IterationCount="Infinite">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="RotateTransform.Angle" Value="0" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="RotateTransform.Angle" Value="360" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+
+        <!-- Ядро круга - кнопка -->
+        <Style Selector="Button#Core">
+            <Setter Property="Background" Value="{StaticResource Surface}" />
+            <Setter Property="BorderBrush" Value="{StaticResource Line}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="76" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Button#Core:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{StaticResource SurfaceRaised}" />
+            <Setter Property="BorderBrush" Value="{StaticResource LineStrong}" />
+        </Style>
+        <Style Selector="Button#Core:pressed /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{StaticResource SurfaceHover}" />
+        </Style>
+        <Style Selector="Button#Core:focus-visible /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="BorderBrush" Value="{StaticResource Accent}" />
+        </Style>
+
+        <Style Selector="TextBlock#Metric.connected">
+            <Setter Property="Foreground" Value="{StaticResource Connected}" />
+        </Style>
+        <Style Selector="TextBlock#Metric.failing">
+            <Setter Property="Foreground" Value="{StaticResource Danger}" />
+        </Style>
+
+        <Style Selector="TextBlock#Action">
+            <Setter Property="Foreground" Value="{StaticResource Accent}" />
+        </Style>
+        <Style Selector="TextBlock#Action.connected">
+            <Setter Property="Foreground" Value="{StaticResource TextMuted}" />
+        </Style>
+
+        <Style Selector="Line.tick">
+            <Setter Property="Stroke" Value="{StaticResource LineStrong}" />
+            <Setter Property="StrokeThickness" Value="1" />
+        </Style>
+    </UserControl.Styles>
+
+    <Panel>
+        <!-- Внешний обод -->
+        <Ellipse Width="210" Height="210" Stroke="{StaticResource Line}" StrokeThickness="1" />
+
+        <!-- Тиковая шкала -->
+        <Canvas Width="240" Height="240">
+            <Line Classes="tick" StartPoint="120,8" EndPoint="120,16" />
+            <Line Classes="tick" StartPoint="232,120" EndPoint="224,120" />
+            <Line Classes="tick" StartPoint="120,232" EndPoint="120,224" />
+            <Line Classes="tick" StartPoint="8,120" EndPoint="16,120" />
+            <Line Classes="tick" StartPoint="199.2,40.8" EndPoint="193.5,46.5" />
+            <Line Classes="tick" StartPoint="199.2,199.2" EndPoint="193.5,193.5" />
+            <Line Classes="tick" StartPoint="40.8,199.2" EndPoint="46.5,193.5" />
+            <Line Classes="tick" StartPoint="40.8,40.8" EndPoint="46.5,46.5" />
+        </Canvas>
+
+        <!-- Дорожка -->
+        <Ellipse Width="180" Height="180" Stroke="{StaticResource LineStrong}" StrokeThickness="6" />
+
+        <!-- Дуга состояния -->
+        <Arc x:Name="StateArc" Width="180" Height="180" StrokeThickness="6" StrokeLineCap="Round"
+             StartAngle="-90"
+             Classes.connected="{Binding IsConnected}"
+             Classes.connecting="{Binding IsConnecting}"
+             Classes.failing="{Binding IsFailing}">
+            <Arc.RenderTransform>
+                <RotateTransform />
+            </Arc.RenderTransform>
+        </Arc>
+
+        <!-- Кнопка -->
+        <Button x:Name="Core" Width="152" Height="152" Click="OnCoreClick" HorizontalAlignment="Center"
+                ToolTip.Tip="{Binding Active.Endpoint, FallbackValue=''}">
+            <StackPanel Width="130">
+                <!-- Значок страны: картинкой, потому что не каждая ОС рисует флаги-эмодзи -->
+                <Border HorizontalAlignment="Center" CornerRadius="4" Padding="7,2" Margin="0,0,0,7"
+                        Background="{StaticResource SurfaceHover}"
+                        IsVisible="{Binding Active.CountryCode, FallbackValue='', Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <Image Width="16" Height="11" VerticalAlignment="Center"
+                               Source="{Binding Active.CountryCode, FallbackValue='', Converter={StaticResource Flag}}" />
+                        <TextBlock Classes="mono" Text="{Binding Active.CountryCode, FallbackValue=''}"
+                                   FontSize="{StaticResource Size.Caption}" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Border>
+
+                <TextBlock Classes="heading" Text="{Binding ActiveName}" HorizontalAlignment="Center"
+                           TextTrimming="CharacterEllipsis" />
+
+                <TextBlock Classes="mono" Text="{Binding Active.ProtocolLabel, FallbackValue='-'}"
+                           HorizontalAlignment="Center" Margin="0,3,0,0"
+                           FontSize="{StaticResource Size.Caption}" TextTrimming="CharacterEllipsis" />
+
+                <TextBlock x:Name="Metric" Classes="mono" Text="{Binding Active.LatencyLabel, FallbackValue='-'}"
+                           HorizontalAlignment="Center" Margin="0,5,0,0"
+                           Classes.connected="{Binding IsConnected}"
+                           Classes.failing="{Binding IsFailing}" />
+
+                <Border Height="1" Background="{StaticResource Line}" Margin="24,9,24,7" />
+
+                <TextBlock x:Name="Action" Text="{Binding PrimaryActionLabel}" HorizontalAlignment="Center"
+                           Classes.connected="{Binding IsConnected}" />
+            </StackPanel>
+        </Button>
+    </Panel>
+</UserControl>

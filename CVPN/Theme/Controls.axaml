@@ -1,0 +1,289 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--
+        Стили по классам вместо ключей WPF: Style="{StaticResource T.Caption}"
+        стало Classes="caption". Шаблоны контролов остались от Fluent - цвета
+        приходят из Palette.axaml.
+    -->
+
+    <!-- ===================== Текст ===================== -->
+    <Style Selector="TextBlock.secondary">
+        <Setter Property="Foreground" Value="{StaticResource TextMuted}" />
+    </Style>
+
+    <Style Selector="TextBlock.caption">
+        <Setter Property="FontSize" Value="{StaticResource Size.Caption}" />
+        <Setter Property="Foreground" Value="{StaticResource TextMuted}" />
+    </Style>
+
+    <!-- Служебная метка: моно читается как «системное поле» -->
+    <Style Selector="TextBlock.label">
+        <Setter Property="FontSize" Value="{StaticResource Size.Caption}" />
+        <Setter Property="Foreground" Value="{StaticResource TextFaint}" />
+        <Setter Property="FontFamily" Value="{StaticResource Font.Mono}" />
+    </Style>
+
+    <Style Selector="TextBlock.mono">
+        <Setter Property="FontFamily" Value="{StaticResource Font.Mono}" />
+        <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
+    </Style>
+
+    <Style Selector="TextBlock.heading">
+        <Setter Property="FontSize" Value="{StaticResource Size.Heading}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+
+    <Style Selector="TextBlock.title">
+        <Setter Property="FontSize" Value="{StaticResource Size.Title}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+
+    <Style Selector="TextBlock.metric">
+        <Setter Property="FontFamily" Value="{StaticResource Font.Mono}" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="Foreground" Value="{StaticResource Text}" />
+    </Style>
+
+    <!-- Строка состояния страницы: сообщения там ждут глазами -->
+    <Style Selector="TextBlock.status">
+        <Setter Property="FontSize" Value="{StaticResource Size.Caption}" />
+        <Setter Property="Foreground" Value="{StaticResource Warning}" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="IsVisible" Value="{Binding $self.Text, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+    </Style>
+
+    <Style Selector="TextBlock.warning">
+        <Setter Property="Foreground" Value="{StaticResource Warning}" />
+    </Style>
+
+    <Style Selector="TextBlock.danger">
+        <Setter Property="Foreground" Value="{StaticResource Danger}" />
+    </Style>
+
+    <Style Selector="TextBlock.accent">
+        <Setter Property="Foreground" Value="{StaticResource Accent}" />
+    </Style>
+
+    <!-- ===================== Страница ===================== -->
+    <Style Selector=":is(Control).page">
+        <Setter Property="Margin" Value="28,22,28,24" />
+    </Style>
+
+    <!-- Узкий экран (телефон): поля меньше, иначе контенту не остаётся места -->
+    <Style Selector=".narrow :is(Control).page">
+        <Setter Property="Margin" Value="14,14,14,12" />
+    </Style>
+
+    <!-- ===================== Карточки ===================== -->
+    <Style Selector="Border.card">
+        <Setter Property="Background" Value="{StaticResource Surface}" />
+        <Setter Property="CornerRadius" Value="{StaticResource RadiusCard}" />
+        <Setter Property="BorderBrush" Value="{StaticResource Line}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="16" />
+    </Style>
+
+    <Style Selector="Border.divider">
+        <Setter Property="Height" Value="1" />
+        <Setter Property="Background" Value="{StaticResource Line}" />
+        <Setter Property="Margin" Value="0,14" />
+    </Style>
+
+    <!-- Метка-плашка: протокол, действие правила, выход соединения -->
+    <Style Selector="Border.tag">
+        <Setter Property="CornerRadius" Value="4" />
+        <Setter Property="Padding" Value="6,2" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Background" Value="{StaticResource Tint.Accent}" />
+    </Style>
+    <Style Selector="Border.tag TextBlock">
+        <Setter Property="FontSize" Value="{StaticResource Size.Caption}" />
+        <Setter Property="Foreground" Value="{StaticResource Accent}" />
+    </Style>
+    <Style Selector="Border.tag.direct">
+        <Setter Property="Background" Value="{StaticResource Tint.Connected}" />
+    </Style>
+    <Style Selector="Border.tag.direct TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource Connected}" />
+    </Style>
+    <Style Selector="Border.tag.block">
+        <Setter Property="Background" Value="{StaticResource Tint.Danger}" />
+    </Style>
+    <Style Selector="Border.tag.block TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource Danger}" />
+    </Style>
+    <Style Selector="Border.tag.byedpi">
+        <Setter Property="Background" Value="{StaticResource Tint.Warning}" />
+    </Style>
+    <Style Selector="Border.tag.byedpi TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource Warning}" />
+    </Style>
+
+    <!-- ===================== Кнопки ===================== -->
+    <Style Selector="Button">
+        <Setter Property="Padding" Value="14,8" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <!-- Главное действие. На экране всегда ровно одно. -->
+    <Style Selector="Button.primary">
+        <Setter Property="Background" Value="{StaticResource Accent}" />
+        <Setter Property="Foreground" Value="{StaticResource OnAccent}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="18,9" />
+    </Style>
+    <Style Selector="Button.primary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{StaticResource AccentHover}" />
+        <Setter Property="Foreground" Value="{StaticResource OnAccent}" />
+    </Style>
+    <Style Selector="Button.primary:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{StaticResource AccentPress}" />
+        <Setter Property="Foreground" Value="{StaticResource OnAccent}" />
+    </Style>
+
+    <Style Selector="Button.ghost">
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{StaticResource TextMuted}" />
+    </Style>
+
+    <Style Selector="Button.small">
+        <Setter Property="Padding" Value="9,5" />
+    </Style>
+
+    <Style Selector="Button.danger">
+        <Setter Property="Foreground" Value="{StaticResource Danger}" />
+        <Setter Property="BorderBrush" Value="{StaticResource DangerLine}" />
+    </Style>
+
+    <Style Selector="Button:disabled">
+        <Setter Property="Opacity" Value="0.4" />
+    </Style>
+
+    <!-- ===================== Поля ===================== -->
+    <Style Selector="TextBox">
+        <Setter Property="FontFamily" Value="{StaticResource Font.Mono}" />
+        <Setter Property="MinHeight" Value="36" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="CaretBrush" Value="{StaticResource Accent}" />
+    </Style>
+
+    <Style Selector="ComboBox">
+        <Setter Property="MinHeight" Value="36" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+    </Style>
+
+    <!-- Строка настройки: подпись слева, переключатель справа -->
+    <Style Selector="ToggleSwitch">
+        <Setter Property="OnContent" Value="" />
+        <Setter Property="OffContent" Value="" />
+        <Setter Property="MinWidth" Value="0" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <!-- ===================== Списки ===================== -->
+    <!-- Список карточек: без подсветки выбора, карточка рисует себя сама -->
+    <Style Selector="ListBox.plain">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+    </Style>
+    <Style Selector="ListBox.plain ListBoxItem">
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Margin" Value="0,0,0,8" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    </Style>
+    <Style Selector="ListBox.plain ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+    <Style Selector="ListBox.plain ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+    <Style Selector="ListBox.plain ListBoxItem:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+    <Style Selector="ListBox.tight ListBoxItem">
+        <Setter Property="Margin" Value="0,0,0,6" />
+    </Style>
+
+    <!-- ===================== Навигация ===================== -->
+    <Style Selector="ListBox.nav">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="0" />
+    </Style>
+    <Style Selector="ListBox.nav ListBoxItem">
+        <Setter Property="Foreground" Value="{StaticResource TextMuted}" />
+        <Setter Property="CornerRadius" Value="{StaticResource Radius}" />
+        <Setter Property="Margin" Value="8,1" />
+        <Setter Property="Padding" Value="14,0" />
+        <Setter Property="MinHeight" Value="38" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+    </Style>
+    <Style Selector="ListBox.nav ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
+    </Style>
+    <Style Selector="ListBox.nav ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{StaticResource SurfaceRaised}" />
+        <Setter Property="Foreground" Value="{StaticResource Text}" />
+    </Style>
+    <Style Selector="ListBox.nav ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{StaticResource SurfaceRaised}" />
+        <Setter Property="Foreground" Value="{StaticResource Text}" />
+    </Style>
+
+    <!-- Нижняя панель на телефоне: пункты в ряд, выбранный - акцентом -->
+    <Style Selector="ListBox.bottomnav ListBoxItem">
+        <Setter Property="Margin" Value="2,0" />
+        <Setter Property="Padding" Value="12,0" />
+        <Setter Property="MinHeight" Value="48" />
+        <Setter Property="FontSize" Value="{StaticResource Size.Small}" />
+    </Style>
+    <Style Selector="ListBox.bottomnav ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{StaticResource Tint.Accent}" />
+        <Setter Property="Foreground" Value="{StaticResource Accent}" />
+    </Style>
+    <Style Selector="ListBox.bottomnav ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{StaticResource Tint.Accent}" />
+        <Setter Property="Foreground" Value="{StaticResource Accent}" />
+    </Style>
+
+    <!-- ===================== Точка состояния ===================== -->
+    <Style Selector="Ellipse.dot">
+        <Setter Property="Width" Value="6" />
+        <Setter Property="Height" Value="6" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Fill" Value="{StaticResource TextFaint}" />
+    </Style>
+    <Style Selector="Ellipse.dot.connected">
+        <Setter Property="Fill" Value="{StaticResource Connected}" />
+    </Style>
+    <Style Selector="Ellipse.dot.connecting">
+        <Setter Property="Fill" Value="{StaticResource Accent}" />
+    </Style>
+    <Style Selector="Ellipse.dot.failing">
+        <Setter Property="Fill" Value="{StaticResource Danger}" />
+    </Style>
+
+    <!-- Задержка сервера: цвет по качеству канала -->
+    <Style Selector="TextBlock.latency">
+        <Setter Property="FontFamily" Value="{StaticResource Font.Mono}" />
+        <Setter Property="Foreground" Value="{StaticResource TextFaint}" />
+    </Style>
+    <Style Selector="TextBlock.latency.good">
+        <Setter Property="Foreground" Value="{StaticResource Connected}" />
+    </Style>
+    <Style Selector="TextBlock.latency.fair">
+        <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
+    </Style>
+    <Style Selector="TextBlock.latency.poor">
+        <Setter Property="Foreground" Value="{StaticResource Warning}" />
+    </Style>
+    <Style Selector="TextBlock.latency.dead">
+        <Setter Property="Foreground" Value="{StaticResource Danger}" />
+    </Style>
+</Styles>

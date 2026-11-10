@@ -26,6 +26,9 @@ public sealed class PlatformServices
 
     /// <summary>Можно ли выбрать свой файл ядра и ciadpi (на Android бинарники только из поставки).</summary>
     public bool CanPickBinaries { get; init; } = true;
+
+    /// <summary>Десктоп: есть трей, окна и настройки TUN самого sing-box.</summary>
+    public bool IsDesktop { get; init; } = true;
 }
 
 /// <summary>Заглушка для того, чего на платформе нет.</summary>

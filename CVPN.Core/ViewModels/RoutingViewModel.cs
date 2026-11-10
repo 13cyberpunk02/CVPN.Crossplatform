@@ -38,7 +38,123 @@ public sealed class RoutingViewModel : PageViewModel
         AddSet = new RelayCommand(AddRoutingProfile);
         RemoveSet = new RelayCommand(RemoveRoutingProfile, () => RoutingProfiles.Count > 1);
 
+        AddNewRule = new RelayCommand(AddFromForm);
+        PickSrs = new RelayCommand(async () => await PickSrsAsync());
+
         shell.PropertyChanged += OnShellChanged;
+    }
+
+    // ===================== форма нового правила =====================
+    // Раньше жила в code-behind WPF-разметки; здесь её используют все платформы.
+
+    private static readonly Dictionary<MatchKind, string> Hints = new()
+    {
+        [MatchKind.Geosite] = "youtube · twitch · category-ads-all",
+        [MatchKind.Geoip] = Loc.T("Hint_Geoip"),
+        [MatchKind.Domain] = Loc.T("Hint_Domain"),
+        [MatchKind.DomainSuffix] = Loc.T("Hint_Suffix"),
+        [MatchKind.DomainKeyword] = Loc.T("Hint_Keyword"),
+        [MatchKind.Process] = Loc.T("Hint_Process"),
+        [MatchKind.RuleSetRemote] = "https://…/geosite-youtube.srs",
+        [MatchKind.RuleSetLocal] = Loc.T("Hint_SetLocal")
+    };
+
+    /// <summary>Порядок совпадает с MatchKind.</summary>
+    public IReadOnlyList<string> MatchOptions { get; } =
+    [
+        "geosite", "geoip", "domain", "domain_suffix", "domain_keyword", "process_name",
+        Loc.T("Routing_SetRemote"), Loc.T("Routing_SetLocal")
+    ];
+
+    /// <summary>Порядок совпадает с RouteAction.</summary>
+    public IReadOnlyList<string> ActionOptions { get; } =
+        [Loc.T("Common_ViaProxy"), Loc.T("Common_Direct"), Loc.T("Common_Block"), Loc.T("Common_ByeDpi")];
+
+    public IReadOnlyList<string> FallbackOptions { get; } = [Loc.T("Common_ViaProxy"), Loc.T("Common_Direct")];
+
+    public int NewMatchIndex
+    {
+        get;
+        set
+        {
+            Set(ref field, Math.Max(0, value));
+            Raise(nameof(ValueHint));
+            Raise(nameof(ShowPickSrs));
+        }
+    }
+
+    private MatchKind NewMatch => (MatchKind)NewMatchIndex;
+
+    public string NewValue
+    {
+        get;
+        set => Set(ref field, value);
+    } = "";
+
+    public int NewActionIndex
+    {
+        get;
+        set => Set(ref field, Math.Max(0, value));
+    }
+
+    public string ValueHint => Hints.GetValueOrDefault(NewMatch, "");
+
+    /// <summary>Кнопка обзора нужна только для локального .srs.</summary>
+    public bool ShowPickSrs => NewMatch == MatchKind.RuleSetLocal;
+
+    /// <summary>«Всё остальное»: 0 - через прокси, 1 - напрямую.</summary>
+    public int FallbackIndex
+    {
+        get => ActiveRouting.ProxyByDefault ? 0 : 1;
+        set
+        {
+            if (value < 0 || value == FallbackIndex) return;
+            SetFallback(value == 0);
+            Raise();
+        }
+    }
+
+    public ICommand AddNewRule { get; }
+    public ICommand PickSrs { get; }
+
+    private void AddFromForm()
+    {
+        AddRule(NewMatch, NewValue, (RouteAction)NewActionIndex);
+        NewValue = "";
+    }
+
+    /// <summary>
+    /// Копируем набор к себе: иначе правило сломается, стоит файлу переехать.
+    /// Читаем потоком - на Android у выбранного файла нет пути.
+    /// </summary>
+    private async Task PickSrsAsync()
+    {
+        var file = await Shell.Platform.Files.OpenAsync(
+            Loc.T("Routing_PickSrsTitle"),
+            Platform.FileFilter.ParseWpf(Loc.T("Routing_SrsFilter")));
+
+        if (file is null) return;
+
+        try
+        {
+            AppPaths.EnsureCreated();
+            var target = Path.Combine(AppPaths.RulesDir, Path.GetFileName(file.Name));
+
+            if (!string.Equals(target, file.LocalPath, StringComparison.OrdinalIgnoreCase))
+            {
+                await using var source = await file.OpenReadAsync();
+                await using var destination = File.Create(target);
+                await source.CopyToAsync(destination);
+            }
+
+            NewValue = target;
+        }
+        catch (Exception ex)
+        {
+            // Не смогли скопировать - работаем по исходному пути, если он есть
+            if (file.LocalPath is not null) NewValue = file.LocalPath;
+            else Shell.Notify(Loc.T("Import_ReadFailed", ex.Message));
+        }
     }
 
     public ObservableCollection<RouteRule> Rules => Shell.Rules;
@@ -216,6 +332,9 @@ public sealed class RoutingViewModel : PageViewModel
         {
             Raise(nameof(Rules));
             Raise(nameof(ActiveRouting));
+
+            // Смена набора меняет и значение «всё остальное»
+            Raise(nameof(FallbackIndex));
         }
     }
 }

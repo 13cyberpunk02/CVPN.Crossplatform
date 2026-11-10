@@ -1,0 +1,102 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:CVPN.ViewModels"
+             xmlns:models="using:CVPN.Models"
+             xmlns:loc="using:CVPN.Localization"
+             x:Class="CVPN.Views.ProfilesView"
+             x:DataType="vm:ProfilesViewModel"
+             x:Name="Root">
+
+    <UserControl.Styles>
+        <Style Selector="Border.profile">
+            <Setter Property="Background" Value="{StaticResource Surface}" />
+            <Setter Property="CornerRadius" Value="{StaticResource RadiusCard}" />
+            <Setter Property="BorderBrush" Value="{StaticResource Line}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="16,14" />
+        </Style>
+        <Style Selector="Border.profile.active">
+            <Setter Property="BorderBrush" Value="{StaticResource Accent}" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid Classes="page" RowDefinitions="Auto,Auto,Auto,Auto,*">
+        <StackPanel Grid.Row="0">
+            <TextBlock Classes="title" Text="{loc:T Nav_Profiles}" />
+            <TextBlock Classes="secondary" Text="{loc:T Profiles_Subtitle}" Margin="0,4,0,0" TextWrapping="Wrap" />
+            <TextBlock Classes="status" Text="{Binding Status}" Margin="0,6,0,0" />
+        </StackPanel>
+
+        <!-- Действия: в ряд на десктопе, переносятся на телефоне -->
+        <WrapPanel Grid.Row="1" Margin="0,12,0,0">
+            <Button Classes="primary" Content="{loc:T Profiles_Create}" Command="{Binding Create}" Margin="0,0,8,8" />
+            <Button Content="{loc:T Profiles_ImportFile}" Command="{Binding ImportFile}" Margin="0,0,8,8" />
+            <Button Classes="ghost" Content="{loc:T Profiles_CheckAll}" Command="{Binding PingAll}" Margin="0,0,8,8" />
+            <Button Classes="ghost" Content="{loc:T Profiles_ExportAll}" Command="{Binding ExportAll}" Margin="0,0,8,8" />
+        </WrapPanel>
+
+        <!-- Импорт по ссылке: самый частый способ завести профиль, поэтому он вверху -->
+        <Grid Grid.Row="2" ColumnDefinitions="*,Auto" Margin="0,4,0,0">
+            <TextBox Text="{Binding LinkText}" PlaceholderText="vless://…  ·  anytls://…  ·  naive+https://…" />
+            <Button Grid.Column="1" Content="{loc:T Profiles_ParseLink}" Command="{Binding ImportLink}"
+                    Margin="8,0,0,0" />
+        </Grid>
+
+        <Grid Grid.Row="3" ColumnDefinitions="*,Auto" Margin="0,8,0,0">
+            <TextBox Text="{Binding Settings.SubscriptionUrl}" PlaceholderText="{loc:T Profiles_SubscriptionHint}" />
+            <Button Grid.Column="1" Content="{loc:T Profiles_UpdateSubscription}"
+                    Command="{Binding UpdateSubscription}" Margin="8,0,0,0" />
+        </Grid>
+
+        <ListBox Grid.Row="4" Classes="plain" Margin="0,18,0,0" ItemsSource="{Binding Profiles}">
+            <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="models:ServerProfile">
+                    <Border Classes="profile" Classes.active="{Binding IsActive}">
+                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                            <StackPanel Grid.Column="0">
+                                <StackPanel Orientation="Horizontal" Spacing="9">
+                                    <Image Width="18" Height="12" VerticalAlignment="Center"
+                                           Source="{Binding CountryCode, Converter={StaticResource Flag}}" />
+                                    <TextBlock Classes="heading" Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
+                                    <Border Classes="tag">
+                                        <TextBlock FontFamily="{StaticResource Font.Mono}" Text="{Binding ProtocolLabel}" />
+                                    </Border>
+                                </StackPanel>
+                                <WrapPanel Margin="0,5,0,0">
+                                    <TextBlock Classes="mono" FontSize="{StaticResource Size.Small}"
+                                               Text="{Binding Endpoint}" Margin="0,0,10,0" />
+                                    <TextBlock Classes="caption" Foreground="{StaticResource TextFaint}"
+                                               Text="{loc:T Profiles_FromSubscription}"
+                                               IsVisible="{Binding Subscription, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                                </WrapPanel>
+                            </StackPanel>
+
+                            <TextBlock Grid.Column="1" Classes="latency" Text="{Binding LatencyLabel}"
+                                       VerticalAlignment="Center" Margin="14,0,0,0"
+                                       Classes.good="{Binding LatencyGrade, Converter={StaticResource Eq}, ConverterParameter=good}"
+                                       Classes.fair="{Binding LatencyGrade, Converter={StaticResource Eq}, ConverterParameter=fair}"
+                                       Classes.poor="{Binding LatencyGrade, Converter={StaticResource Eq}, ConverterParameter=poor}"
+                                       Classes.dead="{Binding LatencyGrade, Converter={StaticResource Eq}, ConverterParameter=dead}" />
+
+                            <!-- Внутри шаблона контекст - профиль, команды страницы берём у Root -->
+                            <WrapPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="0,8,0,0">
+                                <Button Classes="ghost small" Content="{loc:T Profiles_Share}"
+                                        Command="{Binding #Root.((vm:ProfilesViewModel)DataContext).ExportProfile}"
+                                        CommandParameter="{Binding}" />
+                                <Button Classes="ghost small" Content="{loc:T Common_Edit}"
+                                        Command="{Binding #Root.((vm:ProfilesViewModel)DataContext).EditProfileCommand}"
+                                        CommandParameter="{Binding}" />
+                                <Button Classes="ghost small" Content="{loc:T Common_Delete}"
+                                        Command="{Binding #Root.((vm:ProfilesViewModel)DataContext).RemoveProfile}"
+                                        CommandParameter="{Binding}" />
+                                <Button Classes="small" Content="{loc:T Common_Select}" Margin="6,0,0,0"
+                                        Command="{Binding #Root.((vm:ProfilesViewModel)DataContext).SelectProfile}"
+                                        CommandParameter="{Binding}" />
+                            </WrapPanel>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</UserControl>

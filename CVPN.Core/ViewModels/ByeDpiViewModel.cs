@@ -60,6 +60,9 @@ public sealed class ByeDpiViewModel : PageViewModel
 
     public bool IsRunning => _service.IsRunning;
 
+    /// <summary>Свой ciadpi можно выбрать только на десктопе.</summary>
+    public bool ShowBrowse => Shell.Platform.CanPickBinaries;
+
     public string State
     {
         get => _state;

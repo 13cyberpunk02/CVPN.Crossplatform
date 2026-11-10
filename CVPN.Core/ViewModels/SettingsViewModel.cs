@@ -29,10 +29,14 @@ public sealed class SettingsViewModel : PageViewModel
         InstallTask = new RelayCommand(InstallElevatedTask);
         UninstallTask = new RelayCommand(UninstallElevatedTask);
 
+        _startupLanguage = Settings.Language;
+
         // Настройки сохранялись только при штатном выходе: если приложение
         // снять из диспетчера, изменения пропадали
         Settings.PropertyChanged += OnSettingChanged;
     }
+
+    private readonly string _startupLanguage;
 
     private PlatformServices Platform => Shell.Platform;
 
@@ -40,8 +44,10 @@ public sealed class SettingsViewModel : PageViewModel
     {
         Shell.Persist();
 
-        // Язык читается при запуске, поэтому спрашиваем прямо
-        if (e.PropertyName == nameof(AppSettings.Language)) _ = OfferRestartAsync();
+        // Язык читается при запуске, поэтому спрашиваем прямо - но только если
+        // он действительно отличается от того, с которым приложение запущено
+        if (e.PropertyName == nameof(AppSettings.Language) && Settings.Language != _startupLanguage)
+            _ = OfferRestartAsync();
     }
 
     public AppSettings Settings => Shell.Settings;
@@ -56,6 +62,13 @@ public sealed class SettingsViewModel : PageViewModel
     public bool ShowKillSwitch => Platform.KillSwitch.IsSupported;
     public bool ShowAutoStart => Platform.AutoStart.IsSupported;
     public bool ShowSystemProxy => Platform.SystemProxy.IsSupported;
+    public bool ShowCloseToTray => Platform.IsDesktop;
+
+    /// <summary>strict_route и IPv6 у TUN - параметры TUN самого sing-box, на Android его поднимает VpnService.</summary>
+    public bool ShowTunAdvanced => Platform.IsDesktop;
+
+    /// <summary>Есть ли что показать в разделе службы и задачи планировщика.</summary>
+    public bool ShowPrivileged => ShowService || ShowElevatedTask;
 
     public ICommand BrowseCore { get; }
     public ICommand RestoreNetwork { get; }

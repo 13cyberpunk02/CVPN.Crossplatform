@@ -1,0 +1,42 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:CVPN.ViewModels"
+             xmlns:loc="using:CVPN.Localization"
+             x:Class="CVPN.Views.LogsView"
+             x:DataType="vm:LogsViewModel">
+
+    <Grid Classes="page" RowDefinitions="Auto,Auto,*">
+        <StackPanel Grid.Row="0">
+            <TextBlock Classes="title" Text="{loc:T Logs_Title}" />
+            <TextBlock Classes="secondary" Text="{loc:T Logs_Subtitle}" Margin="0,4,0,0" TextWrapping="Wrap" />
+            <TextBlock Classes="status" Text="{Binding Status}" Margin="0,6,0,0" />
+        </StackPanel>
+
+        <WrapPanel Grid.Row="1" Margin="0,12,0,0">
+            <Button Content="{loc:T Common_Copy}" Command="{Binding Copy}" Margin="0,0,8,0" />
+            <Button Classes="ghost" Content="{loc:T Common_Clear}" Command="{Binding Clear}" Margin="0,0,8,0" />
+            <Button Classes="ghost" Content="{loc:T Logs_OpenFolder}" ToolTip.Tip="{loc:T Logs_OpenFolderHint}"
+                    Command="{Binding OpenFolder}" IsVisible="{Binding CanOpenFolder}" />
+        </WrapPanel>
+
+        <Border Grid.Row="2" Background="{StaticResource Console}" CornerRadius="{StaticResource RadiusCard}"
+                BorderBrush="{StaticResource Line}" BorderThickness="1" Margin="0,14,0,0" Padding="14,12">
+            <!-- Виртуализация: в логе до 500 строк, а на телефоне это заметно -->
+            <ListBox x:Name="LogList" Classes="plain" ItemsSource="{Binding Log}">
+                <ListBox.Styles>
+                    <Style Selector="ListBoxItem">
+                        <Setter Property="Margin" Value="0,0,0,3" />
+                    </Style>
+                </ListBox.Styles>
+                <ListBox.ItemTemplate>
+                    <DataTemplate x:DataType="x:String">
+                        <SelectableTextBlock Classes="mono" FontFamily="{StaticResource Font.Mono}"
+                                             Foreground="{StaticResource TextSecondary}"
+                                             FontSize="{StaticResource Size.Small}"
+                                             Text="{Binding}" TextWrapping="Wrap" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Border>
+    </Grid>
+</UserControl>

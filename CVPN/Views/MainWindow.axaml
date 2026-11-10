@@ -1,14 +1,14 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:CVPN.ViewModels"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="using:CVPN.Views"
-        mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="600"
         x:Class="CVPN.Views.MainWindow"
         x:DataType="vm:MainViewModel"
-        Width="900" Height="640"
+        Width="980" Height="660" MinWidth="380" MinHeight="520"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource Bg}"
         Icon="/Assets/cvpn.ico"
         Title="CVPN">
-    <views:MainView />
+    <!-- Системная рамка окна: своя (WindowChrome в WPF) на Linux ведёт себя по-разному в разных DE -->
+    <views:MainView x:Name="Main" />
 </Window>

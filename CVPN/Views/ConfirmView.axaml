@@ -1,0 +1,14 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="using:CVPN.Localization"
+             x:Class="CVPN.Views.ConfirmView"
+             Focusable="True">
+    <StackPanel Spacing="18" MinWidth="280">
+        <TextBlock Classes="heading" Text="CVPN" />
+        <TextBlock x:Name="Message" TextWrapping="Wrap" />
+        <Grid ColumnDefinitions="*,Auto,Auto">
+            <Button Grid.Column="1" Classes="ghost" Content="{loc:T Common_No}" Click="OnNo" Margin="0,0,8,0" />
+            <Button Grid.Column="2" Classes="primary" Content="{loc:T Common_Yes}" Click="OnYes" />
+        </Grid>
+    </StackPanel>
+</UserControl>

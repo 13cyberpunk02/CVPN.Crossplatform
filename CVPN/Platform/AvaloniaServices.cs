@@ -118,4 +118,5 @@ public sealed record CommonServices(
     IUiDispatcher Ui,
     IFilePicker Files,
     IClipboardService Clipboard,
+    IDialogService Dialogs,
     Func<TopLevel?> TopLevel);
