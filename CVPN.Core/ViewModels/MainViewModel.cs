@@ -595,7 +595,9 @@ public sealed class MainViewModel : ObservableObject
         try
         {
             var service = new SingBoxService(Settings.CorePath);
-            SetCore(await service.GetVersionAsync(), problem: false);
+            // «sing-box version 1.14.3» не помещается в боковое меню - слово version лишнее
+            var version = await service.GetVersionAsync();
+            SetCore(version.Replace("sing-box version ", "sing-box ", StringComparison.Ordinal), problem: false);
         }
         catch
         {

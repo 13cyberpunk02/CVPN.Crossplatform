@@ -1,107 +1,219 @@
-# CVPN (Avalonia)
+<div align="center">
 
-Кроссплатформенная версия [CVPN](https://github.com/13CyberPunk02/CVPN) - клиента sing-box -
-на Avalonia: Windows, Linux, Android.
+<img src="CVPN/Assets/cvpn.png" width="96" alt="CVPN" />
 
-## Структура
+# CVPN
+
+**Клиент [sing-box](https://github.com/SagerNet/sing-box) с понятной маршрутизацией и встроенным ByeDPI**
+
+Windows · Linux · Android
+
+[![Релиз](https://img.shields.io/github/v/release/13cyberpunk02/CVPN.Crossplatform?label=%D1%80%D0%B5%D0%BB%D0%B8%D0%B7)](https://github.com/13cyberpunk02/CVPN.Crossplatform/releases/latest)
+[![Тесты](https://github.com/13cyberpunk02/CVPN.Crossplatform/actions/workflows/tests.yml/badge.svg)](https://github.com/13cyberpunk02/CVPN.Crossplatform/actions/workflows/tests.yml)
+[![Лицензия: MIT](https://img.shields.io/badge/%D0%BB%D0%B8%D1%86%D0%B5%D0%BD%D0%B7%D0%B8%D1%8F-MIT-blue)](LICENSE)
+
+**Русский** · [English](README.en.md)
+
+</div>
+
+<p align="center">
+  <img src="docs/screenshots/connection-dark.png" width="49%" alt="Соединение, тёмная тема" />
+  <img src="docs/screenshots/profiles-light.png" width="49%" alt="Профили, светлая тема" />
+</p>
+
+CVPN собирает конфигурацию sing-box из профилей серверов и правил маршрутизации, запускает
+ядро и показывает, что происходит с трафиком. Редактировать JSON руками не нужно: сервер
+добавляется ссылкой, правила задаются в пару кликов, а для сайтов, которые достаточно
+«разблокировать», есть ByeDPI без расхода трафика прокси.
+
+Это кроссплатформенная версия [CVPN для Windows](https://github.com/13CyberPunk02/CVPN),
+переписанная на [Avalonia](https://avaloniaui.net). Профили и правила прежней версии
+читаются как есть.
+
+## Возможности
+
+- **Протоколы:** VLESS (Reality, WebSocket, XHTTP), AnyTLS, NaiveProxy (кроме Android).
+- **Профили:** ссылки `vless://`, `anytls://`, `naive+https://`, подписки, импорт конфигурации
+  sing-box из файла, экспорт и «Поделиться», проверка задержки всех серверов.
+- **Маршрутизация:** правила по geosite, geoip, домену, суффиксу, ключевому слову, процессу
+  и своим наборам `.srs`. Действия: через прокси, напрямую, через ByeDPI, блокировать.
+  Несколько наборов правил и проверка «куда пойдёт этот домен».
+- **ByeDPI** встроен: сайты с действием «через ByeDPI» идут в интернет напрямую, но со
+  скрытым от DPI началом соединения.
+- **Режимы:** TUN (весь трафик системы) или системный прокси.
+- **Kill switch:** Windows - брандмауэр, Linux - nftables, Android - системная
+  «Постоянная VPN».
+- **Служба туннеля:** TUN без запуска приложения от администратора (служба Windows,
+  юнит systemd).
+- **Наблюдение:** активные соединения с правилом, по которому каждое из них пошло,
+  скорость, итоги сессии, журнал ядра.
+- **Удобства:** автовыбор быстрого сервера, автоподключение, автозапуск, значок в трее,
+  тёмная и светлая темы, русский и английский языки.
+
+<p align="center">
+  <img src="docs/screenshots/routing-dark.png" width="49%" alt="Маршруты" />
+  <img src="docs/screenshots/settings-light.png" width="49%" alt="Настройки" />
+</p>
+
+## Установка
+
+Готовые сборки - на странице [релизов](https://github.com/13cyberpunk02/CVPN.Crossplatform/releases/latest).
+.NET ставить не нужно: он уже внутри.
+
+| Система | Файл | Как поставить |
+|---|---|---|
+| Windows 10/11 x64 | `CVPN-<версия>-setup.exe` | Запустить установщик |
+| Windows без установки | `CVPN-<версия>-portable.zip` | Распаковать, запустить `CVPN.exe` |
+| Debian, Ubuntu, Mint | `cvpn_<версия>_amd64.deb` | `sudo apt install ./cvpn_<версия>_amd64.deb` |
+| Любой Linux x64 | `CVPN-<версия>-x86_64.AppImage` | `chmod +x` и запустить |
+| Linux x64, архив | `CVPN-<версия>-linux-x64.tar.gz` | Распаковать, запустить `./CVPN` |
+| Android 6+ (arm64) | `CVPN-<версия>-android-arm64.apk` | Открыть файл на телефоне, разрешить установку |
+
+## Быстрый старт
+
+1. **Профили** - вставьте ссылку на сервер и нажмите «Разобрать ссылку» или укажите
+   ссылку подписки.
+2. **Соединение** - выберите сервер и нажмите на круг.
+3. **Маршруты** - по желанию: что пускать напрямую, что через прокси, что через ByeDPI.
+   Правила проверяются сверху вниз, для всего остального есть отдельная настройка внизу.
+
+Режим TUN перехватывает весь трафик системы и требует прав. Без них работает
+режим системного прокси: в настройках выключите «Режим TUN».
+
+## Платформы
+
+### Windows
+
+TUN требует прав администратора. Три варианта:
+
+- **Служба туннеля** (рекомендуется): «Настройки → Права на TUN → Служба туннеля».
+  Ставится один раз, после этого приложение работает без запроса прав.
+- **Задача планировщика**: приложение целиком запускается с правами администратора без окна UAC.
+- Ничего не ставить: CVPN предложит перезапуск с правами при включении TUN.
+
+### Linux
+
+- **Служба** (рекомендуется): «Настройки → Права на TUN → Служба туннеля → Установить».
+  Через `pkexec` служба копируется в `/opt/cvpn` и ставится юнит `cvpn-tunnel.service`.
+  Пользователь добавляется в группу `cvpn`, **доступ появится после повторного входа
+  в систему**.
+- **Без службы** - выдать права самому ядру:
+  `sudo setcap cap_net_admin,cap_net_raw,cap_net_bind_service+ep <путь к sing-box>`.
+  Учтите: это права на сеть для любого, кто запустит этот файл.
+- **Kill switch** - таблица nftables `inet cvpn_killswitch`. Аварийно снять:
+  `sudo nft delete table inet cvpn_killswitch`. Трафик ByeDPI идёт мимо туннеля,
+  поэтому при включённом kill switch сайты через ByeDPI не откроются.
+- **Системный прокси** настраивается через `gsettings` (GNOME и производные).
+- **Трей** - StatusNotifierItem: KDE, Cinnamon, XFCE. В GNOME нужно расширение AppIndicator.
+
+### Android
+
+- При первом подключении система спросит разрешение на VPN.
+- **Kill switch** включается в настройках Android: «Сеть → VPN → CVPN → Постоянная VPN»
+  и «Блокировать соединения без VPN».
+- ByeDPI и ядро встроены, путь к ним указывать не нужно.
+- Поддерживается только arm64: это почти все телефоны последних лет.
+- NaiveProxy на Android недоступен, как и в официальной сборке sing-box.
+
+## Данные
+
+| Система | Каталог |
+|---|---|
+| Windows | `%AppData%\CVPN` |
+| Linux | `~/.config/CVPN` |
+| Android | внутренний каталог приложения |
+
+Пароли и UUID в `profiles.json` зашифрованы: на Windows через DPAPI (файлы прежней
+версии читаются), на Linux и Android через AES-GCM с ключом рядом с данными.
+
+## Частые вопросы
+
+**XHTTP не подключается.** Официальный sing-box XHTTP не поддерживает, транспорт
+добавляют форки ядра. Укажите путь к такому ядру в «Настройки → Ядро sing-box».
+
+**После включения TUN не открываются локальные сайты (dev-сервер на localhost).**
+Выключите «Строгая маршрутизация» или включите «IPv6 на адаптере TUN» и переподключитесь.
+
+**ByeDPI запущен, но сайт не открывается.** Попробуйте другие аргументы на странице ByeDPI.
+В режиме TUN на Windows привязка ciadpi к адаптеру работает не везде, тогда помогает режим
+системного прокси (подробности на странице ByeDPI).
+
+**Интернет пропал после аварийного завершения с kill switch.** «Настройки → Восстановить
+сеть», на Linux также `sudo nft delete table inet cvpn_killswitch`.
+
+## Сборка из исходников
+
+Нужен [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0).
 
 ```
-CVPN.Shared/    протокол IPC, файловый лог, остановка процессов - общий для приложения и службы
-CVPN.Core/      логика без UI: модели, ConfigBuilder, парсеры, подписки, Clash API, ViewModels,
-                интерфейсы платформы (Platform/), способы запуска ядра (Tunnel/), локализация
-CVPN/           общий интерфейс Avalonia (сборка CVPN.UI): страницы, тема и UI Kit (Theme/),
-                круг подключения, шапка окна, трей, диалоги
-CVPN.Desktop/   точка входа Windows / Linux (CVPN.exe / CVPN), реализации платформы
-CVPN.Service/   служба туннеля: служба Windows и юнит systemd
-CVPN.Android/   точка входа Android (VpnService - в работе)
-CVPN.Tests/     xUnit: Core и санитайзер службы
-packaging/      установщик и портативная сборка Windows, tar.gz/.deb/AppImage для Linux
-```
-
-## Сборка и запуск
-
-```
-dotnet build CVPN.Desktop
+dotnet build CVPN.Desktop        # приложение для Windows и Linux
 dotnet test  CVPN.Tests
-dotnet build CVPN.Android
+dotnet build CVPN.Android        # нужна рабочая нагрузка: dotnet workload install android
 ```
 
-`CVPN_DATA_DIR=<каталог>` - свой каталог данных вместо `%AppData%\CVPN` / `~/.config/CVPN`:
-для проверок и портативного запуска.
+Структура:
 
-В Debug-сборке: `--page=<connection|profiles|routing|connections|logs|byedpi|settings>`,
-`--theme=dark|light`, `--snapshot=файл.png[|ширина[|высота]]` и `--scroll-end` -
-отрисовать окно в PNG и выйти (проверка вёрстки без ручных кликов).
+```
+CVPN.Shared/    протокол IPC, файловый лог - общий для приложения и службы
+CVPN.Core/      логика без UI: модели, ConfigBuilder, парсеры ссылок, подписки, Clash API,
+                ViewModels, интерфейсы платформы, локализация
+CVPN/           общий интерфейс Avalonia: страницы, тема и UI Kit, круг подключения, трей
+CVPN.Desktop/   точка входа и реализации платформы для Windows и Linux
+CVPN.Service/   служба туннеля: служба Windows и юнит systemd
+CVPN.Android/   точка входа Android: VpnService + hev-socks5-tunnel + sing-box
+CVPN.Tests/     xUnit
+packaging/      установщик Windows, пакеты Linux, сборка нативных библиотек Android
+```
 
-## Linux
+<details>
+<summary><b>Пакеты, Android и отладка</b></summary>
 
-**Права на TUN.** Два способа:
-
-1. Служба (рекомендуется): «Настройки → Служба туннеля → Установить». Через `pkexec`
-   служба и ядро копируются в `/opt/cvpn`, ставится юнит `cvpn-tunnel.service`,
-   пользователь добавляется в группу `cvpn`. **Доступ появится после повторного входа
-   в систему.** Вручную: `sudo sh linux/cvpn-service.sh install <service> <sing-box> $USER`.
-2. Без службы - выдать права самому ядру:
-   `sudo setcap cap_net_admin,cap_net_raw,cap_net_bind_service+ep <путь к sing-box>`.
-   Учтите: это права на сеть для любого, кто запустит этот файл.
-
-**Kill switch** - таблица nftables `inet cvpn_killswitch`: исходящий трафик запрещён, кроме
-TUN, `lo`, локальной сети, DHCP и соединений ядра (метка `route.default_mark`).
-Трафик ByeDPI метки не несёт, поэтому при включённом kill switch сайты через ByeDPI не откроются.
-Включение и снятие - через `pkexec`. Аварийно: `sudo nft delete table inet cvpn_killswitch`.
-
-**Системный прокси** настраивается через `gsettings` (GNOME и производные).
-**Трей** - StatusNotifierItem: KDE, Cinnamon, XFCE; в GNOME нужно расширение AppIndicator.
-
-## Пакеты
+**Пакеты:**
 
 ```
 packaging/windows/build.ps1 -Version 1.2.3     # dist\CVPN-1.2.3-setup.exe, -portable.zip
-packaging/linux/build.sh 1.2.3                 # dist/CVPN-1.2.3-linux-x64.tar.gz, cvpn_1.2.3_amd64.deb, .AppImage
+packaging/linux/build.sh 1.2.3                 # dist/*.tar.gz, *.deb, *.AppImage
 ```
 
-Релиз в GitHub собирается по тегу `v*` (`.github/workflows/release.yml`).
+Релиз в GitHub собирается по тегу `v*` (`.github/workflows/release.yml`), текст релиза
+берётся из `packaging/release-notes.md`. Ручной запуск workflow - пробная сборка без
+публикации.
 
-## Android
-
-Режим TUN на Android - это VPN:
-
-```
-приложения ─► TUN (VpnService) ─► hev-socks5-tunnel ─► SOCKS5 127.0.0.1:mixed ─► sing-box ─► сервер
-```
-
-- sing-box - обычный процесс приложения (`libsingbox.so` в nativeLibraryDir: запускать можно
-  только оттуда). Само приложение исключено из своего VPN, поэтому соединения ядра не
-  зацикливаются.
-- tun2socks - [hev-socks5-tunnel](https://github.com/heiher/hev-socks5-tunnel), его C-API
-  вызывается напрямую (P/Invoke), без Java-обёрток.
-- Конфиг для Android правит `ConfigBuilder.AdaptForAndroid`: без входа tun, без привязки к
-  интерфейсу и поиска процессов, локальный DNS - DNS текущей сети.
-- Kill switch - системный: «Настройки → Сеть → VPN → CVPN → Постоянная VPN» и
-  «Блокировать соединения без VPN».
-- ByeDPI вшит (`libciadpi.so`, статическая сборка из релиза ByeDPI): путь не выбирается,
-  привязка к адаптеру не нужна - приложение и так исключено из своего VPN.
-- NaiveProxy на Android не поддерживается (как и в официальной сборке sing-box: ему нужен Cronet).
-
-**Ядро урезано.** Официальная сборка sing-box под Android - 79 МБ (Tailscale, Cloudflared,
-WireGuard, OpenVPN и прочее). CVPN собирает своё только с `with_utls`, `with_clash_api`,
-`with_quic` - 42 МБ. Релизный APK - только arm64, около 31 МБ; после установки около 100 МБ.
-
-Нативные библиотеки не хранятся в git:
+**Android.** Схема работы:
 
 ```
-bash packaging/android/build-core.sh          # ядро для телефонов (Linux или WSL; Go скачается сам)
-pwsh packaging/android/fetch-natives.ps1      # tun2socks, ciadpi, ядро для эмулятора x86_64
+приложения ─► TUN (VpnService) ─► hev-socks5-tunnel ─► SOCKS5 127.0.0.1 ─► sing-box ─► сервер
+```
+
+Само приложение исключено из своего VPN, поэтому соединения ядра не зацикливаются.
+Ядро собирается урезанным (`with_utls`, `with_clash_api`, `with_quic`): 42 МБ вместо 79 МБ
+официальной сборки, APK около 31 МБ. Нативные библиотеки в git не хранятся:
+
+```
+bash packaging/android/build-core.sh          # ядро (Linux или WSL; Go скачается сам)
+pwsh packaging/android/fetch-natives.ps1      # tun2socks, ciadpi, ядро для эмулятора
 dotnet build CVPN.Android -c Release
 ```
 
-Сборка из Windows: `wsl bash packaging/android/build-core.sh`.
-
-## Linux и Android: ByeDPI
-
-На Linux и Android ciadpi всегда тот, что вшит в приложение (`byedpi/ciadpi`, `libciadpi.so`),
-поле пути скрыто. Выбрать свой ciadpi можно только на Windows.
-
-Если Release падает на «Precompiling failed» и в пути профиля Windows есть кириллица -
-это AOT-компилятор Mono: задайте латинский временный каталог, например
+Если Release падает на «Precompiling failed» и в пути профиля Windows есть кириллица,
+это AOT-компилятор Mono: задайте латинский временный каталог,
 `$env:TEMP = $env:TMP = "C:\tmp"`.
+
+**Отладка.** `CVPN_DATA_DIR=<каталог>` - свой каталог данных. В Debug-сборке:
+`--page=<connection|profiles|routing|connections|logs|byedpi|settings>`,
+`--theme=dark|light`, `--snapshot=файл.png[|ширина[|высота]]` и `--scroll-end` -
+отрисовать окно в PNG и выйти.
+
+</details>
+
+## Благодарности
+
+- [sing-box](https://github.com/SagerNet/sing-box) - ядро (GPL-3.0)
+- [ByeDPI](https://github.com/hufrea/byedpi) - обход DPI (MIT)
+- [hev-socks5-tunnel](https://github.com/heiher/hev-socks5-tunnel) - tun2socks для Android (MIT)
+- [Avalonia](https://avaloniaui.net) - кроссплатформенный интерфейс (MIT)
+
+## Лицензия
+
+[MIT](LICENSE). Ядро sing-box распространяется вместе с приложением под GPL-3.0,
+текст лицензии лежит рядом с бинарником.
