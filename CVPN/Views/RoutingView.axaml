@@ -57,8 +57,12 @@
                     <Button Grid.Column="1" HorizontalAlignment="Left" Margin="8,0,0,0"
                             Content="{loc:T Routing_PickSrs}" Command="{Binding PickSrs}"
                             IsVisible="{Binding ShowPickSrs}" />
-                    <Button Grid.Column="2" Classes="primary" Content="{loc:T Common_Add}"
-                            Command="{Binding AddNewRule}" />
+                    <Button Grid.Column="2" Classes="primary" Command="{Binding AddNewRule}">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <Path Classes="icon" Data="{StaticResource Icon.Plus}" Width="14" Height="14" />
+                                <TextBlock Text="{loc:T Common_Add}" />
+                            </StackPanel>
+                    </Button>
                 </Grid>
             </StackPanel>
         </Border>
@@ -111,10 +115,10 @@
                                         CommandParameter="{Binding}">
                                     <Path Classes="icon" Data="{StaticResource Icon.ChevronDown}" />
                                 </Button>
-                                <Button Classes="ghost small icon"
+                                <Button Classes="ghost small icon remove" ToolTip.Tip="{loc:T Common_Delete}"
                                         Command="{Binding #Root.((vm:RoutingViewModel)DataContext).RemoveRule}"
                                         CommandParameter="{Binding}">
-                                    <Path Classes="icon" Data="{StaticResource Icon.X}" />
+                                    <Path Classes="icon" Data="{StaticResource Icon.Trash}" />
                                 </Button>
                             </StackPanel>
                         </Grid>

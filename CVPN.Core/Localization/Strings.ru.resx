@@ -29,10 +29,18 @@
       </xsd:complexType>
     </xsd:element>
   </xsd:schema>
-  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
-  <resheader name="version"><value>2.0</value></resheader>
-  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
-  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
   <data name="Action_Connect" xml:space="preserve">
     <value>Подключить</value>
   </data>
@@ -115,7 +123,7 @@
     <value>Проверить конфиг</value>
   </data>
   <data name="Connection_Download" xml:space="preserve">
-    <value>приём</value>
+    <value>Приём</value>
   </data>
   <data name="Connection_Duration" xml:space="preserve">
     <value>время</value>
@@ -136,7 +144,7 @@
     <value>принято</value>
   </data>
   <data name="Connection_Rules" xml:space="preserve">
-    <value>правила</value>
+    <value>Правила</value>
   </data>
   <data name="Connection_Sent" xml:space="preserve">
     <value>отдано</value>
@@ -145,7 +153,7 @@
     <value>сессия</value>
   </data>
   <data name="Connection_Upload" xml:space="preserve">
-    <value>отдача</value>
+    <value>Отдача</value>
   </data>
   <data name="Connections_CloseHint" xml:space="preserve">
     <value>Закрыть соединение</value>
@@ -638,7 +646,7 @@
     <value>sing-box (sing-box.exe)|sing-box.exe|Исполняемые файлы (*.exe)|*.exe</value>
   </data>
   <data name="Settings_CorePath" xml:space="preserve">
-    <value>путь к ядру</value>
+    <value>Путь к ядру</value>
   </data>
   <data name="Settings_CreateTask" xml:space="preserve">
     <value>Создать задачу</value>
@@ -703,7 +711,7 @@
     <value>Снимает правила брандмауэра, если интернет пропал вместе с туннелем</value>
   </data>
   <data name="Settings_Service" xml:space="preserve">
-    <value>служба туннеля</value>
+    <value>Служба туннеля</value>
   </data>
   <data name="Settings_ServiceFilesMissing" xml:space="preserve">
     <value>файлы службы не найдены: {0}</value>
@@ -733,7 +741,7 @@
     <value>Ядро, режим перехвата трафика и запуск</value>
   </data>
   <data name="Settings_Task" xml:space="preserve">
-    <value>или задача планировщика</value>
+    <value>Или задача планировщика</value>
   </data>
   <data name="Settings_TaskCreateFailed" xml:space="preserve">
     <value>Не удалось создать задачу: {0}</value>
@@ -877,7 +885,7 @@
     <value>ByeDPI</value>
   </data>
   <data name="ByeDpi_Subtitle" xml:space="preserve">
-    <value>Локальный помощник, который скрывает начало соединения от фильтрации провайдера. Сайты с действием «через ByeDPI» идут сразу в интернет через него, а НЕ через ваш прокси-сервер, поэтому его трафик они не расходуют.</value>
+    <value>Локальный помощник, который скрывает начало соединения от фильтрации провайдера. Сайты с действием «через ByeDPI» идут в интернет через него, а не через ваш прокси-сервер, и не расходуют его трафик.</value>
   </data>
   <data name="ByeDpi_Enable" xml:space="preserve">
     <value>Использовать ByeDPI</value>
@@ -1033,7 +1041,7 @@
     <value>Режим VPN на Android пока не готов. Выключите TUN, чтобы пользоваться локальным прокси на 127.0.0.1.</value>
   </data>
   <data name="Settings_Theme" xml:space="preserve">
-    <value>тема</value>
+    <value>Тема</value>
   </data>
   <data name="Theme_System" xml:space="preserve">
     <value>Как в системе</value>
@@ -1091,5 +1099,38 @@
   </data>
   <data name="Store_LoadFailed" xml:space="preserve">
     <value>Файл профилей не читается и отложен как {0} - запуск с настройками по умолчанию ({1})</value>
+  </data>
+  <data name="Settings_SectionConnection" xml:space="preserve">
+    <value>Подключение</value>
+  </data>
+  <data name="Settings_SectionStartup" xml:space="preserve">
+    <value>Запуск</value>
+  </data>
+  <data name="Settings_SectionCore" xml:space="preserve">
+    <value>Ядро sing-box</value>
+  </data>
+  <data name="Settings_CheckUpdatesTitle" xml:space="preserve">
+    <value>Проверять обновления при запуске</value>
+  </data>
+  <data name="Settings_Dns" xml:space="preserve">
+    <value>DNS-сервер</value>
+  </data>
+  <data name="Settings_SectionPrivileged" xml:space="preserve">
+    <value>Права на TUN</value>
+  </data>
+  <data name="Settings_SectionUpdates" xml:space="preserve">
+    <value>Обновления</value>
+  </data>
+  <data name="Settings_SectionAppearance" xml:space="preserve">
+    <value>Внешний вид</value>
+  </data>
+  <data name="Profiles_Active" xml:space="preserve">
+    <value>Активен</value>
+  </data>
+  <data name="ByeDpi_SectionParams" xml:space="preserve">
+    <value>Параметры</value>
+  </data>
+  <data name="Connection_ChooseServer" xml:space="preserve">
+    <value>Сервер для подключения</value>
   </data>
 </root>

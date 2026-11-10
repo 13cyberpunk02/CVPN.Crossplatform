@@ -3,6 +3,7 @@
              xmlns:vm="using:CVPN.ViewModels"
              xmlns:loc="using:CVPN.Localization"
              xmlns:c="using:CVPN.Controls"
+             xmlns:models="using:CVPN.Models"
              x:Class="CVPN.Views.ConnectionView"
              x:DataType="vm:MainViewModel">
 
@@ -13,6 +14,15 @@
         <Style Selector=".narrow UniformGrid.session">
             <Setter Property="Columns" Value="2" />
         </Style>
+        <!-- Выбор сервера: фиксированной ширины на десктопе, во всю строку на телефоне -->
+        <Style Selector="ComboBox.server">
+            <Setter Property="Width" Value="300" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+        <Style Selector=".narrow ComboBox.server">
+            <Setter Property="Width" Value="NaN" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+        </Style>
         <Style Selector="Border.metric">
             <Setter Property="Padding" Value="14,12" />
             <Setter Property="BorderThickness" Value="0" />
@@ -22,16 +32,22 @@
     <ScrollViewer HorizontalScrollBarVisibility="Disabled">
         <Grid Classes="page" RowDefinitions="Auto,*,Auto,Auto,Auto,Auto">
 
-            <!-- Строка состояния -->
+            <!-- Сервер выбирается прямо здесь; состояние уже показано в шапке окна и кругом -->
             <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
-                <StackPanel Orientation="Horizontal" Spacing="9" VerticalAlignment="Center">
-                    <Ellipse Classes="dot"
-                             Classes.connected="{Binding IsConnected}"
-                             Classes.connecting="{Binding IsConnecting}"
-                             Classes.failing="{Binding IsFailing}" />
-                    <TextBlock Classes="mono" Text="{Binding StateLabel}"
-                               FontSize="{StaticResource Size.Caption}" Foreground="{DynamicResource TextMuted}" />
-                </StackPanel>
+                <ComboBox Classes="server" Margin="0,0,12,0"
+                          ItemsSource="{Binding Profiles}" SelectedItem="{Binding ChosenServer}"
+                          ToolTip.Tip="{loc:T Connection_ChooseServer}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="models:ServerProfile">
+                            <StackPanel Orientation="Horizontal" Spacing="9">
+                                <Image Width="16" Height="11" VerticalAlignment="Center"
+                                       Source="{Binding CountryCode, Converter={StaticResource Flag}}" />
+                                <TextBlock Text="{Binding Name}" VerticalAlignment="Center"
+                                           TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
                     <Button Classes="ghost small" Content="{loc:T Connection_Measure}"
                             FontSize="{StaticResource Size.Caption}" Command="{Binding MeasureDelay}" />
@@ -108,8 +124,8 @@
 
             <!-- Действия -->
             <WrapPanel Grid.Row="5" Margin="0,10,0,0">
-                <Button Content="{loc:T Connection_CheckConfig}" Command="{Binding CheckConfig}" Margin="0,0,6,0" />
-                <Button Classes="ghost" Content="{loc:T Connection_OpenConfig}" Command="{Binding OpenConfig}"
+                <Button Classes="ghost small" Content="{loc:T Connection_CheckConfig}" Command="{Binding CheckConfig}" Margin="0,0,6,0" />
+                <Button Classes="ghost small" Content="{loc:T Connection_OpenConfig}" Command="{Binding OpenConfig}"
                         IsVisible="{Binding Platform.Launcher.CanOpenFiles}" />
             </WrapPanel>
         </Grid>

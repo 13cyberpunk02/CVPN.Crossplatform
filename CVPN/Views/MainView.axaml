@@ -87,7 +87,9 @@
                                        Text="{Binding ModeDetail}" Margin="13,2,0,0" TextTrimming="CharacterEllipsis" />
                             <TextBlock Classes="caption warning" Text="{Binding ModePendingHint}" Margin="13,5,0,0"
                                        TextWrapping="Wrap" IsVisible="{Binding ModePending}" />
-                            <TextBlock Classes="label" Text="{Binding SingBoxVersion}" Margin="0,10,0,0"
+                            <!-- Без ядра подключиться нельзя - об этом сообщаем цветом, а не серым шрифтом -->
+                            <TextBlock Classes="label" Classes.warning="{Binding CoreProblem}"
+                                       Text="{Binding SingBoxVersion}" Margin="0,10,0,0"
                                        TextTrimming="CharacterEllipsis" />
                         </StackPanel>
                     </Border>

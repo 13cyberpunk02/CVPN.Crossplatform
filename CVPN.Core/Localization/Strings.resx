@@ -29,10 +29,18 @@
       </xsd:complexType>
     </xsd:element>
   </xsd:schema>
-  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
-  <resheader name="version"><value>2.0</value></resheader>
-  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
-  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
   <data name="Action_Connect" xml:space="preserve">
     <value>Connect</value>
   </data>
@@ -115,7 +123,7 @@
     <value>Check config</value>
   </data>
   <data name="Connection_Download" xml:space="preserve">
-    <value>download</value>
+    <value>Download</value>
   </data>
   <data name="Connection_Duration" xml:space="preserve">
     <value>duration</value>
@@ -136,7 +144,7 @@
     <value>received</value>
   </data>
   <data name="Connection_Rules" xml:space="preserve">
-    <value>rules</value>
+    <value>Rules</value>
   </data>
   <data name="Connection_Sent" xml:space="preserve">
     <value>sent</value>
@@ -145,7 +153,7 @@
     <value>session</value>
   </data>
   <data name="Connection_Upload" xml:space="preserve">
-    <value>upload</value>
+    <value>Upload</value>
   </data>
   <data name="Connections_CloseHint" xml:space="preserve">
     <value>Close this connection</value>
@@ -638,7 +646,7 @@ If you decline, you can turn TUN off in settings - traffic will then go through 
     <value>sing-box (sing-box.exe)|sing-box.exe|Executables (*.exe)|*.exe</value>
   </data>
   <data name="Settings_CorePath" xml:space="preserve">
-    <value>core path</value>
+    <value>Core path</value>
   </data>
   <data name="Settings_CreateTask" xml:space="preserve">
     <value>Create task</value>
@@ -703,7 +711,7 @@ Restart CVPN now?</value>
     <value>Removes the firewall rules if internet went away with the tunnel</value>
   </data>
   <data name="Settings_Service" xml:space="preserve">
-    <value>tunnel service</value>
+    <value>Tunnel service</value>
   </data>
   <data name="Settings_ServiceFilesMissing" xml:space="preserve">
     <value>service files not found: {0}</value>
@@ -733,7 +741,7 @@ Restart CVPN now?</value>
     <value>Core, interception mode and startup</value>
   </data>
   <data name="Settings_Task" xml:space="preserve">
-    <value>or a scheduled task</value>
+    <value>Or a scheduled task</value>
   </data>
   <data name="Settings_TaskCreateFailed" xml:space="preserve">
     <value>Could not create the task: {0}</value>
@@ -877,7 +885,7 @@ Restart CVPN now?</value>
     <value>ByeDPI</value>
   </data>
   <data name="ByeDpi_Subtitle" xml:space="preserve">
-    <value>A local helper that disguises the start of a connection from your ISP's filtering. Sites routed “via ByeDPI” go straight to the internet through it, NOT through your proxy server, so they use none of its traffic.</value>
+    <value>A local helper that disguises the start of a connection from your ISP's filtering. Sites routed “via ByeDPI” go to the internet through it rather than through your proxy server, so they use none of its traffic.</value>
   </data>
   <data name="ByeDpi_Enable" xml:space="preserve">
     <value>Use ByeDPI</value>
@@ -1033,7 +1041,7 @@ Restart CVPN now?</value>
     <value>VPN mode on Android is not ready yet. Turn TUN off to use the local proxy on 127.0.0.1.</value>
   </data>
   <data name="Settings_Theme" xml:space="preserve">
-    <value>theme</value>
+    <value>Theme</value>
   </data>
   <data name="Theme_System" xml:space="preserve">
     <value>As in the system</value>
@@ -1091,5 +1099,38 @@ Restart CVPN now?</value>
   </data>
   <data name="Store_LoadFailed" xml:space="preserve">
     <value>Profiles file could not be read and was set aside as {0} - starting with defaults ({1})</value>
+  </data>
+  <data name="Settings_SectionConnection" xml:space="preserve">
+    <value>Connection</value>
+  </data>
+  <data name="Settings_SectionStartup" xml:space="preserve">
+    <value>Startup</value>
+  </data>
+  <data name="Settings_SectionCore" xml:space="preserve">
+    <value>sing-box core</value>
+  </data>
+  <data name="Settings_CheckUpdatesTitle" xml:space="preserve">
+    <value>Check for updates on startup</value>
+  </data>
+  <data name="Settings_Dns" xml:space="preserve">
+    <value>DNS server</value>
+  </data>
+  <data name="Settings_SectionPrivileged" xml:space="preserve">
+    <value>TUN privileges</value>
+  </data>
+  <data name="Settings_SectionUpdates" xml:space="preserve">
+    <value>Updates</value>
+  </data>
+  <data name="Settings_SectionAppearance" xml:space="preserve">
+    <value>Appearance</value>
+  </data>
+  <data name="Profiles_Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="ByeDpi_SectionParams" xml:space="preserve">
+    <value>Parameters</value>
+  </data>
+  <data name="Connection_ChooseServer" xml:space="preserve">
+    <value>Server to connect to</value>
   </data>
 </root>

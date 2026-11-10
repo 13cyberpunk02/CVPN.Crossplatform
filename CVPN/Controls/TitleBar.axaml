@@ -16,6 +16,9 @@
     <UserControl.Styles>
         <Style Selector="Border#StatePill">
             <Setter Property="Background" Value="{DynamicResource SurfaceHover}" />
+            <!-- В светлой теме фон плашки почти совпадает с шапкой - контур её проявляет -->
+            <Setter Property="BorderBrush" Value="{DynamicResource Line}" />
+            <Setter Property="BorderThickness" Value="1" />
             <Setter Property="Transitions">
                 <Transitions>
                     <BrushTransition Property="Background" Duration="0:0:0.3" />

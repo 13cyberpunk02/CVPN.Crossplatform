@@ -6,103 +6,112 @@
              x:DataType="vm:ByeDpiViewModel">
 
     <ScrollViewer HorizontalScrollBarVisibility="Disabled">
-        <StackPanel Classes="page" Spacing="10">
+        <StackPanel Classes="page" Spacing="8">
             <StackPanel Margin="0,0,0,8">
                 <TextBlock Classes="title" Text="{loc:T Nav_ByeDpi}" />
                 <TextBlock Classes="secondary" Text="{loc:T ByeDpi_Subtitle}" Margin="0,4,0,0" TextWrapping="Wrap" />
                 <TextBlock Classes="status" Text="{Binding Status}" Margin="0,6,0,0" />
             </StackPanel>
 
+            <!-- Включение и запуск - главное на странице, поэтому наверху -->
             <Border Classes="card">
                 <StackPanel>
                     <Grid ColumnDefinitions="*,Auto">
-                        <StackPanel Margin="0,0,12,0">
+                        <StackPanel Margin="0,0,16,0">
                             <TextBlock Text="{loc:T ByeDpi_Enable}" />
                             <TextBlock Classes="caption" Text="{loc:T ByeDpi_EnableHint}" Margin="0,3,0,0" TextWrapping="Wrap" />
                         </StackPanel>
-                        <ToggleSwitch Grid.Column="1" IsChecked="{Binding Settings.ByeDpiEnabled}" />
+                        <ToggleSwitch Grid.Column="1" IsChecked="{Binding Settings.ByeDpiEnabled}" VerticalAlignment="Center" />
                     </Grid>
 
+                    <Border Classes="divider" />
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Orientation="Horizontal" Spacing="9" VerticalAlignment="Center" Margin="0,0,12,8">
+                            <Ellipse Classes="dot" Classes.connected="{Binding IsRunning}" />
+                            <TextBlock Text="{Binding State}" TextWrapping="Wrap" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <WrapPanel Grid.Column="1" HorizontalAlignment="Right">
+                            <Button Classes="small" Content="{loc:T ByeDpi_AddYoutube}" ToolTip.Tip="{loc:T ByeDpi_AddYoutubeHint}"
+                                    Command="{Binding AddYoutubeRule}" Margin="0,0,8,8" />
+                            <Button Classes="primary small" Content="{Binding RunLabel}" Command="{Binding ToggleRun}"
+                                    MinWidth="110" HorizontalContentAlignment="Center" Margin="0,0,0,8" />
+                        </WrapPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="section" Text="{loc:T ByeDpi_SectionParams}" />
+            <Border Classes="card">
+                <StackPanel>
                     <!-- Путь - только на Windows: на Linux и Android ciadpi вшит в приложение -->
                     <StackPanel IsVisible="{Binding ShowPath}">
-                        <Border Classes="divider" />
-
-                        <TextBlock Classes="label" Text="{loc:T ByeDpi_Path}" />
+                        <TextBlock Classes="field" Text="{loc:T ByeDpi_Path}" />
                         <Grid ColumnDefinitions="*,Auto" Margin="0,8,0,0">
                             <TextBox Text="{Binding Settings.ByeDpiPath}" />
                             <Button Grid.Column="1" Content="{loc:T Common_Browse}" Command="{Binding Browse}"
                                     Margin="8,0,0,0" />
                         </Grid>
-                        <TextBlock Classes="caption" Text="{loc:T ByeDpi_PathHint}" Margin="0,8,0,0" TextWrapping="Wrap" />
+                        <TextBlock Classes="caption" Text="{loc:T ByeDpi_PathHint}" Margin="0,6,0,0" TextWrapping="Wrap" />
+                        <Border Classes="divider" />
                     </StackPanel>
-                </StackPanel>
-            </Border>
 
-            <Border Classes="card">
-                <StackPanel>
-                    <TextBlock Classes="label" Text="{loc:T ByeDpi_Args}" />
+                    <TextBlock Classes="field" Text="{loc:T ByeDpi_Args}" />
                     <TextBox Text="{Binding Settings.ByeDpiArgs}" Margin="0,8,0,0" />
-                    <TextBlock Classes="caption" Text="{loc:T ByeDpi_ArgsHint}" Margin="0,8,0,0" TextWrapping="Wrap" />
+                    <TextBlock Classes="caption" Text="{loc:T ByeDpi_ArgsHint}" Margin="0,6,0,0" TextWrapping="Wrap" />
 
-                    <TextBlock Classes="label" Text="{loc:T ByeDpi_WillRun}" Margin="0,14,0,0" />
-                    <SelectableTextBlock FontFamily="{StaticResource Font.Mono}" Foreground="{DynamicResource TextFaint}"
-                                         Text="{Binding CommandPreview}" Margin="0,6,0,0" TextWrapping="Wrap" />
+                    <!-- Итоговая строка запуска - как в терминале -->
+                    <Border Background="{DynamicResource Bg}" CornerRadius="{StaticResource Radius}"
+                            BorderBrush="{DynamicResource Line}" BorderThickness="1"
+                            Padding="12,10" Margin="0,12,0,0">
+                        <StackPanel>
+                            <TextBlock Classes="label" Text="{loc:T ByeDpi_WillRun}" />
+                            <SelectableTextBlock Classes="mono" FontSize="{StaticResource Size.Small}"
+                                                 Text="{Binding CommandPreview}" Margin="0,6,0,0" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
                     <TextBlock Classes="caption warning" Text="{Binding IgnoredNote}" Margin="0,8,0,0"
                                TextWrapping="Wrap" IsVisible="{Binding HasIgnored}" />
 
                     <Border Classes="divider" />
 
                     <Grid ColumnDefinitions="*,Auto">
-                        <StackPanel Margin="0,0,12,0">
+                        <StackPanel Margin="0,0,16,0">
                             <TextBlock Text="{loc:T ByeDpi_Port}" />
                             <TextBlock Classes="caption" Text="{loc:T ByeDpi_PortHint}" Margin="0,3,0,0" TextWrapping="Wrap" />
+                            <TextBlock Classes="caption danger" Text="{Binding PortWarning}" Margin="0,4,0,0"
+                                       TextWrapping="Wrap" IsVisible="{Binding HasPortWarning}" />
                         </StackPanel>
                         <TextBox Grid.Column="1" Width="96" Text="{Binding Settings.ByeDpiPort}" VerticalAlignment="Center" />
                     </Grid>
 
                     <StackPanel IsVisible="{Binding ShowBypassTun}">
                         <Border Classes="divider" />
-
                         <Grid ColumnDefinitions="*,Auto">
-                            <StackPanel Margin="0,0,12,0">
+                            <StackPanel Margin="0,0,16,0">
                                 <TextBlock Text="{loc:T ByeDpi_BypassTun}" />
                                 <TextBlock Classes="caption" Text="{loc:T ByeDpi_BypassTunHint}" Margin="0,3,0,0" TextWrapping="Wrap" />
                             </StackPanel>
-                            <ToggleSwitch Grid.Column="1" IsChecked="{Binding Settings.ByeDpiBypassTun}" />
+                            <ToggleSwitch Grid.Column="1" IsChecked="{Binding Settings.ByeDpiBypassTun}" VerticalAlignment="Center" />
                         </Grid>
                     </StackPanel>
 
                     <Border Classes="divider" />
-
                     <Grid ColumnDefinitions="*,Auto">
-                        <StackPanel Margin="0,0,12,0">
+                        <StackPanel Margin="0,0,16,0">
                             <TextBlock Text="{loc:T ByeDpi_BlockQuic}" />
                             <TextBlock Classes="caption" Text="{loc:T ByeDpi_BlockQuicHint}" Margin="0,3,0,0" TextWrapping="Wrap" />
                         </StackPanel>
-                        <ToggleSwitch Grid.Column="1" IsChecked="{Binding Settings.ByeDpiBlockQuic}" />
+                        <ToggleSwitch Grid.Column="1" IsChecked="{Binding Settings.ByeDpiBlockQuic}" VerticalAlignment="Center" />
                     </Grid>
-
-                    <TextBlock Classes="caption danger" Text="{Binding PortWarning}" Margin="0,8,0,0"
-                               TextWrapping="Wrap" IsVisible="{Binding HasPortWarning}" />
                 </StackPanel>
             </Border>
 
-            <Border Classes="card">
+            <!-- Примечание про TUN: заметная полоса слева, но обычный цвет текста - его надо прочитать, а не испугаться -->
+            <Border Classes="card note" IsVisible="{Binding ShowTunNote}">
                 <StackPanel>
-                    <TextBlock Classes="label" Text="{loc:T ByeDpi_State}" />
-                    <TextBlock Text="{Binding State}" Margin="0,6,0,0" TextWrapping="Wrap" />
-                    <WrapPanel Margin="0,12,0,0">
-                        <Button Classes="primary" Content="{Binding RunLabel}" Command="{Binding ToggleRun}" Margin="0,0,8,8" />
-                        <Button Content="{loc:T ByeDpi_AddYoutube}" ToolTip.Tip="{loc:T ByeDpi_AddYoutubeHint}"
-                                Command="{Binding AddYoutubeRule}" Margin="0,0,8,8" />
-                    </WrapPanel>
-                </StackPanel>
-            </Border>
-
-            <Border Classes="card" IsVisible="{Binding ShowTunNote}">
-                <StackPanel>
-                    <TextBlock Classes="label" Text="{loc:T ByeDpi_TunTitle}" />
-                    <TextBlock Classes="caption warning" Text="{loc:T ByeDpi_TunNote}" Margin="0,8,0,0" TextWrapping="Wrap" />
+                    <TextBlock Classes="field warning" Text="{loc:T ByeDpi_TunTitle}" />
+                    <TextBlock Classes="caption" Text="{loc:T ByeDpi_TunNote}" Margin="0,6,0,0" TextWrapping="Wrap" />
                 </StackPanel>
             </Border>
         </StackPanel>

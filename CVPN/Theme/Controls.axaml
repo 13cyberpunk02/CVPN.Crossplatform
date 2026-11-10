@@ -41,6 +41,21 @@
         <Setter Property="LetterSpacing" Value="-0.3" />
     </Style>
 
+    <!-- Заголовок группы карточек на длинных страницах (настройки, ByeDPI) -->
+    <Style Selector="TextBlock.section">
+        <Setter Property="FontSize" Value="{StaticResource Size.Small}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+        <Setter Property="Margin" Value="2,14,0,0" />
+    </Style>
+
+    <!-- Подпись поля внутри карточки -->
+    <Style Selector="TextBlock.field">
+        <Setter Property="FontSize" Value="{StaticResource Size.Small}" />
+        <Setter Property="FontWeight" Value="Medium" />
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+    </Style>
+
     <Style Selector="TextBlock.metric">
         <Setter Property="FontFamily" Value="{StaticResource Font.Mono}" />
         <Setter Property="FontSize" Value="20" />
@@ -97,6 +112,16 @@
         <Setter Property="Width" Value="20" />
         <Setter Property="Height" Value="20" />
     </Style>
+    <!-- Квадратная кнопка-иконка в строке списка -->
+    <Style Selector="Button.icon Path.icon">
+        <Setter Property="Width" Value="15" />
+        <Setter Property="Height" Value="15" />
+    </Style>
+    <!-- Удаление: нейтральное в покое, красное при наведении -->
+    <Style Selector="Button.ghost.remove:pointerover">
+        <Setter Property="Foreground" Value="{DynamicResource Danger}" />
+        <Setter Property="Background" Value="{DynamicResource Tint.Danger}" />
+    </Style>
 
     <!-- ===================== Страница ===================== -->
     <Style Selector=":is(Control).page">
@@ -120,6 +145,13 @@
                 <BrushTransition Property="Background" Duration="0:0:0.2" />
             </Transitions>
         </Setter>
+    </Style>
+
+    <!-- Примечание: полоса предупреждающего цвета слева -->
+    <Style Selector="Border.card.note">
+        <Setter Property="BorderBrush" Value="{DynamicResource Warning}" />
+        <Setter Property="BorderThickness" Value="3,0,0,0" />
+        <Setter Property="Background" Value="{DynamicResource Tint.Warning}" />
     </Style>
 
     <!-- Карточка-элемент списка: отзывается на наведение рамкой и лёгким подъёмом -->

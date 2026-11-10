@@ -3,7 +3,7 @@
              xmlns:vm="using:CVPN.ViewModels"
              x:Class="CVPN.Controls.ConnectDial"
              x:DataType="vm:MainViewModel"
-             Width="240" Height="240">
+             Width="288" Height="288">
 
     <!--
         Круг подключения. Обод показывает состояние, центр им управляет.
@@ -80,7 +80,7 @@
             <Setter Property="Background" Value="{DynamicResource Surface}" />
             <Setter Property="BorderBrush" Value="{DynamicResource Line}" />
             <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="CornerRadius" Value="76" />
+            <Setter Property="CornerRadius" Value="92" />
             <Setter Property="Padding" Value="0" />
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -119,30 +119,30 @@
 
     <Panel>
         <!-- Внешний обод -->
-        <Ellipse Width="210" Height="210" Stroke="{DynamicResource Line}" StrokeThickness="1" />
+        <Ellipse Width="252" Height="252" Stroke="{DynamicResource Line}" StrokeThickness="1" />
 
         <!-- Тиковая шкала -->
-        <Canvas Width="240" Height="240">
-            <Line Classes="tick" StartPoint="120,8" EndPoint="120,16" />
-            <Line Classes="tick" StartPoint="232,120" EndPoint="224,120" />
-            <Line Classes="tick" StartPoint="120,232" EndPoint="120,224" />
-            <Line Classes="tick" StartPoint="8,120" EndPoint="16,120" />
-            <Line Classes="tick" StartPoint="199.2,40.8" EndPoint="193.5,46.5" />
-            <Line Classes="tick" StartPoint="199.2,199.2" EndPoint="193.5,193.5" />
-            <Line Classes="tick" StartPoint="40.8,199.2" EndPoint="46.5,193.5" />
-            <Line Classes="tick" StartPoint="40.8,40.8" EndPoint="46.5,46.5" />
+        <Canvas Width="288" Height="288">
+            <Line Classes="tick" StartPoint="144,8" EndPoint="144,16" />
+            <Line Classes="tick" StartPoint="280,144" EndPoint="272,144" />
+            <Line Classes="tick" StartPoint="144,280" EndPoint="144,272" />
+            <Line Classes="tick" StartPoint="8,144" EndPoint="16,144" />
+            <Line Classes="tick" StartPoint="240.2,47.8" EndPoint="234.5,53.5" />
+            <Line Classes="tick" StartPoint="240.2,240.2" EndPoint="234.5,234.5" />
+            <Line Classes="tick" StartPoint="47.8,240.2" EndPoint="53.5,234.5" />
+            <Line Classes="tick" StartPoint="47.8,47.8" EndPoint="53.5,53.5" />
         </Canvas>
 
         <!-- Свечение -->
-        <Ellipse x:Name="Halo" Width="192" Height="192" StrokeThickness="14"
+        <Ellipse x:Name="Halo" Width="230" Height="230" StrokeThickness="16"
                  Classes.connected="{Binding IsConnected}"
                  Classes.connecting="{Binding IsConnecting}" />
 
         <!-- Дорожка -->
-        <Ellipse Width="180" Height="180" Stroke="{DynamicResource LineStrong}" StrokeThickness="6" />
+        <Ellipse Width="216" Height="216" Stroke="{DynamicResource LineStrong}" StrokeThickness="6" />
 
         <!-- Дуга состояния -->
-        <Arc x:Name="StateArc" Width="180" Height="180" StrokeThickness="6" StrokeLineCap="Round"
+        <Arc x:Name="StateArc" Width="216" Height="216" StrokeThickness="6" StrokeLineCap="Round"
              StartAngle="-90"
              Classes.connected="{Binding IsConnected}"
              Classes.connecting="{Binding IsConnecting}"
@@ -153,9 +153,9 @@
         </Arc>
 
         <!-- Кнопка -->
-        <Button x:Name="Core" Width="152" Height="152" Click="OnCoreClick" HorizontalAlignment="Center"
+        <Button x:Name="Core" Width="184" Height="184" Click="OnCoreClick" HorizontalAlignment="Center"
                 ToolTip.Tip="{Binding Active.Endpoint, FallbackValue=''}">
-            <StackPanel Width="130">
+            <StackPanel Width="164">
                 <!-- Значок страны: картинкой, потому что не каждая ОС рисует флаги-эмодзи -->
                 <Border HorizontalAlignment="Center" CornerRadius="4" Padding="7,2" Margin="0,0,0,7"
                         Background="{DynamicResource SurfaceHover}"
@@ -169,6 +169,7 @@
                 </Border>
 
                 <TextBlock Classes="heading" Text="{Binding ActiveName}" HorizontalAlignment="Center"
+                           TextAlignment="Center" TextWrapping="Wrap" MaxLines="2"
                            TextTrimming="CharacterEllipsis" />
 
                 <TextBlock Classes="mono" Text="{Binding Active.ProtocolLabel, FallbackValue='-'}"
@@ -177,6 +178,7 @@
 
                 <TextBlock x:Name="Metric" Classes="mono" Text="{Binding Active.LatencyLabel, FallbackValue='-'}"
                            HorizontalAlignment="Center" Margin="0,5,0,0"
+                           IsVisible="{Binding Active.HasLatency, FallbackValue=False}"
                            Classes.connected="{Binding IsConnected}"
                            Classes.failing="{Binding IsFailing}" />
 

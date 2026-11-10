@@ -284,8 +284,25 @@ public sealed class MainViewModel : ObservableObject
             if (_active is not null) _active.IsActive = true;
             _state.ActiveProfileName = _active?.Name;
             Raise(nameof(ActiveName));
+            Raise(nameof(ChosenServer));
         }
     }
+
+    /// <summary>
+    /// Выбор сервера прямо на главной странице: то же, что «Выбрать» в профилях,
+    /// включая переключение без перезапуска ядра.
+    /// </summary>
+    public ServerProfile? ChosenServer
+    {
+        get => _active;
+        set
+        {
+            if (value is not null && !ReferenceEquals(value, _active)) _ = SelectServerAsync(value);
+        }
+    }
+
+    /// <summary>Ядра нет или оно не отвечает - подключиться не выйдет, это надо видеть сразу.</summary>
+    public bool CoreProblem { get; private set; } = true;
 
     public string Uptime
     {
@@ -571,19 +588,26 @@ public sealed class MainViewModel : ObservableObject
     {
         if (!File.Exists(Settings.CorePath))
         {
-            SingBoxVersion = Loc.T("Core_NotFound");
+            SetCore(Loc.T("Core_NotFound"), problem: true);
             return;
         }
 
         try
         {
             var service = new SingBoxService(Settings.CorePath);
-            SingBoxVersion = await service.GetVersionAsync();
+            SetCore(await service.GetVersionAsync(), problem: false);
         }
         catch
         {
-            SingBoxVersion = Loc.T("Core_NotResponding");
+            SetCore(Loc.T("Core_NotResponding"), problem: true);
         }
+    }
+
+    private void SetCore(string label, bool problem)
+    {
+        SingBoxVersion = label;
+        CoreProblem = problem;
+        Raise(nameof(CoreProblem));
     }
 
     /// <summary>Вызывается при закрытии приложения: нельзя оставить систему с чужим прокси.</summary>

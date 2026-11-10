@@ -27,7 +27,7 @@ public sealed class ServerProfile : ObservableObject
     public int LatencyMs
     {
         get => _latencyMs;
-        set { Set(ref _latencyMs, value); Raise(nameof(LatencyLabel)); Raise(nameof(LatencyGrade)); }
+        set { Set(ref _latencyMs, value); Raise(nameof(LatencyLabel)); Raise(nameof(LatencyGrade)); Raise(nameof(HasLatency)); }
     }
 
     /// <summary>Состояние интерфейса, в файл не пишется.</summary>
@@ -153,6 +153,10 @@ public sealed class ServerProfile : ObservableObject
 
     [JsonIgnore]
     public string LatencyLabel => LatencyMs < 0 ? "-" : $"{LatencyMs} ms";
+
+    /// <summary>Задержку уже замеряли - иначе в круге подключения ей не место.</summary>
+    [JsonIgnore]
+    public bool HasLatency => LatencyMs >= 0;
 
     /// <summary>Качество канала для подсветки: unknown · good · fair · poor · dead.</summary>
     [JsonIgnore]
