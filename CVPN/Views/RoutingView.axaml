@@ -40,7 +40,7 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
             <Button Grid.Column="1" Content="{loc:T Common_New}" Command="{Binding AddSet}" Margin="8,0,0,0" />
-            <Button Grid.Column="2" Classes="ghost" Content="{loc:T Common_Delete}" Command="{Binding RemoveSet}"
+            <Button Grid.Column="2" Classes="danger" Content="{loc:T Common_Delete}" Command="{Binding RemoveSet}"
                     Margin="6,0,0,0" />
         </Grid>
 

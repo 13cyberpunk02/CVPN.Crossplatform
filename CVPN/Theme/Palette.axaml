@@ -73,6 +73,20 @@
                 <GradientStop Offset="1" Color="#FF5FD8F2" />
             </LinearGradientBrush>
 
+            <!-- Фон главной страницы: лазурная подсветка сверху и сияние за кругом подключения -->
+            <LinearGradientBrush x:Key="HeroBackdrop" StartPoint="0%,0%" EndPoint="0%,100%">
+                <GradientStop Offset="0" Color="#FF10283C" />
+                <GradientStop Offset="0.75" Color="#FF0E1620" />
+            </LinearGradientBrush>
+            <RadialGradientBrush x:Key="HeroGlow" Center="50%,46%" GradientOrigin="50%,46%" RadiusX="45%" RadiusY="45%">
+                <GradientStop Offset="0" Color="#552EA8F0" />
+                <GradientStop Offset="1" Color="#002EA8F0" />
+            </RadialGradientBrush>
+            <RadialGradientBrush x:Key="HeroGlowConnected" Center="50%,46%" GradientOrigin="50%,46%" RadiusX="45%" RadiusY="45%">
+                <GradientStop Offset="0" Color="#4D2DD4A7" />
+                <GradientStop Offset="1" Color="#002DD4A7" />
+            </RadialGradientBrush>
+
             <!-- Акцент Fluent - для контролов, которые мы не перерисовываем -->
             <Color x:Key="SystemAccentColor">#FF2EA8F0</Color>
             <Color x:Key="SystemAccentColorLight1">#FF55BAF4</Color>
@@ -211,6 +225,20 @@
                 <GradientStop Offset="0" Color="#FF0A84D6" />
                 <GradientStop Offset="1" Color="#FF34B6EA" />
             </LinearGradientBrush>
+
+            <!-- Фон главной страницы: лазурная подсветка сверху и сияние за кругом подключения -->
+            <LinearGradientBrush x:Key="HeroBackdrop" StartPoint="0%,0%" EndPoint="0%,100%">
+                <GradientStop Offset="0" Color="#FFD6EBFA" />
+                <GradientStop Offset="0.75" Color="#FFF2F6FA" />
+            </LinearGradientBrush>
+            <RadialGradientBrush x:Key="HeroGlow" Center="50%,46%" GradientOrigin="50%,46%" RadiusX="45%" RadiusY="45%">
+                <GradientStop Offset="0" Color="#5534B6EA" />
+                <GradientStop Offset="1" Color="#0034B6EA" />
+            </RadialGradientBrush>
+            <RadialGradientBrush x:Key="HeroGlowConnected" Center="50%,46%" GradientOrigin="50%,46%" RadiusX="45%" RadiusY="45%">
+                <GradientStop Offset="0" Color="#4D1FB58A" />
+                <GradientStop Offset="1" Color="#001FB58A" />
+            </RadialGradientBrush>
 
             <!-- Акцент Fluent - для контролов, которые мы не перерисовываем -->
             <Color x:Key="SystemAccentColor">#FF0A84D6</Color>

@@ -14,8 +14,8 @@
 
         <WrapPanel Grid.Row="1" Margin="0,12,0,0">
             <Button Content="{loc:T Common_Copy}" Command="{Binding Copy}" Margin="0,0,8,0" />
-            <Button Classes="ghost" Content="{loc:T Common_Clear}" Command="{Binding Clear}" Margin="0,0,8,0" />
-            <Button Classes="ghost" Content="{loc:T Logs_OpenFolder}" ToolTip.Tip="{loc:T Logs_OpenFolderHint}"
+            <Button Content="{loc:T Common_Clear}" Command="{Binding Clear}" Margin="0,0,8,0" />
+            <Button Content="{loc:T Logs_OpenFolder}" ToolTip.Tip="{loc:T Logs_OpenFolderHint}"
                     Command="{Binding OpenFolder}" IsVisible="{Binding CanOpenFolder}" />
         </WrapPanel>
 

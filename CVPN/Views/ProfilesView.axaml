@@ -14,17 +14,24 @@
             <TextBlock Classes="status" Text="{Binding Status}" Margin="0,6,0,0" />
         </StackPanel>
 
-        <!-- Действия: в ряд на десктопе, переносятся на телефоне -->
+        <!-- Действия: в ряд на десктопе, переносятся на телефоне.
+             Главное - вставка из буфера: так ссылки добавляются чаще всего, особенно на телефоне -->
         <WrapPanel Grid.Row="1" Margin="0,12,0,0">
-            <Button Classes="primary" Command="{Binding Create}" Margin="0,0,8,8">
+            <Button Classes="primary" Command="{Binding PasteLink}" ToolTip.Tip="{loc:T Profiles_PasteHint}" Margin="0,0,8,8">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <Path Classes="icon" Data="{StaticResource Icon.Clipboard}" Width="14" Height="14" />
+                    <TextBlock Text="{loc:T Profiles_Paste}" />
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding Create}" Margin="0,0,8,8">
                 <StackPanel Orientation="Horizontal" Spacing="8">
                     <Path Classes="icon" Data="{StaticResource Icon.Plus}" Width="14" Height="14" />
                     <TextBlock Text="{loc:T Profiles_Create}" />
                 </StackPanel>
             </Button>
             <Button Content="{loc:T Profiles_ImportFile}" Command="{Binding ImportFile}" Margin="0,0,8,8" />
-            <Button Classes="ghost" Content="{loc:T Profiles_CheckAll}" Command="{Binding PingAll}" Margin="0,0,8,8" />
-            <Button Classes="ghost" Content="{loc:T Profiles_ExportAll}" Command="{Binding ExportAll}" Margin="0,0,8,8" />
+            <Button Content="{loc:T Profiles_CheckAll}" Command="{Binding PingAll}" Margin="0,0,8,8" />
+            <Button Content="{loc:T Profiles_ExportAll}" Command="{Binding ExportAll}" Margin="0,0,8,8" />
         </WrapPanel>
 
         <!-- Импорт по ссылке: самый частый способ завести профиль, поэтому он вверху -->

@@ -1133,4 +1133,13 @@ Restart CVPN now?</value>
   <data name="Connection_ChooseServer" xml:space="preserve">
     <value>Server to connect to</value>
   </data>
+  <data name="Profiles_ClipboardEmpty" xml:space="preserve">
+    <value>There is no server link in the clipboard</value>
+  </data>
+  <data name="Profiles_Paste" xml:space="preserve">
+    <value>Paste from clipboard</value>
+  </data>
+  <data name="Profiles_PasteHint" xml:space="preserve">
+    <value>Adds links from the clipboard, one per line. An https:// address is treated as a subscription URL.</value>
+  </data>
 </root>

@@ -7,7 +7,7 @@
         <TextBlock Classes="heading" Text="CVPN" />
         <TextBlock x:Name="Message" TextWrapping="Wrap" />
         <Grid ColumnDefinitions="*,Auto,Auto">
-            <Button Grid.Column="1" Classes="ghost" Content="{loc:T Common_No}" Click="OnNo" Margin="0,0,8,0" />
+            <Button Grid.Column="1" Content="{loc:T Common_No}" Click="OnNo" Margin="0,0,8,0" />
             <Button Grid.Column="2" Classes="primary" Content="{loc:T Common_Yes}" Click="OnYes" />
         </Grid>
     </StackPanel>

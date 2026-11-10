@@ -104,7 +104,7 @@
                    IsVisible="{Binding HasError}" />
 
         <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,22,0,0">
-            <Button Classes="ghost" Content="{loc:T Common_Cancel}" Click="OnCancel" />
+            <Button Content="{loc:T Common_Cancel}" Click="OnCancel" />
             <Button Grid.Column="2" Classes="primary" Content="{loc:T Common_Save}" Click="OnSave" />
         </Grid>
     </StackPanel>

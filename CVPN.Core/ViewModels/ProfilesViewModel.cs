@@ -19,6 +19,7 @@ public sealed class ProfilesViewModel : PageViewModel
     public ProfilesViewModel(MainViewModel shell) : base(shell)
     {
         ImportLink = new RelayCommand(Import);
+        PasteLink = new RelayCommand(async () => await PasteAsync(), () => !IsBusy);
         ImportFile = new RelayCommand(async () => await ImportFromFileAsync());
         Create = new RelayCommand(async () => await EditAsync(null));
 
@@ -63,6 +64,7 @@ public sealed class ProfilesViewModel : PageViewModel
     }
 
     public ICommand ImportLink { get; }
+    public ICommand PasteLink { get; }
     public ICommand ImportFile { get; }
     public ICommand Create { get; }
     public ICommand EditProfileCommand { get; }
@@ -114,6 +116,67 @@ public sealed class ProfilesViewModel : PageViewModel
         Shell.Notify(Loc.T("Profiles_Added", profile.Name));
         Shell.Persist();
     }
+
+    /// <summary>
+    /// Импорт из буфера обмена одним нажатием - главное на телефоне, где вставлять
+    /// в поле неудобно. Ссылки по одной в строке добавляются все разом; одиночный
+    /// http(s)-адрес считается ссылкой подписки.
+    /// </summary>
+    private async Task PasteAsync()
+    {
+        string? text;
+        try
+        {
+            text = await Shell.Platform.Clipboard.GetTextAsync();
+        }
+        catch (Exception)
+        {
+            text = null;
+        }
+
+        var lines = (text ?? "").Split(['\r', '\n'],
+            StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        if (lines.Length == 0)
+        {
+            Shell.Notify(Loc.T("Profiles_ClipboardEmpty"));
+            return;
+        }
+
+        if (lines.Length == 1 && IsSubscriptionUrl(lines[0]))
+        {
+            Settings.SubscriptionUrl = lines[0];
+            await UpdateSubscriptionAsync();
+            return;
+        }
+
+        var added = new List<ServerProfile>();
+        var lastError = "";
+
+        foreach (var line in lines)
+        {
+            if (LinkParser.TryParse(line, out var profile, out var error)) added.Add(profile);
+            else lastError = error;
+        }
+
+        if (added.Count == 0)
+        {
+            Shell.Notify(lastError.Length > 0 ? lastError : Loc.T("Profiles_ClipboardEmpty"));
+            return;
+        }
+
+        foreach (var profile in added) Profiles.Add(profile);
+        Shell.Active ??= added[0];
+        Shell.Persist();
+
+        Shell.Notify(added.Count == 1
+            ? Loc.T("Profiles_Added", added[0].Name)
+            : Loc.T("Profiles_AddedMany", added.Count));
+    }
+
+    internal static bool IsSubscriptionUrl(string text) =>
+        text.StartsWith("https://", StringComparison.OrdinalIgnoreCase)
+        || text.StartsWith("http://", StringComparison.OrdinalIgnoreCase);
 
     /// <summary>Принимает конфиг sing-box, массив outbound'ов или одиночный объект.</summary>
     private async Task ImportFromFileAsync()

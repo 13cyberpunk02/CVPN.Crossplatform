@@ -18,7 +18,7 @@
                  TextWrapping="Wrap" AcceptsReturn="True" VerticalContentAlignment="Top" />
 
         <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,18,0,0">
-            <Button Classes="ghost" Content="{loc:T Common_Close}" Click="OnClose" />
+            <Button Content="{loc:T Common_Close}" Click="OnClose" />
             <Button x:Name="CopyButton" Grid.Column="2" Classes="primary" Content="{loc:T Export_CopyLink}"
                     Click="OnCopy" />
         </Grid>

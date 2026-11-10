@@ -66,17 +66,17 @@
                             <!-- Предлагаем противоположное тому, что происходит сейчас:
                                  для прокси - «напрямую», для прямого - «через прокси» -->
                             <WrapPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="0,6,0,0">
-                                <Button Classes="ghost small" Content="{loc:T Connections_MakeDirect}"
+                                <Button Classes="small" Content="{loc:T Connections_MakeDirect}"
                                         ToolTip.Tip="{loc:T Connections_MakeDirectHint}"
                                         IsVisible="{Binding !IsDirect}"
                                         Command="{Binding #Root.((vm:ConnectionsViewModel)DataContext).RuleDirect}"
                                         CommandParameter="{Binding}" />
-                                <Button Classes="ghost small" Content="{loc:T Connections_MakeProxy}"
+                                <Button Classes="small" Content="{loc:T Connections_MakeProxy}"
                                         ToolTip.Tip="{loc:T Connections_MakeProxyHint}"
                                         IsVisible="{Binding IsDirect}"
                                         Command="{Binding #Root.((vm:ConnectionsViewModel)DataContext).RuleProxy}"
                                         CommandParameter="{Binding}" />
-                                <Button Classes="ghost small" Content="{loc:T Connections_MakeBlock}"
+                                <Button Classes="small" Content="{loc:T Connections_MakeBlock}"
                                         ToolTip.Tip="{loc:T Connections_MakeBlockHint}"
                                         Command="{Binding #Root.((vm:ConnectionsViewModel)DataContext).RuleBlock}"
                                         CommandParameter="{Binding}" />

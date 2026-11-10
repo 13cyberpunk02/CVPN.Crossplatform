@@ -27,7 +27,26 @@
             <Setter Property="Padding" Value="14,12" />
             <Setter Property="BorderThickness" Value="0" />
         </Style>
+        <!-- Сияние за кругом: лазурное, при подключении плавно сменяется зелёным -->
+        <Style Selector="Border.glow">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.6" Easing="SineEaseInOut" />
+                </Transitions>
+            </Setter>
+        </Style>
+        <Style Selector="Border.glow.idle.on, Border.glow.live">
+            <Setter Property="Opacity" Value="0" />
+        </Style>
+        <Style Selector="Border.glow.live.on">
+            <Setter Property="Opacity" Value="1" />
+        </Style>
     </UserControl.Styles>
+
+    <Panel>
+    <Border Background="{DynamicResource HeroBackdrop}" />
+    <Border Classes="glow idle" Classes.on="{Binding IsConnected}" Background="{DynamicResource HeroGlow}" />
+    <Border Classes="glow live" Classes.on="{Binding IsConnected}" Background="{DynamicResource HeroGlowConnected}" />
 
     <ScrollViewer HorizontalScrollBarVisibility="Disabled">
         <Grid Classes="page" RowDefinitions="Auto,*,Auto,Auto,Auto,Auto">
@@ -49,7 +68,7 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
-                    <Button Classes="ghost small" Content="{loc:T Connection_Measure}"
+                    <Button Classes="small" Content="{loc:T Connection_Measure}"
                             FontSize="{StaticResource Size.Caption}" Command="{Binding MeasureDelay}" />
                     <TextBlock Classes="mono" Text="{Binding Uptime}" VerticalAlignment="Center"
                                FontSize="{StaticResource Size.Caption}" />
@@ -124,10 +143,11 @@
 
             <!-- Действия -->
             <WrapPanel Grid.Row="5" Margin="0,10,0,0">
-                <Button Classes="ghost small" Content="{loc:T Connection_CheckConfig}" Command="{Binding CheckConfig}" Margin="0,0,6,0" />
-                <Button Classes="ghost small" Content="{loc:T Connection_OpenConfig}" Command="{Binding OpenConfig}"
+                <Button Classes="small" Content="{loc:T Connection_CheckConfig}" Command="{Binding CheckConfig}" Margin="0,0,6,0" />
+                <Button Classes="small" Content="{loc:T Connection_OpenConfig}" Command="{Binding OpenConfig}"
                         IsVisible="{Binding Platform.Launcher.CanOpenFiles}" />
             </WrapPanel>
         </Grid>
     </ScrollViewer>
+    </Panel>
 </UserControl>

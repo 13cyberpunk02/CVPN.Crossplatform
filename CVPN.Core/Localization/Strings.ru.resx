@@ -1133,4 +1133,13 @@
   <data name="Connection_ChooseServer" xml:space="preserve">
     <value>Сервер для подключения</value>
   </data>
+  <data name="Profiles_ClipboardEmpty" xml:space="preserve">
+    <value>В буфере обмена нет ссылки на сервер</value>
+  </data>
+  <data name="Profiles_Paste" xml:space="preserve">
+    <value>Вставить из буфера</value>
+  </data>
+  <data name="Profiles_PasteHint" xml:space="preserve">
+    <value>Добавляет ссылки из буфера обмена, по одной в строке. Адрес https:// считается ссылкой подписки.</value>
+  </data>
 </root>
