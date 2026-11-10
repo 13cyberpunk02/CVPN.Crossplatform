@@ -39,7 +39,12 @@ echo "== sing-box $SINGBOX_VERSION"
 git clone --quiet --depth 1 --branch "v$SINGBOX_VERSION" https://github.com/SagerNet/sing-box "$WORK/src"
 
 cd "$WORK/src"
-GOOS=android GOARCH=arm64 CGO_ENABLED=0 go build -trimpath -tags "$TAGS" \
+# -buildvcs=false: в бинарник не попадает состояние git-клона - сборка воспроизводима.
+# -gcflags=-B (без проверки границ массивов) сознательно не используется: экономит
+# около 0,5 МБ, но в коде, который разбирает данные из сети, превращает аккуратную
+# панику в порчу памяти. -extldflags=static не нужен: без cgo Go компонует сам,
+# и бинарник и так статический.
+GOOS=android GOARCH=arm64 CGO_ENABLED=0 go build -trimpath -buildvcs=false -tags "$TAGS" \
     -ldflags "-s -w -buildid= -checklinkname=0 -X github.com/sagernet/sing-box/constant.Version=$SINGBOX_VERSION" \
     -o "$WORK/sing-box" ./cmd/sing-box
 
