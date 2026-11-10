@@ -17,6 +17,7 @@ public partial class App : Application
 {
     private TopLevel? _topLevel;
     private OverlayDialogService? _dialogs;
+    private TrayController? _tray;
     private bool _shutdownDone;
 
     /// <summary>
@@ -99,7 +100,13 @@ public partial class App : Application
 
             window.Opened += async (_, _) => await Shell.StartupAsync();
             desktop.ShutdownRequested += OnShutdownRequested;
-            desktop.Exit += (_, e) => FileLog.Current.Write($"=== exit, code {e.ApplicationExitCode}");
+            desktop.Exit += (_, e) =>
+            {
+                _tray?.Dispose();
+                FileLog.Current.Write($"=== exit, code {e.ApplicationExitCode}");
+            };
+
+            SetupTray(desktop, window);
         }
         else if (ApplicationLifetime is IActivityApplicationLifetime activity)
         {
@@ -181,6 +188,49 @@ public partial class App : Application
     /// пользователь останется без интернета. Это асинхронно, поэтому первый
     /// запрос на выход откладываем, прибираемся и выходим уже сами.
     /// </summary>
+    /// <summary>
+    /// Трей и жизнь окна. Приложение выходит только явно (меню трея, крестик
+    /// без «сворачивать в трей») - иначе спрятанное окно завершало бы процесс
+    /// вместе с туннелем.
+    /// </summary>
+    private void SetupTray(IClassicDesktopStyleApplicationLifetime desktop, Window window)
+    {
+        // Отладочный снимок не должен мелькать значком в трее
+        if (Environment.GetCommandLineArgs().Any(a => a.StartsWith("--snapshot=", StringComparison.Ordinal))) return;
+
+        desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+
+        void ShowWindow()
+        {
+            window.Show();
+            if (window.WindowState == WindowState.Minimized) window.WindowState = WindowState.Normal;
+            window.Activate();
+        }
+
+        _tray = new TrayController(Shell!, ShowWindow, () => desktop.TryShutdown());
+
+        window.Closing += (_, e) =>
+        {
+            // Идёт настоящий выход - окно закрывается вместе с приложением
+            if (_shutdownDone) return;
+
+            e.Cancel = true;
+
+            if (Shell!.Settings.CloseToTray)
+            {
+                window.Hide();
+                if (Shell.IsConnected) Shell.Notify(Loc.T("Tray_StillRunningHint"));
+                return;
+            }
+
+            desktop.TryShutdown();
+        };
+
+        // Автозапуск: окно не показываем, приложение живёт в трее
+        if (Environment.GetCommandLineArgs().Contains("--minimized"))
+            window.Opened += (_, _) => window.Hide();
+    }
+
     private async void OnShutdownRequested(object? sender, ShutdownRequestedEventArgs e)
     {
         if (_shutdownDone || Shell is null) return;
