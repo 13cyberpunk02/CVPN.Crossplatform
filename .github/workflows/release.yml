@@ -73,8 +73,62 @@ jobs:
           name: linux
           path: dist/*
 
+  android:
+    needs: version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Рабочая нагрузка Android
+        run: dotnet workload install android
+
+      - name: Урезанное ядро sing-box (arm64)
+        run: bash packaging/android/build-core.sh
+
+      - name: tun2socks и ByeDPI
+        shell: pwsh
+        run: packaging/android/fetch-natives.ps1 -SingBoxVersion $env:SINGBOX_VERSION -ByeDpiVersion $env:BYEDPI_VERSION
+
+      # Ключ подписи - из секретов: обновления ставятся поверх только с тем же ключом.
+      # Без секретов APK подписывается отладочным ключом - годится лишь для проверки.
+      - name: Ключ подписи
+        id: sign
+        env:
+          KEYSTORE: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KEYSTORE" ]; then
+            echo "$KEYSTORE" | base64 -d > "$RUNNER_TEMP/cvpn.keystore"
+            echo "args=-p:AndroidKeyStore=true -p:AndroidSigningKeyStore=$RUNNER_TEMP/cvpn.keystore -p:AndroidSigningKeyAlias=${{ secrets.ANDROID_KEY_ALIAS }} -p:AndroidSigningKeyPass=env:ANDROID_KEY_PASSWORD -p:AndroidSigningStorePass=env:ANDROID_STORE_PASSWORD" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::ANDROID_KEYSTORE_BASE64 не задан - APK подписан отладочным ключом"
+          fi
+
+      - name: APK
+        env:
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+        run: |
+          dotnet publish CVPN.Android/CVPN.Android.csproj -c Release \
+            -p:ApplicationDisplayVersion=${{ needs.version.outputs.value }} \
+            -p:ApplicationVersion=${{ github.run_number }} \
+            ${{ steps.sign.outputs.args }} -o android-out
+          mkdir -p dist
+          cp android-out/*-Signed.apk "dist/CVPN-${{ needs.version.outputs.value }}-android-arm64.apk"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android
+          path: dist/*
+
   publish:
-    needs: [ windows, linux ]
+    needs: [ windows, linux, android ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4

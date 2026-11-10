@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Значок заставки Android 12+. Система показывает его в квадрате 288dp и
+    обрезает кругом 192dp: с отступом 26% скруглённый квадрат значка (138dp)
+    целиком попадает в круг.
+-->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+       android:drawable="@drawable/icon"
+       android:inset="26%" />

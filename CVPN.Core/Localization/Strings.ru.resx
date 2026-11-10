@@ -1089,4 +1089,7 @@
   <data name="Android_CoreNotListening" xml:space="preserve">
     <value>ядро не открыло порт {0}</value>
   </data>
+  <data name="Store_LoadFailed" xml:space="preserve">
+    <value>Файл профилей не читается и отложен как {0} - запуск с настройками по умолчанию ({1})</value>
+  </data>
 </root>

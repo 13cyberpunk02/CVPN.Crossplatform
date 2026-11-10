@@ -2,6 +2,8 @@ using CVPN.Core;
 
 namespace CVPN.Tests;
 
+// Общая коллекция с ProfileStoreTests: оба трогают статический счётчик Secret.FailureCount
+[Collection("SecretState")]
 public class SecretTests
 {
         [Fact]

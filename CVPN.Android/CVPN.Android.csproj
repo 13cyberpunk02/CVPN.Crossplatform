@@ -9,9 +9,18 @@
     <ApplicationVersion>1</ApplicationVersion>
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
     <AndroidPackageFormat>apk</AndroidPackageFormat>
-    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
-    <!-- Только ABI, под которые есть ядро и tun2socks (natives/): телефоны arm64 и эмулятор x86_64 -->
+    <!-- Отладка - телефон arm64 и эмулятор x86_64 -->
     <RuntimeIdentifiers>android-arm64;android-x64</RuntimeIdentifiers>
+  </PropertyGroup>
+
+  <!--
+    Релиз - только arm64: это все современные телефоны. x86_64 нужна лишь
+    эмулятору и удвоила бы APK (ядро на каждую архитектуру - десятки МБ).
+    AOT - по профилю запуска (по умолчанию в .NET Android): заранее компилируется
+    то, что нужно при старте, остальное - JIT. Полный AOT раздувал APK.
+  -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <RuntimeIdentifiers>android-arm64</RuntimeIdentifiers>
   </PropertyGroup>
 
   <ItemGroup>

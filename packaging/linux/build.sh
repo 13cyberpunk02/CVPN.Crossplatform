@@ -3,7 +3,7 @@
 #
 #   packaging/linux/build.sh <версия>
 #
-# Нужны: dotnet 10 SDK, curl, git, make, gcc, dpkg-deb. AppImage-инструмент
+# Нужны: dotnet 10 SDK, curl, dpkg-deb. AppImage-инструмент
 # скачивается сам. .NET встраивается в пакет (self-contained): ставить runtime
 # пользователю не нужно.
 
@@ -36,11 +36,17 @@ install -Dm755 "$WORK/sing-box-$SINGBOX_VERSION-linux-amd64/sing-box" "$APP/core
 cp "$WORK/sing-box-$SINGBOX_VERSION-linux-amd64/LICENSE" "$APP/LICENSE.sing-box.txt"
 
 echo "== ByeDPI $BYEDPI_VERSION =="
-# Готовых сборок под Linux в релизах нет - собираем из исходников с тегом
-git clone --quiet --depth 1 --branch "v$BYEDPI_VERSION" https://github.com/hufrea/byedpi "$WORK/byedpi"
-make -s -C "$WORK/byedpi"
-install -Dm755 "$WORK/byedpi/ciadpi" "$APP/byedpi/ciadpi"
-cp "$WORK/byedpi/LICENSE" "$APP/LICENSE.byedpi.txt"
+# Статическая сборка из релиза: от glibc не зависит и запускается на любом
+# дистрибутиве. Тег v0.17.3, а файл byedpi-17.3-...: «0.» в имени опущен.
+# При смене версии нужно обновить и хеш.
+BYEDPI_SHA256="${BYEDPI_SHA256:-98f73c32eacb571ebd88d790f6376ed9e70f02d44c1fe862472ecea75cd7117d}"
+curl -fsSL -o "$WORK/byedpi.tar.gz" \
+    "https://github.com/hufrea/byedpi/releases/download/v$BYEDPI_VERSION/byedpi-${BYEDPI_VERSION#0.}-x86_64.tar.gz"
+echo "$BYEDPI_SHA256  $WORK/byedpi.tar.gz" | sha256sum -c --quiet
+mkdir -p "$WORK/byedpi"
+tar -xzf "$WORK/byedpi.tar.gz" -C "$WORK/byedpi"
+install -Dm755 "$WORK/byedpi/ciadpi-x86_64" "$APP/byedpi/ciadpi"
+curl -fsSL -o "$APP/LICENSE.byedpi.txt" "https://raw.githubusercontent.com/hufrea/byedpi/v$BYEDPI_VERSION/LICENSE"
 
 cp "$ROOT/LICENSE" "$APP/LICENSE"
 chmod 755 "$APP/CVPN" "$APP/service/CVPN.Service"

@@ -205,14 +205,21 @@ public sealed class AppSettings : ObservableObject
         set => Set(ref field, value);
     }
 
-    /// <summary>Путь к ciadpi.exe. ByeDPI в приложение не вшит: его ставят отдельно.</summary>
+    /// <summary>
+    /// Путь к ciadpi. На Windows его можно сменить на свою сборку; на Linux и
+    /// Android ciadpi всегда тот, что вшит в приложение (byedpi/ciadpi и
+    /// libciadpi.so) - сохранённое значение там не используется.
+    /// </summary>
     public string ByeDpiPath
     {
         // Пустое поле - значит «тот, что поставлен с приложением». Так путь
         // подставляется независимо от того, что лежит в старом profiles.json
-        get => string.IsNullOrWhiteSpace(field) ? AppPaths.DetectByeDpiPath() : field;
+        get => !CanChooseByeDpi || string.IsNullOrWhiteSpace(field) ? AppPaths.DetectByeDpiPath() : field;
         set => Set(ref field, value);
     } = AppPaths.DetectByeDpiPath();
+
+    /// <summary>Свой ciadpi выбирают только на Windows - на остальных ОС он вшит.</summary>
+    public static bool CanChooseByeDpi => OperatingSystem.IsWindows();
 
     /// <summary>
     /// Аргументы ciadpi как их ввёл человек. Адрес и порт приложение

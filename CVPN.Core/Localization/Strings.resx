@@ -1089,4 +1089,7 @@ Restart CVPN now?</value>
   <data name="Android_CoreNotListening" xml:space="preserve">
     <value>the core did not open port {0}</value>
   </data>
+  <data name="Store_LoadFailed" xml:space="preserve">
+    <value>Profiles file could not be read and was set aside as {0} - starting with defaults ({1})</value>
+  </data>
 </root>

@@ -23,15 +23,18 @@
                         <ToggleSwitch Grid.Column="1" IsChecked="{Binding Settings.ByeDpiEnabled}" />
                     </Grid>
 
-                    <Border Classes="divider" />
+                    <!-- Путь - только на Windows: на Linux и Android ciadpi вшит в приложение -->
+                    <StackPanel IsVisible="{Binding ShowPath}">
+                        <Border Classes="divider" />
 
-                    <TextBlock Classes="label" Text="{loc:T ByeDpi_Path}" />
-                    <Grid ColumnDefinitions="*,Auto" Margin="0,8,0,0">
-                        <TextBox Text="{Binding Settings.ByeDpiPath}" />
-                        <Button Grid.Column="1" Content="{loc:T Common_Browse}" Command="{Binding Browse}"
-                                Margin="8,0,0,0" IsVisible="{Binding ShowBrowse}" />
-                    </Grid>
-                    <TextBlock Classes="caption" Text="{loc:T ByeDpi_PathHint}" Margin="0,8,0,0" TextWrapping="Wrap" />
+                        <TextBlock Classes="label" Text="{loc:T ByeDpi_Path}" />
+                        <Grid ColumnDefinitions="*,Auto" Margin="0,8,0,0">
+                            <TextBox Text="{Binding Settings.ByeDpiPath}" />
+                            <Button Grid.Column="1" Content="{loc:T Common_Browse}" Command="{Binding Browse}"
+                                    Margin="8,0,0,0" />
+                        </Grid>
+                        <TextBlock Classes="caption" Text="{loc:T ByeDpi_PathHint}" Margin="0,8,0,0" TextWrapping="Wrap" />
+                    </StackPanel>
                 </StackPanel>
             </Border>
 
@@ -57,15 +60,17 @@
                         <TextBox Grid.Column="1" Width="96" Text="{Binding Settings.ByeDpiPort}" VerticalAlignment="Center" />
                     </Grid>
 
-                    <Border Classes="divider" />
+                    <StackPanel IsVisible="{Binding ShowBypassTun}">
+                        <Border Classes="divider" />
 
-                    <Grid ColumnDefinitions="*,Auto">
-                        <StackPanel Margin="0,0,12,0">
-                            <TextBlock Text="{loc:T ByeDpi_BypassTun}" />
-                            <TextBlock Classes="caption" Text="{loc:T ByeDpi_BypassTunHint}" Margin="0,3,0,0" TextWrapping="Wrap" />
-                        </StackPanel>
-                        <ToggleSwitch Grid.Column="1" IsChecked="{Binding Settings.ByeDpiBypassTun}" />
-                    </Grid>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel Margin="0,0,12,0">
+                                <TextBlock Text="{loc:T ByeDpi_BypassTun}" />
+                                <TextBlock Classes="caption" Text="{loc:T ByeDpi_BypassTunHint}" Margin="0,3,0,0" TextWrapping="Wrap" />
+                            </StackPanel>
+                            <ToggleSwitch Grid.Column="1" IsChecked="{Binding Settings.ByeDpiBypassTun}" />
+                        </Grid>
+                    </StackPanel>
 
                     <Border Classes="divider" />
 
@@ -94,7 +99,7 @@
                 </StackPanel>
             </Border>
 
-            <Border Classes="card">
+            <Border Classes="card" IsVisible="{Binding ShowTunNote}">
                 <StackPanel>
                     <TextBlock Classes="label" Text="{loc:T ByeDpi_TunTitle}" />
                     <TextBlock Classes="caption warning" Text="{loc:T ByeDpi_TunNote}" Margin="0,8,0,0" TextWrapping="Wrap" />

@@ -60,8 +60,17 @@ public sealed class ByeDpiViewModel : PageViewModel
 
     public bool IsRunning => _service.IsRunning;
 
-    /// <summary>Свой ciadpi можно выбрать только на десктопе.</summary>
-    public bool ShowBrowse => Shell.Platform.CanPickBinaries;
+    /// <summary>Путь к ciadpi - только на Windows: на Linux и Android он вшит в приложение.</summary>
+    public bool ShowPath => AppSettings.CanChooseByeDpi && Shell.Platform.CanPickBinaries;
+
+    /// <summary>
+    /// Привязка ciadpi к реальному адаптеру - для TUN на десктопе. На Android
+    /// приложение исключено из своего VPN, и трафик ciadpi идёт мимо туннеля сам.
+    /// </summary>
+    public bool ShowBypassTun => Shell.Platform.IsDesktop;
+
+    /// <summary>Предупреждение про TUN описывает маршрутизацию Windows.</summary>
+    public bool ShowTunNote => OperatingSystem.IsWindows();
 
     public string State
     {
@@ -74,7 +83,9 @@ public sealed class ByeDpiViewModel : PageViewModel
     /// соединения ciadpi попали бы в туннель и приёмы обхода DPI потеряли бы силу.
     /// </summary>
     private string? ConnIp =>
-        Settings is { TunEnabled: true, ByeDpiBypassTun: true } ? PhysicalAdapter.FindIPv4()?.ToString() : null;
+        ShowBypassTun && Settings is { TunEnabled: true, ByeDpiBypassTun: true }
+            ? PhysicalAdapter.FindIPv4()?.ToString()
+            : null;
 
     public string RunLabel => IsRunning ? Loc.T("ByeDpi_Stop") : Loc.T("ByeDpi_Start");
 
@@ -83,7 +94,8 @@ public sealed class ByeDpiViewModel : PageViewModel
     {
         get
         {
-            var name = string.IsNullOrWhiteSpace(Settings.ByeDpiPath)
+            // Вшитый ciadpi на Android называется libciadpi.so - человеку это имя ничего не скажет
+            var name = !AppSettings.CanChooseByeDpi || string.IsNullOrWhiteSpace(Settings.ByeDpiPath)
                 ? (OperatingSystem.IsWindows() ? "ciadpi.exe" : "ciadpi")
                 : Path.GetFileName(Settings.ByeDpiPath);
 
@@ -148,7 +160,8 @@ public sealed class ByeDpiViewModel : PageViewModel
         {
             var connIp = ConnIp;
 
-            if (Settings is { TunEnabled: true, ByeDpiBypassTun: true })
+            // На Android привязки нет вовсе (ciadpi мимо VPN и так) - и предупреждать не о чем
+            if (ShowBypassTun && Settings is { TunEnabled: true, ByeDpiBypassTun: true })
                 Shell.Append(connIp is null
                     ? $"[byedpi] {Loc.T("ByeDpi_NoAdapter")}"
                     : $"[byedpi] {Loc.T("ByeDpi_BoundTo", connIp)}");

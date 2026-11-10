@@ -37,10 +37,28 @@ public static class ProfileStore
 
             return state;
         }
-        catch
+        catch (Exception ex)
         {
-            // Битый файл не должен мешать запуску: начинаем с набора по умолчанию
+            // Битый файл не должен мешать запуску: начинаем с набора по умолчанию.
+            // Но и затирать его нельзя - первое же сохранение уничтожило бы все
+            // профили. Откладываем копию и говорим о ней.
+            LastLoadWarning = Localization.Loc.T("Store_LoadFailed", Backup(), ex.Message);
             return Seed();
+        }
+    }
+
+    /// <summary>Переименовывает нечитаемый profiles.json рядом. Возвращает путь копии.</summary>
+    private static string Backup()
+    {
+        try
+        {
+            var target = $"{AppPaths.ProfilesFile}.broken-{DateTime.Now:yyyyMMdd-HHmmss}";
+            File.Move(AppPaths.ProfilesFile, target);
+            return target;
+        }
+        catch (Exception)
+        {
+            return AppPaths.ProfilesFile;
         }
     }
 

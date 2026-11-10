@@ -79,13 +79,28 @@ packaging/linux/build.sh 1.2.3                 # dist/CVPN-1.2.3-linux-x64.tar.g
   интерфейсу и поиска процессов, локальный DNS - DNS текущей сети.
 - Kill switch - системный: «Настройки → Сеть → VPN → CVPN → Постоянная VPN» и
   «Блокировать соединения без VPN».
+- ByeDPI вшит (`libciadpi.so`, статическая сборка из релиза ByeDPI): путь не выбирается,
+  привязка к адаптеру не нужна - приложение и так исключено из своего VPN.
+- NaiveProxy на Android не поддерживается (как и в официальной сборке sing-box: ему нужен Cronet).
 
-Нативные библиотеки (ARM64 и x86_64) не хранятся в git:
+**Ядро урезано.** Официальная сборка sing-box под Android - 79 МБ (Tailscale, Cloudflared,
+WireGuard, OpenVPN и прочее). CVPN собирает своё только с `with_utls`, `with_clash_api`,
+`with_quic` - 42 МБ. Релизный APK - только arm64, около 31 МБ; после установки около 100 МБ.
+
+Нативные библиотеки не хранятся в git:
 
 ```
-pwsh packaging/android/fetch-natives.ps1
+bash packaging/android/build-core.sh          # ядро для телефонов (Linux или WSL; Go скачается сам)
+pwsh packaging/android/fetch-natives.ps1      # tun2socks, ciadpi, ядро для эмулятора x86_64
 dotnet build CVPN.Android -c Release
 ```
+
+Сборка из Windows: `wsl bash packaging/android/build-core.sh`.
+
+## Linux и Android: ByeDPI
+
+На Linux и Android ciadpi всегда тот, что вшит в приложение (`byedpi/ciadpi`, `libciadpi.so`),
+поле пути скрыто. Выбрать свой ciadpi можно только на Windows.
 
 Если Release падает на «Precompiling failed» и в пути профиля Windows есть кириллица -
 это AOT-компилятор Mono: задайте латинский временный каталог, например
