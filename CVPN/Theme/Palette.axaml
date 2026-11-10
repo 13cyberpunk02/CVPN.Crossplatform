@@ -73,6 +73,29 @@
                 <GradientStop Offset="1" Color="#FF5FD8F2" />
             </LinearGradientBrush>
 
+            <!-- Кольцо вокруг кнопки подключения: «комета» с ярким концом, вращается всегда -->
+            <ConicGradientBrush x:Key="DialSweep" Center="50%,50%">
+                <GradientStop Offset="0" Color="#262EA8F0" />
+                <GradientStop Offset="0.45" Color="#FF2EA8F0" />
+                <GradientStop Offset="0.8" Color="#FF5FD8F2" />
+                <GradientStop Offset="0.97" Color="#FFE6FAFF" />
+                <GradientStop Offset="1" Color="#262EA8F0" />
+            </ConicGradientBrush>
+            <ConicGradientBrush x:Key="DialSweepConnected" Center="50%,50%">
+                <GradientStop Offset="0" Color="#262DD4A7" />
+                <GradientStop Offset="0.45" Color="#FF2DD4A7" />
+                <GradientStop Offset="0.8" Color="#FF7FF0D2" />
+                <GradientStop Offset="0.97" Color="#FFE6FFF7" />
+                <GradientStop Offset="1" Color="#262DD4A7" />
+            </ConicGradientBrush>
+            <ConicGradientBrush x:Key="DialSweepFailing" Center="50%,50%">
+                <GradientStop Offset="0" Color="#26FF6B6B" />
+                <GradientStop Offset="0.45" Color="#FFFF6B6B" />
+                <GradientStop Offset="0.8" Color="#FFFFA3A3" />
+                <GradientStop Offset="0.97" Color="#FFFFE9E9" />
+                <GradientStop Offset="1" Color="#26FF6B6B" />
+            </ConicGradientBrush>
+
             <!-- Фон главной страницы: лазурная подсветка сверху и сияние за кругом подключения -->
             <LinearGradientBrush x:Key="HeroBackdrop" StartPoint="0%,0%" EndPoint="0%,100%">
                 <GradientStop Offset="0" Color="#FF10283C" />
@@ -225,6 +248,29 @@
                 <GradientStop Offset="0" Color="#FF0A84D6" />
                 <GradientStop Offset="1" Color="#FF34B6EA" />
             </LinearGradientBrush>
+
+            <!-- Кольцо вокруг кнопки подключения: «комета» с ярким концом, вращается всегда -->
+            <ConicGradientBrush x:Key="DialSweep" Center="50%,50%">
+                <GradientStop Offset="0" Color="#260A84D6" />
+                <GradientStop Offset="0.45" Color="#FF0A84D6" />
+                <GradientStop Offset="0.8" Color="#FF34B6EA" />
+                <GradientStop Offset="0.97" Color="#FF9FE0FA" />
+                <GradientStop Offset="1" Color="#260A84D6" />
+            </ConicGradientBrush>
+            <ConicGradientBrush x:Key="DialSweepConnected" Center="50%,50%">
+                <GradientStop Offset="0" Color="#260E9F7B" />
+                <GradientStop Offset="0.45" Color="#FF0E9F7B" />
+                <GradientStop Offset="0.8" Color="#FF3CC9A0" />
+                <GradientStop Offset="0.97" Color="#FFA8EBD6" />
+                <GradientStop Offset="1" Color="#260E9F7B" />
+            </ConicGradientBrush>
+            <ConicGradientBrush x:Key="DialSweepFailing" Center="50%,50%">
+                <GradientStop Offset="0" Color="#26D63B3B" />
+                <GradientStop Offset="0.45" Color="#FFD63B3B" />
+                <GradientStop Offset="0.8" Color="#FFF07272" />
+                <GradientStop Offset="0.97" Color="#FFFFC2C2" />
+                <GradientStop Offset="1" Color="#26D63B3B" />
+            </ConicGradientBrush>
 
             <!-- Фон главной страницы: лазурная подсветка сверху и сияние за кругом подключения -->
             <LinearGradientBrush x:Key="HeroBackdrop" StartPoint="0%,0%" EndPoint="0%,100%">

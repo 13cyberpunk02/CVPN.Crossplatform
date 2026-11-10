@@ -111,6 +111,59 @@
             <Setter Property="Foreground" Value="{DynamicResource TextMuted}" />
         </Style>
 
+        <!-- ===== градиентное кольцо ===== -->
+        <Style Selector="Panel#Sweep Ellipse">
+            <Setter Property="Stroke" Value="{DynamicResource DialSweep}" />
+        </Style>
+        <Style Selector="Panel#Sweep.connected Ellipse">
+            <Setter Property="Stroke" Value="{DynamicResource DialSweepConnected}" />
+        </Style>
+        <Style Selector="Panel#Sweep.failing Ellipse">
+            <Setter Property="Stroke" Value="{DynamicResource DialSweepFailing}" />
+        </Style>
+
+        <!-- Неспешное вращение в покое и после подключения -->
+        <Style Selector="Panel#Sweep:not(.connecting)">
+            <Style.Animations>
+                <Animation Duration="0:0:6" IterationCount="Infinite">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="RotateTransform.Angle" Value="0" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="RotateTransform.Angle" Value="360" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <!-- Подключение: быстрее - видно, что идёт работа -->
+        <Style Selector="Panel#Sweep.connecting">
+            <Style.Animations>
+                <Animation Duration="0:0:1.6" IterationCount="Infinite">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="RotateTransform.Angle" Value="0" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="RotateTransform.Angle" Value="360" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+
+        <!-- Свечение кольца дышит -->
+        <Style Selector="Ellipse#SweepGlow">
+            <Style.Animations>
+                <Animation Duration="0:0:2.8" IterationCount="Infinite" PlaybackDirection="Alternate"
+                           Easing="SineEaseInOut">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="0.45" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="1" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+
         <Style Selector="Line.tick">
             <Setter Property="Stroke" Value="{DynamicResource LineStrong}" />
             <Setter Property="StrokeThickness" Value="1" />
@@ -151,6 +204,23 @@
                 <RotateTransform />
             </Arc.RenderTransform>
         </Arc>
+
+        <!-- Градиентное кольцо вокруг кнопки: вращается всегда, цвет и скорость - по состоянию.
+             Под ним размытая копия - мягкое свечение того же цвета -->
+        <Panel x:Name="Sweep" Width="198" Height="198" IsHitTestVisible="False"
+               Classes.connected="{Binding IsConnected}"
+               Classes.connecting="{Binding IsConnecting}"
+               Classes.failing="{Binding IsFailing}">
+            <Panel.RenderTransform>
+                <RotateTransform />
+            </Panel.RenderTransform>
+            <Ellipse x:Name="SweepGlow" StrokeThickness="7">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="12" />
+                </Ellipse.Effect>
+            </Ellipse>
+            <Ellipse x:Name="SweepRing" StrokeThickness="2.5" Margin="2" />
+        </Panel>
 
         <!-- Кнопка -->
         <Button x:Name="Core" Width="184" Height="184" Click="OnCoreClick" HorizontalAlignment="Center"
