@@ -106,6 +106,10 @@ jobs:
           if [ -n "$KEYSTORE" ]; then
             echo "$KEYSTORE" | base64 -d > "$RUNNER_TEMP/cvpn.keystore"
             echo "args=-p:AndroidKeyStore=true -p:AndroidSigningKeyStore=$RUNNER_TEMP/cvpn.keystore -p:AndroidSigningKeyAlias=${{ secrets.ANDROID_KEY_ALIAS }} -p:AndroidSigningKeyPass=env:ANDROID_KEY_PASSWORD -p:AndroidSigningStorePass=env:ANDROID_STORE_PASSWORD" >> "$GITHUB_OUTPUT"
+          elif [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            # Релиз с отладочным ключом нельзя будет обновить релизным - лучше упасть
+            echo "::error::ANDROID_KEYSTORE_BASE64 не задан - релиз без ключа подписи не публикуется"
+            exit 1
           else
             echo "::warning::ANDROID_KEYSTORE_BASE64 не задан - APK подписан отладочным ключом"
           fi
@@ -129,8 +133,16 @@ jobs:
 
   publish:
     needs: [ windows, linux, android ]
+    # Ручной запуск - пробная сборка: артефакты в Actions, без релиза
+    if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     steps:
+      # Текст релиза - packaging/release-notes.md в репозитории
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: packaging/release-notes.md
+          sparse-checkout-cone-mode: false
+
       - uses: actions/download-artifact@v4
         with:
           path: dist
@@ -140,6 +152,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: dist/*
-          generate_release_notes: true
+          body_path: packaging/release-notes.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
