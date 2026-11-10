@@ -1,31 +1,33 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!--
-        Стили по классам вместо ключей WPF: Style="{StaticResource T.Caption}"
-        стало Classes="caption". Шаблоны контролов остались от Fluent - цвета
-        приходят из Palette.axaml.
+        UI Kit CVPN: стили по классам. Кнопка - собственный шаблон (Kit.axaml),
+        поля, списки и переключатели - шаблоны Fluent, перекрашенные палитрой
+        и дополненные анимациями. Цвета - только DynamicResource: тема
+        меняется на лету.
     -->
 
     <!-- ===================== Текст ===================== -->
     <Style Selector="TextBlock.secondary">
-        <Setter Property="Foreground" Value="{StaticResource TextMuted}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextMuted}" />
     </Style>
 
     <Style Selector="TextBlock.caption">
         <Setter Property="FontSize" Value="{StaticResource Size.Caption}" />
-        <Setter Property="Foreground" Value="{StaticResource TextMuted}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextMuted}" />
     </Style>
 
-    <!-- Служебная метка: моно читается как «системное поле» -->
+    <!-- Служебная метка: моно, разреженная, приглушённая - «системное поле» -->
     <Style Selector="TextBlock.label">
         <Setter Property="FontSize" Value="{StaticResource Size.Caption}" />
-        <Setter Property="Foreground" Value="{StaticResource TextFaint}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextFaint}" />
         <Setter Property="FontFamily" Value="{StaticResource Font.Mono}" />
+        <Setter Property="LetterSpacing" Value="0.6" />
     </Style>
 
-    <Style Selector="TextBlock.mono">
+    <Style Selector="TextBlock.mono, SelectableTextBlock.mono">
         <Setter Property="FontFamily" Value="{StaticResource Font.Mono}" />
-        <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
     </Style>
 
     <Style Selector="TextBlock.heading">
@@ -35,40 +37,71 @@
 
     <Style Selector="TextBlock.title">
         <Setter Property="FontSize" Value="{StaticResource Size.Title}" />
-        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="LetterSpacing" Value="-0.3" />
     </Style>
 
     <Style Selector="TextBlock.metric">
         <Setter Property="FontFamily" Value="{StaticResource Font.Mono}" />
-        <Setter Property="FontSize" Value="18" />
-        <Setter Property="Foreground" Value="{StaticResource Text}" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource Text}" />
     </Style>
 
-    <!-- Строка состояния страницы: сообщения там ждут глазами -->
+    <!-- Строка состояния: появляется плавно - сообщение заметно, но не дёргает -->
     <Style Selector="TextBlock.status">
         <Setter Property="FontSize" Value="{StaticResource Size.Caption}" />
-        <Setter Property="Foreground" Value="{StaticResource Warning}" />
+        <Setter Property="Foreground" Value="{DynamicResource Warning}" />
         <Setter Property="TextWrapping" Value="Wrap" />
         <Setter Property="IsVisible" Value="{Binding $self.Text, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+        <Style.Animations>
+            <Animation Duration="0:0:0.3" FillMode="Forward">
+                <KeyFrame Cue="0%">
+                    <Setter Property="Opacity" Value="0" />
+                </KeyFrame>
+                <KeyFrame Cue="100%">
+                    <Setter Property="Opacity" Value="1" />
+                </KeyFrame>
+            </Animation>
+        </Style.Animations>
     </Style>
 
     <Style Selector="TextBlock.warning">
-        <Setter Property="Foreground" Value="{StaticResource Warning}" />
+        <Setter Property="Foreground" Value="{DynamicResource Warning}" />
     </Style>
-
     <Style Selector="TextBlock.danger">
-        <Setter Property="Foreground" Value="{StaticResource Danger}" />
+        <Setter Property="Foreground" Value="{DynamicResource Danger}" />
+    </Style>
+    <Style Selector="TextBlock.accent">
+        <Setter Property="Foreground" Value="{DynamicResource Accent}" />
     </Style>
 
-    <Style Selector="TextBlock.accent">
-        <Setter Property="Foreground" Value="{StaticResource Accent}" />
+    <!-- ===================== Иконки ===================== -->
+    <!-- Контурная иконка: цвет берёт у кнопки или текста вокруг -->
+    <Style Selector="Path.icon">
+        <Setter Property="Width" Value="16" />
+        <Setter Property="Height" Value="16" />
+        <Setter Property="Stretch" Value="Uniform" />
+        <Setter Property="StrokeThickness" Value="1.75" />
+        <Setter Property="StrokeLineCap" Value="Round" />
+        <Setter Property="StrokeJoin" Value="Round" />
+        <Setter Property="Stroke" Value="{Binding $parent[TemplatedControl].Foreground}" />
+        <Setter Property="Fill" Value="Transparent" />
+    </Style>
+    <!-- В компактных кнопках строк списка иконка мельче -->
+    <Style Selector="Button.small Path.icon">
+        <Setter Property="Width" Value="12" />
+        <Setter Property="Height" Value="12" />
+    </Style>
+    <Style Selector="Path.icon.large">
+        <Setter Property="Width" Value="20" />
+        <Setter Property="Height" Value="20" />
     </Style>
 
     <!-- ===================== Страница ===================== -->
     <Style Selector=":is(Control).page">
         <Setter Property="Margin" Value="28,22,28,24" />
     </Style>
-
     <!-- Узкий экран (телефон): поля меньше, иначе контенту не остаётся места -->
     <Style Selector=".narrow :is(Control).page">
         <Setter Property="Margin" Value="14,14,14,12" />
@@ -76,112 +109,138 @@
 
     <!-- ===================== Карточки ===================== -->
     <Style Selector="Border.card">
-        <Setter Property="Background" Value="{StaticResource Surface}" />
+        <Setter Property="Background" Value="{DynamicResource Surface}" />
         <Setter Property="CornerRadius" Value="{StaticResource RadiusCard}" />
-        <Setter Property="BorderBrush" Value="{StaticResource Line}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Line}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Padding" Value="16" />
+        <Setter Property="Padding" Value="18" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Property="BorderBrush" Duration="0:0:0.2" />
+                <BrushTransition Property="Background" Duration="0:0:0.2" />
+            </Transitions>
+        </Setter>
+    </Style>
+
+    <!-- Карточка-элемент списка: отзывается на наведение рамкой и лёгким подъёмом -->
+    <Style Selector="Border.item">
+        <Setter Property="Background" Value="{DynamicResource Surface}" />
+        <Setter Property="CornerRadius" Value="{StaticResource RadiusCard}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Line}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="16,13" />
+        <Setter Property="RenderTransform" Value="none" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Property="BorderBrush" Duration="0:0:0.2" />
+                <BrushTransition Property="Background" Duration="0:0:0.2" />
+                <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.2" />
+                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.2" Easing="CubicEaseOut" />
+            </Transitions>
+        </Setter>
+    </Style>
+    <Style Selector="Border.item:pointerover">
+        <Setter Property="BorderBrush" Value="{DynamicResource LineHover}" />
+        <Setter Property="RenderTransform" Value="translateY(-1px)" />
+        <Setter Property="BoxShadow" Value="0 6 18 0 #26000000" />
+    </Style>
+    <Style Selector="Border.item.active">
+        <Setter Property="BorderBrush" Value="{DynamicResource Accent}" />
+        <Setter Property="Background" Value="{DynamicResource SurfaceRaised}" />
+    </Style>
+    <Style Selector="Border.item.compact">
+        <Setter Property="CornerRadius" Value="{StaticResource Radius}" />
+        <Setter Property="Padding" Value="14,10" />
     </Style>
 
     <Style Selector="Border.divider">
         <Setter Property="Height" Value="1" />
-        <Setter Property="Background" Value="{StaticResource Line}" />
+        <Setter Property="Background" Value="{DynamicResource Line}" />
         <Setter Property="Margin" Value="0,14" />
     </Style>
 
-    <!-- Метка-плашка: протокол, действие правила, выход соединения -->
+    <!-- Плашка: протокол, действие правила, выход соединения -->
     <Style Selector="Border.tag">
-        <Setter Property="CornerRadius" Value="4" />
-        <Setter Property="Padding" Value="6,2" />
+        <Setter Property="CornerRadius" Value="{StaticResource RadiusSmall}" />
+        <Setter Property="Padding" Value="7,2" />
         <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="Background" Value="{StaticResource Tint.Accent}" />
+        <Setter Property="Background" Value="{DynamicResource Tint.Accent}" />
     </Style>
     <Style Selector="Border.tag TextBlock">
         <Setter Property="FontSize" Value="{StaticResource Size.Caption}" />
-        <Setter Property="Foreground" Value="{StaticResource Accent}" />
+        <Setter Property="FontWeight" Value="Medium" />
+        <Setter Property="Foreground" Value="{DynamicResource Accent}" />
     </Style>
     <Style Selector="Border.tag.direct">
-        <Setter Property="Background" Value="{StaticResource Tint.Connected}" />
+        <Setter Property="Background" Value="{DynamicResource Tint.Connected}" />
     </Style>
     <Style Selector="Border.tag.direct TextBlock">
-        <Setter Property="Foreground" Value="{StaticResource Connected}" />
+        <Setter Property="Foreground" Value="{DynamicResource Connected}" />
     </Style>
     <Style Selector="Border.tag.block">
-        <Setter Property="Background" Value="{StaticResource Tint.Danger}" />
+        <Setter Property="Background" Value="{DynamicResource Tint.Danger}" />
     </Style>
     <Style Selector="Border.tag.block TextBlock">
-        <Setter Property="Foreground" Value="{StaticResource Danger}" />
+        <Setter Property="Foreground" Value="{DynamicResource Danger}" />
     </Style>
     <Style Selector="Border.tag.byedpi">
-        <Setter Property="Background" Value="{StaticResource Tint.Warning}" />
+        <Setter Property="Background" Value="{DynamicResource Tint.Warning}" />
     </Style>
     <Style Selector="Border.tag.byedpi TextBlock">
-        <Setter Property="Foreground" Value="{StaticResource Warning}" />
+        <Setter Property="Foreground" Value="{DynamicResource Warning}" />
+    </Style>
+    <Style Selector="Border.tag.neutral">
+        <Setter Property="Background" Value="{DynamicResource SurfaceHover}" />
+    </Style>
+    <Style Selector="Border.tag.neutral TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
     </Style>
 
-    <!-- ===================== Кнопки ===================== -->
-    <Style Selector="Button">
-        <Setter Property="Padding" Value="14,8" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Cursor" Value="Hand" />
-        <Setter Property="VerticalAlignment" Value="Center" />
-    </Style>
-
-    <!-- Главное действие. На экране всегда ровно одно. -->
-    <Style Selector="Button.primary">
-        <Setter Property="Background" Value="{StaticResource Accent}" />
-        <Setter Property="Foreground" Value="{StaticResource OnAccent}" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Padding" Value="18,9" />
-    </Style>
-    <Style Selector="Button.primary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-        <Setter Property="Background" Value="{StaticResource AccentHover}" />
-        <Setter Property="Foreground" Value="{StaticResource OnAccent}" />
-    </Style>
-    <Style Selector="Button.primary:pressed /template/ ContentPresenter#PART_ContentPresenter">
-        <Setter Property="Background" Value="{StaticResource AccentPress}" />
-        <Setter Property="Foreground" Value="{StaticResource OnAccent}" />
-    </Style>
-
-    <Style Selector="Button.ghost">
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{StaticResource TextMuted}" />
-    </Style>
-
-    <Style Selector="Button.small">
-        <Setter Property="Padding" Value="9,5" />
-    </Style>
-
-    <Style Selector="Button.danger">
-        <Setter Property="Foreground" Value="{StaticResource Danger}" />
-        <Setter Property="BorderBrush" Value="{StaticResource DangerLine}" />
-    </Style>
-
-    <Style Selector="Button:disabled">
-        <Setter Property="Opacity" Value="0.4" />
-    </Style>
-
-    <!-- ===================== Поля ===================== -->
+    <!-- ===================== Поля ввода ===================== -->
     <Style Selector="TextBox">
         <Setter Property="FontFamily" Value="{StaticResource Font.Mono}" />
-        <Setter Property="MinHeight" Value="36" />
+        <Setter Property="MinHeight" Value="38" />
+        <Setter Property="Padding" Value="12,8" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="CaretBrush" Value="{StaticResource Accent}" />
+        <Setter Property="CaretBrush" Value="{DynamicResource Accent}" />
+        <Setter Property="SelectionBrush" Value="{DynamicResource AccentPress}" />
+    </Style>
+    <!-- Рамка плавно меняет цвет, а в фокусе вокруг поля появляется лазурный ореол -->
+    <Style Selector="TextBox /template/ Border#PART_BorderElement">
+        <Setter Property="CornerRadius" Value="{StaticResource Radius}" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Property="BorderBrush" Duration="0:0:0.18" />
+                <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.2" />
+            </Transitions>
+        </Setter>
+    </Style>
+    <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BoxShadow" Value="0 0 0 3 #402EA8F0" />
     </Style>
 
     <Style Selector="ComboBox">
-        <Setter Property="MinHeight" Value="36" />
+        <Setter Property="MinHeight" Value="38" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="CornerRadius" Value="{StaticResource Radius}" />
+    </Style>
+    <Style Selector="ComboBox /template/ Border#Background">
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Property="BorderBrush" Duration="0:0:0.18" />
+            </Transitions>
+        </Setter>
     </Style>
 
-    <!-- Строка настройки: подпись слева, переключатель справа -->
+    <!-- Переключатель: подпись слева, сам он справа -->
     <Style Selector="ToggleSwitch">
         <Setter Property="OnContent" Value="" />
         <Setter Property="OffContent" Value="" />
         <Setter Property="MinWidth" Value="0" />
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
     </Style>
 
     <!-- ===================== Списки ===================== -->
@@ -196,6 +255,9 @@
         <Setter Property="Margin" Value="0,0,0,8" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
     </Style>
+    <Style Selector="ListBox.plain ListBoxItem /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
     <Style Selector="ListBox.plain ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
         <Setter Property="Background" Value="Transparent" />
     </Style>
@@ -209,81 +271,168 @@
         <Setter Property="Margin" Value="0,0,0,6" />
     </Style>
 
-    <!-- ===================== Навигация ===================== -->
+    <!-- ===================== Меню ===================== -->
     <Style Selector="ListBox.nav">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Padding" Value="0" />
     </Style>
     <Style Selector="ListBox.nav ListBoxItem">
-        <Setter Property="Foreground" Value="{StaticResource TextMuted}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextMuted}" />
         <Setter Property="CornerRadius" Value="{StaticResource Radius}" />
-        <Setter Property="Margin" Value="8,1" />
-        <Setter Property="Padding" Value="14,0" />
-        <Setter Property="MinHeight" Value="38" />
+        <Setter Property="Margin" Value="10,2" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="MinHeight" Value="40" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="Cursor" Value="Hand" />
     </Style>
-    <Style Selector="ListBox.nav ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Style Selector="ListBox.nav ListBoxItem /template/ ContentPresenter#PART_ContentPresenter">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Property="Background" Duration="0:0:0.2" />
+                <BrushTransition Property="Foreground" Duration="0:0:0.2" />
+            </Transitions>
+        </Setter>
+    </Style>
+    <Style Selector="ListBox.nav ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource SurfaceHover}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
     </Style>
     <Style Selector="ListBox.nav ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
-        <Setter Property="Background" Value="{StaticResource SurfaceRaised}" />
-        <Setter Property="Foreground" Value="{StaticResource Text}" />
+        <Setter Property="Background" Value="{DynamicResource Tint.Accent}" />
+        <Setter Property="Foreground" Value="{DynamicResource Text}" />
     </Style>
     <Style Selector="ListBox.nav ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-        <Setter Property="Background" Value="{StaticResource SurfaceRaised}" />
-        <Setter Property="Foreground" Value="{StaticResource Text}" />
+        <Setter Property="Background" Value="{DynamicResource Tint.Accent}" />
+        <Setter Property="Foreground" Value="{DynamicResource Text}" />
     </Style>
 
-    <!-- Нижняя панель на телефоне: пункты в ряд, выбранный - акцентом -->
+    <!-- Маркер выбранного пункта: вырастает из середины -->
+    <Style Selector="ListBox.nav Border.marker">
+        <Setter Property="Width" Value="3" />
+        <Setter Property="Height" Value="18" />
+        <Setter Property="CornerRadius" Value="2" />
+        <Setter Property="Background" Value="{DynamicResource AccentGradient}" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <!-- Невыбранный: прозрачный и сжатый по высоте. Opacity страхует,
+             если платформа не применит трансформацию -->
+        <Setter Property="Opacity" Value="0" />
+        <Setter Property="RenderTransform" Value="scale(1, 0.2)" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.28" Easing="BackEaseOut" />
+                <DoubleTransition Property="Opacity" Duration="0:0:0.18" />
+            </Transitions>
+        </Setter>
+    </Style>
+    <Style Selector="ListBox.nav ListBoxItem:selected Border.marker">
+        <Setter Property="Opacity" Value="1" />
+        <Setter Property="RenderTransform" Value="scale(1, 1)" />
+    </Style>
+    <Style Selector="ListBox.nav ListBoxItem:selected Path.icon">
+        <Setter Property="Stroke" Value="{DynamicResource Accent}" />
+    </Style>
+
+    <!-- Нижнее меню (телефон): иконка над подписью, маркер не нужен -->
     <Style Selector="ListBox.bottomnav ListBoxItem">
         <Setter Property="Margin" Value="2,0" />
-        <Setter Property="Padding" Value="12,0" />
-        <Setter Property="MinHeight" Value="48" />
-        <Setter Property="FontSize" Value="{StaticResource Size.Small}" />
+        <Setter Property="MinHeight" Value="54" />
+        <Setter Property="MinWidth" Value="72" />
+        <Setter Property="FontSize" Value="{StaticResource Size.Caption}" />
     </Style>
     <Style Selector="ListBox.bottomnav ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
-        <Setter Property="Background" Value="{StaticResource Tint.Accent}" />
-        <Setter Property="Foreground" Value="{StaticResource Accent}" />
+        <Setter Property="Foreground" Value="{DynamicResource Accent}" />
     </Style>
     <Style Selector="ListBox.bottomnav ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-        <Setter Property="Background" Value="{StaticResource Tint.Accent}" />
-        <Setter Property="Foreground" Value="{StaticResource Accent}" />
+        <Setter Property="Foreground" Value="{DynamicResource Accent}" />
     </Style>
 
     <!-- ===================== Точка состояния ===================== -->
     <Style Selector="Ellipse.dot">
-        <Setter Property="Width" Value="6" />
-        <Setter Property="Height" Value="6" />
+        <Setter Property="Width" Value="7" />
+        <Setter Property="Height" Value="7" />
         <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="Fill" Value="{StaticResource TextFaint}" />
+        <Setter Property="Fill" Value="{DynamicResource TextFaint}" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Property="Fill" Duration="0:0:0.3" />
+            </Transitions>
+        </Setter>
     </Style>
     <Style Selector="Ellipse.dot.connected">
-        <Setter Property="Fill" Value="{StaticResource Connected}" />
-    </Style>
-    <Style Selector="Ellipse.dot.connecting">
-        <Setter Property="Fill" Value="{StaticResource Accent}" />
+        <Setter Property="Fill" Value="{DynamicResource Connected}" />
     </Style>
     <Style Selector="Ellipse.dot.failing">
-        <Setter Property="Fill" Value="{StaticResource Danger}" />
+        <Setter Property="Fill" Value="{DynamicResource Danger}" />
+    </Style>
+    <!-- Подключение - точка мигает -->
+    <Style Selector="Ellipse.dot.connecting">
+        <Setter Property="Fill" Value="{DynamicResource Accent}" />
+        <Style.Animations>
+            <Animation Duration="0:0:0.9" IterationCount="Infinite" PlaybackDirection="Alternate">
+                <KeyFrame Cue="0%">
+                    <Setter Property="Opacity" Value="1" />
+                </KeyFrame>
+                <KeyFrame Cue="100%">
+                    <Setter Property="Opacity" Value="0.25" />
+                </KeyFrame>
+            </Animation>
+        </Style.Animations>
     </Style>
 
     <!-- Задержка сервера: цвет по качеству канала -->
     <Style Selector="TextBlock.latency">
         <Setter Property="FontFamily" Value="{StaticResource Font.Mono}" />
-        <Setter Property="Foreground" Value="{StaticResource TextFaint}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource TextFaint}" />
     </Style>
     <Style Selector="TextBlock.latency.good">
-        <Setter Property="Foreground" Value="{StaticResource Connected}" />
+        <Setter Property="Foreground" Value="{DynamicResource Connected}" />
     </Style>
     <Style Selector="TextBlock.latency.fair">
-        <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
     </Style>
     <Style Selector="TextBlock.latency.poor">
-        <Setter Property="Foreground" Value="{StaticResource Warning}" />
+        <Setter Property="Foreground" Value="{DynamicResource Warning}" />
     </Style>
     <Style Selector="TextBlock.latency.dead">
-        <Setter Property="Foreground" Value="{StaticResource Danger}" />
+        <Setter Property="Foreground" Value="{DynamicResource Danger}" />
+    </Style>
+
+    <!-- ===================== Диалоги ===================== -->
+    <!-- Затемнение проявляется, карточка «всплывает» из чуть меньшего размера -->
+    <Style Selector="Border.scrim">
+        <Setter Property="Background" Value="{DynamicResource Scrim}" />
+        <Style.Animations>
+            <Animation Duration="0:0:0.2" FillMode="Forward">
+                <KeyFrame Cue="0%">
+                    <Setter Property="Opacity" Value="0" />
+                </KeyFrame>
+                <KeyFrame Cue="100%">
+                    <Setter Property="Opacity" Value="1" />
+                </KeyFrame>
+            </Animation>
+        </Style.Animations>
+    </Style>
+    <Style Selector="Border.dialog">
+        <Setter Property="Background" Value="{DynamicResource Surface}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource LineStrong}" />
+        <Setter Property="BoxShadow" Value="0 18 48 0 #55000000" />
+        <Style.Animations>
+            <Animation Duration="0:0:0.24" FillMode="Forward" Easing="CubicEaseOut">
+                <KeyFrame Cue="0%">
+                    <Setter Property="Opacity" Value="0" />
+                    <Setter Property="ScaleTransform.ScaleX" Value="0.95" />
+                    <Setter Property="ScaleTransform.ScaleY" Value="0.95" />
+                </KeyFrame>
+                <KeyFrame Cue="100%">
+                    <Setter Property="Opacity" Value="1" />
+                    <Setter Property="ScaleTransform.ScaleX" Value="1" />
+                    <Setter Property="ScaleTransform.ScaleY" Value="1" />
+                </KeyFrame>
+            </Animation>
+        </Style.Animations>
     </Style>
 </Styles>

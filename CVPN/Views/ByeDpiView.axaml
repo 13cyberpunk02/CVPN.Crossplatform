@@ -42,7 +42,7 @@
                     <TextBlock Classes="caption" Text="{loc:T ByeDpi_ArgsHint}" Margin="0,8,0,0" TextWrapping="Wrap" />
 
                     <TextBlock Classes="label" Text="{loc:T ByeDpi_WillRun}" Margin="0,14,0,0" />
-                    <SelectableTextBlock FontFamily="{StaticResource Font.Mono}" Foreground="{StaticResource TextFaint}"
+                    <SelectableTextBlock FontFamily="{StaticResource Font.Mono}" Foreground="{DynamicResource TextFaint}"
                                          Text="{Binding CommandPreview}" Margin="0,6,0,0" TextWrapping="Wrap" />
                     <TextBlock Classes="caption warning" Text="{Binding IgnoredNote}" Margin="0,8,0,0"
                                TextWrapping="Wrap" IsVisible="{Binding HasIgnored}" />

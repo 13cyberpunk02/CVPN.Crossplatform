@@ -10,16 +10,16 @@
     <UserControl.Styles>
         <Style Selector="TextBlock.test">
             <Setter Property="FontSize" Value="{StaticResource Size.Caption}" />
-            <Setter Property="Foreground" Value="{StaticResource Accent}" />
+            <Setter Property="Foreground" Value="{DynamicResource Accent}" />
         </Style>
         <Style Selector="TextBlock.test.direct">
-            <Setter Property="Foreground" Value="{StaticResource Connected}" />
+            <Setter Property="Foreground" Value="{DynamicResource Connected}" />
         </Style>
         <Style Selector="TextBlock.test.block">
-            <Setter Property="Foreground" Value="{StaticResource Danger}" />
+            <Setter Property="Foreground" Value="{DynamicResource Danger}" />
         </Style>
         <Style Selector="TextBlock.test.byedpi">
-            <Setter Property="Foreground" Value="{StaticResource Warning}" />
+            <Setter Property="Foreground" Value="{DynamicResource Warning}" />
         </Style>
     </UserControl.Styles>
 
@@ -82,14 +82,14 @@
         <ListBox Grid.Row="4" Classes="plain tight" Margin="0,14,0,0" ItemsSource="{Binding Rules}">
             <ListBox.ItemTemplate>
                 <DataTemplate x:DataType="models:RouteRule">
-                    <Border Background="{StaticResource Surface}" CornerRadius="{StaticResource Radius}" Padding="14,10">
+                    <Border Classes="item compact">
                         <Grid ColumnDefinitions="Auto,*,Auto,Auto">
                             <ToggleSwitch IsChecked="{Binding Enabled}" HorizontalAlignment="Left" />
 
                             <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
                                 <TextBlock Classes="mono" FontSize="{StaticResource Size.Small}"
-                                           Foreground="{StaticResource TextFaint}" Text="{Binding MatchLabel}" />
-                                <TextBlock Classes="mono" Foreground="{StaticResource Text}" Text="{Binding DisplayValue}"
+                                           Foreground="{DynamicResource TextFaint}" Text="{Binding MatchLabel}" />
+                                <TextBlock Classes="mono" Foreground="{DynamicResource Text}" Text="{Binding DisplayValue}"
                                            ToolTip.Tip="{Binding Value}" TextTrimming="CharacterEllipsis" />
                             </StackPanel>
 
@@ -101,15 +101,21 @@
                             </Border>
 
                             <StackPanel Grid.Column="3" Orientation="Horizontal" Margin="6,0,0,0">
-                                <Button Classes="ghost small" Content="▲" ToolTip.Tip="{loc:T Routing_MoveUpHint}"
+                                <Button Classes="ghost small icon" ToolTip.Tip="{loc:T Routing_MoveUpHint}"
                                         Command="{Binding #Root.((vm:RoutingViewModel)DataContext).MoveUp}"
-                                        CommandParameter="{Binding}" />
-                                <Button Classes="ghost small" Content="▼" ToolTip.Tip="{loc:T Routing_MoveDownHint}"
+                                        CommandParameter="{Binding}">
+                                    <Path Classes="icon" Data="{StaticResource Icon.ChevronUp}" />
+                                </Button>
+                                <Button Classes="ghost small icon" ToolTip.Tip="{loc:T Routing_MoveDownHint}"
                                         Command="{Binding #Root.((vm:RoutingViewModel)DataContext).MoveDown}"
-                                        CommandParameter="{Binding}" />
-                                <Button Classes="ghost small" Content="✕"
+                                        CommandParameter="{Binding}">
+                                    <Path Classes="icon" Data="{StaticResource Icon.ChevronDown}" />
+                                </Button>
+                                <Button Classes="ghost small icon"
                                         Command="{Binding #Root.((vm:RoutingViewModel)DataContext).RemoveRule}"
-                                        CommandParameter="{Binding}" />
+                                        CommandParameter="{Binding}">
+                                    <Path Classes="icon" Data="{StaticResource Icon.X}" />
+                                </Button>
                             </StackPanel>
                         </Grid>
                     </Border>

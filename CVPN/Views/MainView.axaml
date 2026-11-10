@@ -5,8 +5,8 @@
              xmlns:loc="using:CVPN.Localization"
              x:Class="CVPN.Views.MainView"
              x:DataType="vm:MainViewModel"
-             Background="{StaticResource Bg}"
-             Foreground="{StaticResource Text}"
+             Background="{DynamicResource Bg}"
+             Foreground="{DynamicResource Text}"
              FontSize="{StaticResource Size.Body}">
 
     <!--
@@ -42,10 +42,10 @@
 
     <UserControl.Styles>
         <Style Selector="TextBlock#ModeTitle">
-            <Setter Property="Foreground" Value="{StaticResource TextMuted}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextMuted}" />
         </Style>
         <Style Selector="TextBlock#ModeTitle.active">
-            <Setter Property="Foreground" Value="{StaticResource Text}" />
+            <Setter Property="Foreground" Value="{DynamicResource Text}" />
         </Style>
     </UserControl.Styles>
 
@@ -53,25 +53,29 @@
         <Grid ColumnDefinitions="Auto,*" RowDefinitions="*,Auto">
 
             <!-- ===== боковое меню ===== -->
-            <Border x:Name="Sidebar" Grid.Column="0" Grid.Row="0" Width="186"
-                    BorderBrush="{StaticResource Line}" BorderThickness="0,0,1,0">
-                <Grid RowDefinitions="Auto,Auto,*,Auto">
-                    <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="10" Margin="18,16,0,6">
-                        <Rectangle Width="14" Height="14" Fill="{StaticResource Accent}" RadiusX="4" RadiusY="4" />
-                        <TextBlock Text="CVPN" FontSize="{StaticResource Size.Small}" VerticalAlignment="Center" />
-                    </StackPanel>
-
-                    <ListBox Grid.Row="1" Classes="nav" Margin="0,8,0,0"
+            <Border x:Name="Sidebar" Grid.Column="0" Grid.Row="0" Width="200"
+                    Background="{DynamicResource Chrome}"
+                    BorderBrush="{DynamicResource Line}" BorderThickness="0,0,1,0">
+                <Grid RowDefinitions="Auto,*,Auto">
+                    <!-- Логотип - в шапке окна; на телефоне шапки нет, и он там не нужен -->
+                    <ListBox Grid.Row="0" Classes="nav" Margin="0,12,0,0"
                              ItemsSource="{Binding NavItems}" SelectedItem="{Binding SelectedNav}">
                         <ListBox.ItemTemplate>
                             <DataTemplate x:DataType="vm:NavItem">
-                                <TextBlock Text="{Binding Title}" />
+                                <Panel>
+                                    <Border Classes="marker" />
+                                    <StackPanel Orientation="Horizontal" Spacing="12" Margin="14,0,0,0"
+                                                VerticalAlignment="Center">
+                                        <Path Classes="icon" Data="{Binding Key, Converter={StaticResource Icon}}" />
+                                        <TextBlock Text="{Binding Title}" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Panel>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
 
                     <!-- Режим: что перехватывает трафик в этой сессии -->
-                    <Border Grid.Row="3" BorderBrush="{StaticResource Line}" BorderThickness="0,1,0,0" Padding="18,12">
+                    <Border Grid.Row="2" BorderBrush="{DynamicResource Line}" BorderThickness="0,1,0,0" Padding="18,12">
                         <StackPanel>
                             <TextBlock Classes="label" Text="{loc:T Common_Mode}" />
                             <StackPanel Orientation="Horizontal" Spacing="7" Margin="0,5,0,0">
@@ -91,11 +95,18 @@
             </Border>
 
             <!-- ===== страница ===== -->
-            <ContentControl Grid.Column="1" Grid.Row="0" Content="{Binding SelectedNav.Page}" />
+            <!-- Смена страницы - плавное проявление -->
+            <TransitioningContentControl Grid.Column="1" Grid.Row="0" Content="{Binding SelectedNav.Page}">
+                <TransitioningContentControl.PageTransition>
+                    <CompositePageTransition>
+                        <CrossFade Duration="0:0:0.18" />
+                    </CompositePageTransition>
+                </TransitioningContentControl.PageTransition>
+            </TransitioningContentControl>
 
             <!-- ===== нижнее меню (узкий экран) ===== -->
             <Border x:Name="BottomBar" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" IsVisible="False"
-                    Background="{StaticResource Surface}" BorderBrush="{StaticResource Line}" BorderThickness="0,1,0,0">
+                    Background="{DynamicResource Chrome}" BorderBrush="{DynamicResource Line}" BorderThickness="0,1,0,0">
                 <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled">
                     <ListBox Classes="nav bottomnav" Margin="4,4"
                              ItemsSource="{Binding NavItems}" SelectedItem="{Binding SelectedNav}">
@@ -106,7 +117,11 @@
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
                             <DataTemplate x:DataType="vm:NavItem">
-                                <TextBlock Text="{Binding Title}" />
+                                <StackPanel Spacing="3" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Path Classes="icon large" HorizontalAlignment="Center"
+                                          Data="{Binding Key, Converter={StaticResource Icon}}" />
+                                    <TextBlock Text="{Binding Title}" HorizontalAlignment="Center" />
+                                </StackPanel>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>

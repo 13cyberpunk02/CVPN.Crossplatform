@@ -69,12 +69,24 @@ public partial class App : Application
 
         Shell = new MainViewModel(platform);
 
+        // Тема применяется сразу и меняется на лету - разметка берёт цвета через DynamicResource
+        ApplyTheme(Shell.Settings.Theme);
+        Shell.Settings.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(AppSettings.Theme)) ApplyTheme(Shell.Settings.Theme);
+        };
+
 #if DEBUG
         // --page=routing - сразу открыть страницу: удобно проверять вёрстку
         var page = Environment.GetCommandLineArgs()
             .FirstOrDefault(a => a.StartsWith("--page=", StringComparison.Ordinal))?["--page=".Length..];
         var target = Shell.NavItems.FirstOrDefault(n => n.Key == page);
         if (target is not null) Shell.SelectedNav = target;
+
+        // --theme=light - тема только на этот запуск, в настройки не пишется
+        var theme = Environment.GetCommandLineArgs()
+            .FirstOrDefault(a => a.StartsWith("--theme=", StringComparison.Ordinal))?["--theme=".Length..];
+        if (theme is not null) ApplyTheme(theme);
 #endif
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
@@ -140,6 +152,14 @@ public partial class App : Application
             (ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.Shutdown();
         };
     }
+
+    /// <summary>«dark» / «light» / пусто - как в системе (Avalonia следит за ней сама).</summary>
+    private void ApplyTheme(string code) => RequestedThemeVariant = code switch
+    {
+        "dark" => Avalonia.Styling.ThemeVariant.Dark,
+        "light" => Avalonia.Styling.ThemeVariant.Light,
+        _ => Avalonia.Styling.ThemeVariant.Default
+    };
 
     private Control CreateMainView()
     {

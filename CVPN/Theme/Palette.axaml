@@ -1,161 +1,311 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!--
-        Палитра из WPF-клиента. Литеральных цветов вне этого файла нет.
-        Ниже - переопределение ресурсов Fluent: так стандартные контролы
-        (кнопки, поля, списки) сразу выглядят в нашей теме и сохраняют
-        поведение - фокус, клавиатуру, касания на телефоне.
+        Палитра CVPN: тёмная и светлая темы с лазурным акцентом.
+        Файл сгенерирован из двух таблиц цветов - ключи в темах совпадают
+        один в один. В разметке цвета берутся только через DynamicResource:
+        тема переключается на лету, StaticResource застыл бы на первой.
     -->
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Dark">
+            <Color x:Key="Clr.Bg">#FF0E1620</Color>
+            <SolidColorBrush x:Key="Bg" Color="#FF0E1620" />
+            <Color x:Key="Clr.Chrome">#FF0A121A</Color>
+            <SolidColorBrush x:Key="Chrome" Color="#FF0A121A" />
+            <Color x:Key="Clr.Surface">#FF142130</Color>
+            <SolidColorBrush x:Key="Surface" Color="#FF142130" />
+            <Color x:Key="Clr.SurfaceRaised">#FF1A2A3B</Color>
+            <SolidColorBrush x:Key="SurfaceRaised" Color="#FF1A2A3B" />
+            <Color x:Key="Clr.SurfaceHover">#FF213448</Color>
+            <SolidColorBrush x:Key="SurfaceHover" Color="#FF213448" />
+            <Color x:Key="Clr.Console">#FF0A1119</Color>
+            <SolidColorBrush x:Key="Console" Color="#FF0A1119" />
+            <Color x:Key="Clr.InputBg">#FF0F1A26</Color>
+            <SolidColorBrush x:Key="InputBg" Color="#FF0F1A26" />
+            <Color x:Key="Clr.Line">#FF1E2E3F</Color>
+            <SolidColorBrush x:Key="Line" Color="#FF1E2E3F" />
+            <Color x:Key="Clr.LineStrong">#FF2B4055</Color>
+            <SolidColorBrush x:Key="LineStrong" Color="#FF2B4055" />
+            <Color x:Key="Clr.LineHover">#FF3A5670</Color>
+            <SolidColorBrush x:Key="LineHover" Color="#FF3A5670" />
+            <Color x:Key="Clr.Text">#FFE4EEF6</Color>
+            <SolidColorBrush x:Key="Text" Color="#FFE4EEF6" />
+            <Color x:Key="Clr.TextSecondary">#FFA8BDCF</Color>
+            <SolidColorBrush x:Key="TextSecondary" Color="#FFA8BDCF" />
+            <Color x:Key="Clr.TextMuted">#FF7A93A8</Color>
+            <SolidColorBrush x:Key="TextMuted" Color="#FF7A93A8" />
+            <Color x:Key="Clr.TextFaint">#FF587087</Color>
+            <SolidColorBrush x:Key="TextFaint" Color="#FF587087" />
+            <Color x:Key="Clr.OnAccent">#FF04121C</Color>
+            <SolidColorBrush x:Key="OnAccent" Color="#FF04121C" />
+            <Color x:Key="Clr.Accent">#FF2EA8F0</Color>
+            <SolidColorBrush x:Key="Accent" Color="#FF2EA8F0" />
+            <Color x:Key="Clr.AccentHover">#FF55BAF4</Color>
+            <SolidColorBrush x:Key="AccentHover" Color="#FF55BAF4" />
+            <Color x:Key="Clr.AccentPress">#FF1A8FD6</Color>
+            <SolidColorBrush x:Key="AccentPress" Color="#FF1A8FD6" />
+            <Color x:Key="Clr.AccentSoft">#FF5FD8F2</Color>
+            <SolidColorBrush x:Key="AccentSoft" Color="#FF5FD8F2" />
+            <Color x:Key="Clr.Connected">#FF2DD4A7</Color>
+            <SolidColorBrush x:Key="Connected" Color="#FF2DD4A7" />
+            <Color x:Key="Clr.Warning">#FFF2B54A</Color>
+            <SolidColorBrush x:Key="Warning" Color="#FFF2B54A" />
+            <Color x:Key="Clr.Danger">#FFFF6B6B</Color>
+            <SolidColorBrush x:Key="Danger" Color="#FFFF6B6B" />
+            <Color x:Key="Clr.DangerLine">#FF4A2A33</Color>
+            <SolidColorBrush x:Key="DangerLine" Color="#FF4A2A33" />
+            <Color x:Key="Clr.Scrim">#A6050B12</Color>
+            <SolidColorBrush x:Key="Scrim" Color="#A6050B12" />
+            <Color x:Key="Clr.Glow">#592EA8F0</Color>
+            <SolidColorBrush x:Key="Glow" Color="#592EA8F0" />
+            <Color x:Key="Clr.GlowConnected">#592DD4A7</Color>
+            <SolidColorBrush x:Key="GlowConnected" Color="#592DD4A7" />
 
-    <!-- Поверхности -->
-    <Color x:Key="Clr.Bg">#FF0B0E13</Color>
-    <Color x:Key="Clr.Surface">#FF12161E</Color>
-    <Color x:Key="Clr.SurfaceRaised">#FF171C26</Color>
-    <Color x:Key="Clr.SurfaceHover">#FF1D2330</Color>
-    <Color x:Key="Clr.Console">#FF090C11</Color>
+            <!-- Подложки статусов -->
+            <SolidColorBrush x:Key="Tint.Accent" Color="#FF2EA8F0" Opacity="0.14" />
+            <SolidColorBrush x:Key="Tint.Connected" Color="#FF2DD4A7" Opacity="0.14" />
+            <SolidColorBrush x:Key="Tint.Danger" Color="#FFFF6B6B" Opacity="0.14" />
+            <SolidColorBrush x:Key="Tint.Warning" Color="#FFF2B54A" Opacity="0.14" />
 
-    <!-- Линии -->
-    <Color x:Key="Clr.Line">#FF1B212C</Color>
-    <Color x:Key="Clr.LineStrong">#FF2A3242</Color>
-    <Color x:Key="Clr.LineHover">#FF39445A</Color>
+            <!-- Акцентный градиент: главная кнопка, логотип, дуга круга -->
+            <LinearGradientBrush x:Key="AccentGradient" StartPoint="0%,0%" EndPoint="100%,100%">
+                <GradientStop Offset="0" Color="#FF2EA8F0" />
+                <GradientStop Offset="1" Color="#FF5FD8F2" />
+            </LinearGradientBrush>
 
-    <!-- Текст -->
-    <Color x:Key="Clr.Text">#FFE7EBF2</Color>
-    <Color x:Key="Clr.TextSecondary">#FFB9C1D1</Color>
-    <Color x:Key="Clr.TextMuted">#FF79839A</Color>
-    <Color x:Key="Clr.TextFaint">#FF5D6679</Color>
-    <Color x:Key="Clr.OnAccent">#FF0B0E13</Color>
+            <!-- Акцент Fluent - для контролов, которые мы не перерисовываем -->
+            <Color x:Key="SystemAccentColor">#FF2EA8F0</Color>
+            <Color x:Key="SystemAccentColorLight1">#FF55BAF4</Color>
+            <Color x:Key="SystemAccentColorLight2">#FF5FD8F2</Color>
+            <Color x:Key="SystemAccentColorLight3">#FF5FD8F2</Color>
+            <Color x:Key="SystemAccentColorDark1">#FF1A8FD6</Color>
+            <Color x:Key="SystemAccentColorDark2">#FF1A8FD6</Color>
+            <Color x:Key="SystemAccentColorDark3">#FF1A8FD6</Color>
 
-    <!-- Роли -->
-    <Color x:Key="Clr.Accent">#FF7A5CFF</Color>
-    <Color x:Key="Clr.AccentHover">#FF8E75FF</Color>
-    <Color x:Key="Clr.AccentPress">#FF6449E0</Color>
-    <Color x:Key="Clr.Connected">#FF34D399</Color>
-    <Color x:Key="Clr.Warning">#FFF5B342</Color>
-    <Color x:Key="Clr.Danger">#FFFF5C5C</Color>
-    <Color x:Key="Clr.DangerLine">#FF3A2530</Color>
-    <Color x:Key="Clr.Scrim">#B3000000</Color>
+            <!-- Ресурсы Fluent: поля, списки, переключатели в наших цветах -->
+            <SolidColorBrush x:Key="TextControlBackground" Color="#FF0F1A26" />
+            <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#FF0F1A26" />
+            <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#FF0F1A26" />
+            <SolidColorBrush x:Key="TextControlBackgroundDisabled" Color="#FF0F1A26" />
+            <SolidColorBrush x:Key="TextControlBorderBrush" Color="#FF2B4055" />
+            <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="#FF3A5670" />
+            <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="#FF2EA8F0" />
+            <SolidColorBrush x:Key="TextControlForeground" Color="#FFE4EEF6" />
+            <SolidColorBrush x:Key="TextControlForegroundPointerOver" Color="#FFE4EEF6" />
+            <SolidColorBrush x:Key="TextControlForegroundFocused" Color="#FFE4EEF6" />
+            <SolidColorBrush x:Key="TextControlPlaceholderForeground" Color="#FF587087" />
+            <SolidColorBrush x:Key="TextControlPlaceholderForegroundPointerOver" Color="#FF587087" />
+            <SolidColorBrush x:Key="TextControlPlaceholderForegroundFocused" Color="#FF587087" />
+            <SolidColorBrush x:Key="TextControlSelectionHighlightColor" Color="#FF1A8FD6" />
+            <SolidColorBrush x:Key="TextControlButtonForeground" Color="#FF7A93A8" />
+            <SolidColorBrush x:Key="TextControlButtonForegroundPointerOver" Color="#FFE4EEF6" />
+            <SolidColorBrush x:Key="ComboBoxBackground" Color="#FF0F1A26" />
+            <SolidColorBrush x:Key="ComboBoxBackgroundPointerOver" Color="#FF0F1A26" />
+            <SolidColorBrush x:Key="ComboBoxBackgroundPressed" Color="#FF0F1A26" />
+            <SolidColorBrush x:Key="ComboBoxBackgroundFocused" Color="#FF0F1A26" />
+            <SolidColorBrush x:Key="ComboBoxBackgroundDisabled" Color="#FF0F1A26" />
+            <SolidColorBrush x:Key="ComboBoxBorderBrush" Color="#FF2B4055" />
+            <SolidColorBrush x:Key="ComboBoxBorderBrushPointerOver" Color="#FF3A5670" />
+            <SolidColorBrush x:Key="ComboBoxBorderBrushPressed" Color="#FF2EA8F0" />
+            <SolidColorBrush x:Key="ComboBoxBorderBrushFocused" Color="#FF2EA8F0" />
+            <SolidColorBrush x:Key="ComboBoxForeground" Color="#FFE4EEF6" />
+            <SolidColorBrush x:Key="ComboBoxForegroundFocused" Color="#FFE4EEF6" />
+            <SolidColorBrush x:Key="ComboBoxDropDownGlyphForeground" Color="#FF7A93A8" />
+            <SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="#FF1A2A3B" />
+            <SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="#FF2B4055" />
+            <SolidColorBrush x:Key="ComboBoxItemForeground" Color="#FFA8BDCF" />
+            <SolidColorBrush x:Key="ComboBoxItemForegroundPointerOver" Color="#FFE4EEF6" />
+            <SolidColorBrush x:Key="ComboBoxItemForegroundSelected" Color="#FFE4EEF6" />
+            <SolidColorBrush x:Key="ComboBoxItemForegroundSelectedPointerOver" Color="#FFE4EEF6" />
+            <SolidColorBrush x:Key="ComboBoxItemBackgroundPointerOver" Color="#FF213448" />
+            <SolidColorBrush x:Key="ComboBoxItemBackgroundPressed" Color="#FF213448" />
+            <SolidColorBrush x:Key="ComboBoxItemBackgroundSelected" Color="#FF213448" />
+            <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPointerOver" Color="#FF213448" />
+            <SolidColorBrush x:Key="ToggleSwitchFillOff" Color="#FF2B4055" />
+            <SolidColorBrush x:Key="ToggleSwitchFillOffPointerOver" Color="#FF3A5670" />
+            <SolidColorBrush x:Key="ToggleSwitchFillOffPressed" Color="#FF3A5670" />
+            <SolidColorBrush x:Key="ToggleSwitchStrokeOff" Color="#FF2B4055" />
+            <SolidColorBrush x:Key="ToggleSwitchStrokeOffPointerOver" Color="#FF3A5670" />
+            <SolidColorBrush x:Key="ToggleSwitchStrokeOffPressed" Color="#FF3A5670" />
+            <SolidColorBrush x:Key="ToggleSwitchKnobFillOff" Color="#FF7A93A8" />
+            <SolidColorBrush x:Key="ToggleSwitchKnobFillOffPointerOver" Color="#FFA8BDCF" />
+            <SolidColorBrush x:Key="ToggleSwitchKnobFillOffPressed" Color="#FFA8BDCF" />
+            <SolidColorBrush x:Key="ToggleSwitchFillOn" Color="#FF2EA8F0" />
+            <SolidColorBrush x:Key="ToggleSwitchFillOnPointerOver" Color="#FF55BAF4" />
+            <SolidColorBrush x:Key="ToggleSwitchFillOnPressed" Color="#FF1A8FD6" />
+            <SolidColorBrush x:Key="ToggleSwitchStrokeOn" Color="#FF2EA8F0" />
+            <SolidColorBrush x:Key="ToggleSwitchStrokeOnPointerOver" Color="#FF55BAF4" />
+            <SolidColorBrush x:Key="ToggleSwitchKnobFillOn" Color="#FF04121C" />
+            <SolidColorBrush x:Key="ToggleSwitchKnobFillOnPointerOver" Color="#FF04121C" />
+            <SolidColorBrush x:Key="ToggleSwitchKnobFillOnPressed" Color="#FF04121C" />
+            <SolidColorBrush x:Key="ToolTipBackground" Color="#FF1A2A3B" />
+            <SolidColorBrush x:Key="ToolTipBorderBrush" Color="#FF2B4055" />
+            <SolidColorBrush x:Key="ToolTipForeground" Color="#FFA8BDCF" />
+            <SolidColorBrush x:Key="ScrollBarThumbFill" Color="#FF2B4055" />
+            <SolidColorBrush x:Key="ScrollBarThumbFillPointerOver" Color="#FF3A5670" />
+            <SolidColorBrush x:Key="ScrollBarThumbFillPressed" Color="#FF2EA8F0" />
+        </ResourceDictionary>
 
-    <SolidColorBrush x:Key="Bg" Color="{StaticResource Clr.Bg}" />
-    <SolidColorBrush x:Key="Surface" Color="{StaticResource Clr.Surface}" />
-    <SolidColorBrush x:Key="SurfaceRaised" Color="{StaticResource Clr.SurfaceRaised}" />
-    <SolidColorBrush x:Key="SurfaceHover" Color="{StaticResource Clr.SurfaceHover}" />
-    <SolidColorBrush x:Key="Console" Color="{StaticResource Clr.Console}" />
+        <ResourceDictionary x:Key="Light">
+            <Color x:Key="Clr.Bg">#FFF2F6FA</Color>
+            <SolidColorBrush x:Key="Bg" Color="#FFF2F6FA" />
+            <Color x:Key="Clr.Chrome">#FFE8EFF5</Color>
+            <SolidColorBrush x:Key="Chrome" Color="#FFE8EFF5" />
+            <Color x:Key="Clr.Surface">#FFFFFFFF</Color>
+            <SolidColorBrush x:Key="Surface" Color="#FFFFFFFF" />
+            <Color x:Key="Clr.SurfaceRaised">#FFF5F9FC</Color>
+            <SolidColorBrush x:Key="SurfaceRaised" Color="#FFF5F9FC" />
+            <Color x:Key="Clr.SurfaceHover">#FFE5EEF5</Color>
+            <SolidColorBrush x:Key="SurfaceHover" Color="#FFE5EEF5" />
+            <Color x:Key="Clr.Console">#FFF8FBFD</Color>
+            <SolidColorBrush x:Key="Console" Color="#FFF8FBFD" />
+            <Color x:Key="Clr.InputBg">#FFFFFFFF</Color>
+            <SolidColorBrush x:Key="InputBg" Color="#FFFFFFFF" />
+            <Color x:Key="Clr.Line">#FFDCE6EF</Color>
+            <SolidColorBrush x:Key="Line" Color="#FFDCE6EF" />
+            <Color x:Key="Clr.LineStrong">#FFC5D4E1</Color>
+            <SolidColorBrush x:Key="LineStrong" Color="#FFC5D4E1" />
+            <Color x:Key="Clr.LineHover">#FF9FB7CB</Color>
+            <SolidColorBrush x:Key="LineHover" Color="#FF9FB7CB" />
+            <Color x:Key="Clr.Text">#FF0F1E2B</Color>
+            <SolidColorBrush x:Key="Text" Color="#FF0F1E2B" />
+            <Color x:Key="Clr.TextSecondary">#FF33495C</Color>
+            <SolidColorBrush x:Key="TextSecondary" Color="#FF33495C" />
+            <Color x:Key="Clr.TextMuted">#FF5B7488</Color>
+            <SolidColorBrush x:Key="TextMuted" Color="#FF5B7488" />
+            <Color x:Key="Clr.TextFaint">#FF8EA3B5</Color>
+            <SolidColorBrush x:Key="TextFaint" Color="#FF8EA3B5" />
+            <Color x:Key="Clr.OnAccent">#FFFFFFFF</Color>
+            <SolidColorBrush x:Key="OnAccent" Color="#FFFFFFFF" />
+            <Color x:Key="Clr.Accent">#FF0A84D6</Color>
+            <SolidColorBrush x:Key="Accent" Color="#FF0A84D6" />
+            <Color x:Key="Clr.AccentHover">#FF2196E3</Color>
+            <SolidColorBrush x:Key="AccentHover" Color="#FF2196E3" />
+            <Color x:Key="Clr.AccentPress">#FF0A6FB5</Color>
+            <SolidColorBrush x:Key="AccentPress" Color="#FF0A6FB5" />
+            <Color x:Key="Clr.AccentSoft">#FF34B6EA</Color>
+            <SolidColorBrush x:Key="AccentSoft" Color="#FF34B6EA" />
+            <Color x:Key="Clr.Connected">#FF0E9F7B</Color>
+            <SolidColorBrush x:Key="Connected" Color="#FF0E9F7B" />
+            <Color x:Key="Clr.Warning">#FFB97800</Color>
+            <SolidColorBrush x:Key="Warning" Color="#FFB97800" />
+            <Color x:Key="Clr.Danger">#FFD63B3B</Color>
+            <SolidColorBrush x:Key="Danger" Color="#FFD63B3B" />
+            <Color x:Key="Clr.DangerLine">#FFF1C4C4</Color>
+            <SolidColorBrush x:Key="DangerLine" Color="#FFF1C4C4" />
+            <Color x:Key="Clr.Scrim">#66203040</Color>
+            <SolidColorBrush x:Key="Scrim" Color="#66203040" />
+            <Color x:Key="Clr.Glow">#330A84D6</Color>
+            <SolidColorBrush x:Key="Glow" Color="#330A84D6" />
+            <Color x:Key="Clr.GlowConnected">#330E9F7B</Color>
+            <SolidColorBrush x:Key="GlowConnected" Color="#330E9F7B" />
 
-    <SolidColorBrush x:Key="Line" Color="{StaticResource Clr.Line}" />
-    <SolidColorBrush x:Key="LineStrong" Color="{StaticResource Clr.LineStrong}" />
-    <SolidColorBrush x:Key="LineHover" Color="{StaticResource Clr.LineHover}" />
+            <!-- Подложки статусов -->
+            <SolidColorBrush x:Key="Tint.Accent" Color="#FF0A84D6" Opacity="0.14" />
+            <SolidColorBrush x:Key="Tint.Connected" Color="#FF0E9F7B" Opacity="0.14" />
+            <SolidColorBrush x:Key="Tint.Danger" Color="#FFD63B3B" Opacity="0.14" />
+            <SolidColorBrush x:Key="Tint.Warning" Color="#FFB97800" Opacity="0.14" />
 
-    <SolidColorBrush x:Key="Text" Color="{StaticResource Clr.Text}" />
-    <SolidColorBrush x:Key="TextSecondary" Color="{StaticResource Clr.TextSecondary}" />
-    <SolidColorBrush x:Key="TextMuted" Color="{StaticResource Clr.TextMuted}" />
-    <SolidColorBrush x:Key="TextFaint" Color="{StaticResource Clr.TextFaint}" />
-    <SolidColorBrush x:Key="OnAccent" Color="{StaticResource Clr.OnAccent}" />
+            <!-- Акцентный градиент: главная кнопка, логотип, дуга круга -->
+            <LinearGradientBrush x:Key="AccentGradient" StartPoint="0%,0%" EndPoint="100%,100%">
+                <GradientStop Offset="0" Color="#FF0A84D6" />
+                <GradientStop Offset="1" Color="#FF34B6EA" />
+            </LinearGradientBrush>
 
-    <SolidColorBrush x:Key="Accent" Color="{StaticResource Clr.Accent}" />
-    <SolidColorBrush x:Key="AccentHover" Color="{StaticResource Clr.AccentHover}" />
-    <SolidColorBrush x:Key="AccentPress" Color="{StaticResource Clr.AccentPress}" />
-    <SolidColorBrush x:Key="Connected" Color="{StaticResource Clr.Connected}" />
-    <SolidColorBrush x:Key="Warning" Color="{StaticResource Clr.Warning}" />
-    <SolidColorBrush x:Key="Danger" Color="{StaticResource Clr.Danger}" />
-    <SolidColorBrush x:Key="DangerLine" Color="{StaticResource Clr.DangerLine}" />
-    <SolidColorBrush x:Key="Scrim" Color="{StaticResource Clr.Scrim}" />
+            <!-- Акцент Fluent - для контролов, которые мы не перерисовываем -->
+            <Color x:Key="SystemAccentColor">#FF0A84D6</Color>
+            <Color x:Key="SystemAccentColorLight1">#FF2196E3</Color>
+            <Color x:Key="SystemAccentColorLight2">#FF34B6EA</Color>
+            <Color x:Key="SystemAccentColorLight3">#FF34B6EA</Color>
+            <Color x:Key="SystemAccentColorDark1">#FF0A6FB5</Color>
+            <Color x:Key="SystemAccentColorDark2">#FF0A6FB5</Color>
+            <Color x:Key="SystemAccentColorDark3">#FF0A6FB5</Color>
 
-    <!-- Тонкие подложки под статусы -->
-    <SolidColorBrush x:Key="Tint.Accent" Color="{StaticResource Clr.Accent}" Opacity="0.14" />
-    <SolidColorBrush x:Key="Tint.Connected" Color="{StaticResource Clr.Connected}" Opacity="0.14" />
-    <SolidColorBrush x:Key="Tint.Danger" Color="{StaticResource Clr.Danger}" Opacity="0.14" />
-    <SolidColorBrush x:Key="Tint.Warning" Color="{StaticResource Clr.Warning}" Opacity="0.14" />
+            <!-- Ресурсы Fluent: поля, списки, переключатели в наших цветах -->
+            <SolidColorBrush x:Key="TextControlBackground" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="TextControlBackgroundDisabled" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="TextControlBorderBrush" Color="#FFC5D4E1" />
+            <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="#FF9FB7CB" />
+            <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="#FF0A84D6" />
+            <SolidColorBrush x:Key="TextControlForeground" Color="#FF0F1E2B" />
+            <SolidColorBrush x:Key="TextControlForegroundPointerOver" Color="#FF0F1E2B" />
+            <SolidColorBrush x:Key="TextControlForegroundFocused" Color="#FF0F1E2B" />
+            <SolidColorBrush x:Key="TextControlPlaceholderForeground" Color="#FF8EA3B5" />
+            <SolidColorBrush x:Key="TextControlPlaceholderForegroundPointerOver" Color="#FF8EA3B5" />
+            <SolidColorBrush x:Key="TextControlPlaceholderForegroundFocused" Color="#FF8EA3B5" />
+            <SolidColorBrush x:Key="TextControlSelectionHighlightColor" Color="#FF0A6FB5" />
+            <SolidColorBrush x:Key="TextControlButtonForeground" Color="#FF5B7488" />
+            <SolidColorBrush x:Key="TextControlButtonForegroundPointerOver" Color="#FF0F1E2B" />
+            <SolidColorBrush x:Key="ComboBoxBackground" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="ComboBoxBackgroundPointerOver" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="ComboBoxBackgroundPressed" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="ComboBoxBackgroundFocused" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="ComboBoxBackgroundDisabled" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="ComboBoxBorderBrush" Color="#FFC5D4E1" />
+            <SolidColorBrush x:Key="ComboBoxBorderBrushPointerOver" Color="#FF9FB7CB" />
+            <SolidColorBrush x:Key="ComboBoxBorderBrushPressed" Color="#FF0A84D6" />
+            <SolidColorBrush x:Key="ComboBoxBorderBrushFocused" Color="#FF0A84D6" />
+            <SolidColorBrush x:Key="ComboBoxForeground" Color="#FF0F1E2B" />
+            <SolidColorBrush x:Key="ComboBoxForegroundFocused" Color="#FF0F1E2B" />
+            <SolidColorBrush x:Key="ComboBoxDropDownGlyphForeground" Color="#FF5B7488" />
+            <SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="#FFF5F9FC" />
+            <SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="#FFC5D4E1" />
+            <SolidColorBrush x:Key="ComboBoxItemForeground" Color="#FF33495C" />
+            <SolidColorBrush x:Key="ComboBoxItemForegroundPointerOver" Color="#FF0F1E2B" />
+            <SolidColorBrush x:Key="ComboBoxItemForegroundSelected" Color="#FF0F1E2B" />
+            <SolidColorBrush x:Key="ComboBoxItemForegroundSelectedPointerOver" Color="#FF0F1E2B" />
+            <SolidColorBrush x:Key="ComboBoxItemBackgroundPointerOver" Color="#FFE5EEF5" />
+            <SolidColorBrush x:Key="ComboBoxItemBackgroundPressed" Color="#FFE5EEF5" />
+            <SolidColorBrush x:Key="ComboBoxItemBackgroundSelected" Color="#FFE5EEF5" />
+            <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPointerOver" Color="#FFE5EEF5" />
+            <SolidColorBrush x:Key="ToggleSwitchFillOff" Color="#FFC5D4E1" />
+            <SolidColorBrush x:Key="ToggleSwitchFillOffPointerOver" Color="#FF9FB7CB" />
+            <SolidColorBrush x:Key="ToggleSwitchFillOffPressed" Color="#FF9FB7CB" />
+            <SolidColorBrush x:Key="ToggleSwitchStrokeOff" Color="#FFC5D4E1" />
+            <SolidColorBrush x:Key="ToggleSwitchStrokeOffPointerOver" Color="#FF9FB7CB" />
+            <SolidColorBrush x:Key="ToggleSwitchStrokeOffPressed" Color="#FF9FB7CB" />
+            <SolidColorBrush x:Key="ToggleSwitchKnobFillOff" Color="#FF5B7488" />
+            <SolidColorBrush x:Key="ToggleSwitchKnobFillOffPointerOver" Color="#FF33495C" />
+            <SolidColorBrush x:Key="ToggleSwitchKnobFillOffPressed" Color="#FF33495C" />
+            <SolidColorBrush x:Key="ToggleSwitchFillOn" Color="#FF0A84D6" />
+            <SolidColorBrush x:Key="ToggleSwitchFillOnPointerOver" Color="#FF2196E3" />
+            <SolidColorBrush x:Key="ToggleSwitchFillOnPressed" Color="#FF0A6FB5" />
+            <SolidColorBrush x:Key="ToggleSwitchStrokeOn" Color="#FF0A84D6" />
+            <SolidColorBrush x:Key="ToggleSwitchStrokeOnPointerOver" Color="#FF2196E3" />
+            <SolidColorBrush x:Key="ToggleSwitchKnobFillOn" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="ToggleSwitchKnobFillOnPointerOver" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="ToggleSwitchKnobFillOnPressed" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="ToolTipBackground" Color="#FFF5F9FC" />
+            <SolidColorBrush x:Key="ToolTipBorderBrush" Color="#FFC5D4E1" />
+            <SolidColorBrush x:Key="ToolTipForeground" Color="#FF33495C" />
+            <SolidColorBrush x:Key="ScrollBarThumbFill" Color="#FFC5D4E1" />
+            <SolidColorBrush x:Key="ScrollBarThumbFillPointerOver" Color="#FF9FB7CB" />
+            <SolidColorBrush x:Key="ScrollBarThumbFillPressed" Color="#FF0A84D6" />
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
 
     <!--
-        Типографика. Санс - то, чем управляет человек; моно - всё машинное:
-        адреса, порты, скорости, UUID, логи. Inter поставляется с приложением,
-        моноширинный берём системный: на каждой ОС свой.
+        Типографика - общая для обеих тем. Санс - то, чем управляет человек;
+        моно - всё машинное: адреса, порты, скорости, UUID, логи.
     -->
-    <FontFamily x:Key="Font.Mono">Cascadia Mono, Consolas, DejaVu Sans Mono, Liberation Mono, Roboto Mono, monospace</FontFamily>
+    <FontFamily x:Key="Font.Mono">Cascadia Mono, Consolas, JetBrains Mono, DejaVu Sans Mono, Liberation Mono, Roboto Mono, monospace</FontFamily>
 
     <x:Double x:Key="Size.Caption">11</x:Double>
     <x:Double x:Key="Size.Small">12</x:Double>
     <x:Double x:Key="Size.Body">13</x:Double>
     <x:Double x:Key="Size.Heading">16</x:Double>
-    <x:Double x:Key="Size.Title">21</x:Double>
+    <x:Double x:Key="Size.Title">22</x:Double>
 
-    <CornerRadius x:Key="Radius">8</CornerRadius>
-    <CornerRadius x:Key="RadiusCard">12</CornerRadius>
+    <CornerRadius x:Key="Radius">10</CornerRadius>
+    <CornerRadius x:Key="RadiusSmall">6</CornerRadius>
+    <CornerRadius x:Key="RadiusCard">14</CornerRadius>
+    <CornerRadius x:Key="ControlCornerRadius">10</CornerRadius>
+    <CornerRadius x:Key="OverlayCornerRadius">10</CornerRadius>
 
-    <!-- ===================== Fluent ===================== -->
-    <Color x:Key="SystemAccentColor">#FF7A5CFF</Color>
-    <Color x:Key="SystemAccentColorLight1">#FF8E75FF</Color>
-    <Color x:Key="SystemAccentColorLight2">#FFA48FFF</Color>
-    <Color x:Key="SystemAccentColorLight3">#FFBBAAFF</Color>
-    <Color x:Key="SystemAccentColorDark1">#FF6449E0</Color>
-    <Color x:Key="SystemAccentColorDark2">#FF5038C0</Color>
-    <Color x:Key="SystemAccentColorDark3">#FF3D29A0</Color>
-
-    <CornerRadius x:Key="ControlCornerRadius">8</CornerRadius>
-    <CornerRadius x:Key="OverlayCornerRadius">8</CornerRadius>
-
-    <!-- Кнопки: прозрачные с обводкой -->
-    <StaticResource x:Key="ButtonBackground" ResourceKey="Bg" />
-    <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="SurfaceHover" />
-    <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="SurfaceRaised" />
-    <StaticResource x:Key="ButtonBackgroundDisabled" ResourceKey="Bg" />
-    <StaticResource x:Key="ButtonForeground" ResourceKey="TextSecondary" />
-    <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="Text" />
-    <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="Text" />
-    <StaticResource x:Key="ButtonForegroundDisabled" ResourceKey="TextFaint" />
-    <StaticResource x:Key="ButtonBorderBrush" ResourceKey="LineStrong" />
-    <StaticResource x:Key="ButtonBorderBrushPointerOver" ResourceKey="LineHover" />
-    <StaticResource x:Key="ButtonBorderBrushPressed" ResourceKey="LineHover" />
-    <StaticResource x:Key="ButtonBorderBrushDisabled" ResourceKey="Line" />
-
-    <!-- Поля ввода -->
-    <StaticResource x:Key="TextControlBackground" ResourceKey="Bg" />
-    <StaticResource x:Key="TextControlBackgroundPointerOver" ResourceKey="Bg" />
-    <StaticResource x:Key="TextControlBackgroundFocused" ResourceKey="Bg" />
-    <StaticResource x:Key="TextControlBorderBrush" ResourceKey="LineStrong" />
-    <StaticResource x:Key="TextControlBorderBrushPointerOver" ResourceKey="LineHover" />
-    <StaticResource x:Key="TextControlBorderBrushFocused" ResourceKey="Accent" />
-    <StaticResource x:Key="TextControlForeground" ResourceKey="Text" />
-    <StaticResource x:Key="TextControlForegroundPointerOver" ResourceKey="Text" />
-    <StaticResource x:Key="TextControlForegroundFocused" ResourceKey="Text" />
-    <StaticResource x:Key="TextControlPlaceholderForeground" ResourceKey="TextFaint" />
-    <StaticResource x:Key="TextControlPlaceholderForegroundPointerOver" ResourceKey="TextFaint" />
-    <StaticResource x:Key="TextControlPlaceholderForegroundFocused" ResourceKey="TextFaint" />
-    <StaticResource x:Key="TextControlSelectionHighlightColor" ResourceKey="AccentPress" />
-
-    <!-- Выпадающие списки -->
-    <StaticResource x:Key="ComboBoxBackground" ResourceKey="Bg" />
-    <StaticResource x:Key="ComboBoxBackgroundPointerOver" ResourceKey="Bg" />
-    <StaticResource x:Key="ComboBoxBackgroundPressed" ResourceKey="Bg" />
-    <StaticResource x:Key="ComboBoxBackgroundFocused" ResourceKey="Bg" />
-    <StaticResource x:Key="ComboBoxBorderBrush" ResourceKey="LineStrong" />
-    <StaticResource x:Key="ComboBoxBorderBrushPointerOver" ResourceKey="LineHover" />
-    <StaticResource x:Key="ComboBoxBorderBrushPressed" ResourceKey="Accent" />
-    <StaticResource x:Key="ComboBoxBorderBrushFocused" ResourceKey="Accent" />
-    <StaticResource x:Key="ComboBoxForeground" ResourceKey="Text" />
-    <StaticResource x:Key="ComboBoxDropDownBackground" ResourceKey="SurfaceRaised" />
-    <StaticResource x:Key="ComboBoxDropDownBorderBrush" ResourceKey="LineStrong" />
-    <StaticResource x:Key="ComboBoxItemBackgroundPointerOver" ResourceKey="SurfaceHover" />
-    <StaticResource x:Key="ComboBoxItemBackgroundSelected" ResourceKey="SurfaceHover" />
-    <StaticResource x:Key="ComboBoxItemBackgroundSelectedPointerOver" ResourceKey="SurfaceHover" />
-    <StaticResource x:Key="ComboBoxItemForegroundPointerOver" ResourceKey="Text" />
-    <StaticResource x:Key="ComboBoxItemForegroundSelected" ResourceKey="Text" />
-
-    <!-- Переключатель -->
-    <StaticResource x:Key="ToggleSwitchFillOff" ResourceKey="LineStrong" />
-    <StaticResource x:Key="ToggleSwitchFillOffPointerOver" ResourceKey="LineHover" />
-    <StaticResource x:Key="ToggleSwitchStrokeOff" ResourceKey="LineStrong" />
-    <StaticResource x:Key="ToggleSwitchStrokeOffPointerOver" ResourceKey="LineHover" />
-    <StaticResource x:Key="ToggleSwitchKnobFillOff" ResourceKey="TextMuted" />
-    <StaticResource x:Key="ToggleSwitchKnobFillOffPointerOver" ResourceKey="TextSecondary" />
-    <StaticResource x:Key="ToggleSwitchFillOn" ResourceKey="Accent" />
-    <StaticResource x:Key="ToggleSwitchFillOnPointerOver" ResourceKey="AccentHover" />
-    <StaticResource x:Key="ToggleSwitchKnobFillOn" ResourceKey="OnAccent" />
-    <StaticResource x:Key="ToggleSwitchKnobFillOnPointerOver" ResourceKey="OnAccent" />
-
-    <!-- Подсказки -->
-    <StaticResource x:Key="ToolTipBackground" ResourceKey="SurfaceRaised" />
-    <StaticResource x:Key="ToolTipBorderBrush" ResourceKey="LineStrong" />
-    <StaticResource x:Key="ToolTipForeground" ResourceKey="TextSecondary" />
+    <!-- Скорость анимаций: быстрые - отклик на действие, плавные - смена состояния -->
+    <x:TimeSpan x:Key="Anim.Fast">0:0:0.12</x:TimeSpan>
+    <x:TimeSpan x:Key="Anim.Normal">0:0:0.2</x:TimeSpan>
+    <x:TimeSpan x:Key="Anim.Slow">0:0:0.45</x:TimeSpan>
 </ResourceDictionary>

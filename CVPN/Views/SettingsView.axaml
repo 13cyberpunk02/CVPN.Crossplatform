@@ -135,6 +135,16 @@
                 </StackPanel>
             </Border>
 
+            <!-- Тема: применяется сразу, без перезапуска -->
+            <Border Classes="card">
+                <StackPanel>
+                    <TextBlock Classes="label" Text="{loc:T Settings_Theme}" />
+                    <ComboBox Margin="0,10,0,0" ItemsSource="{Binding Themes}"
+                              SelectedValue="{Binding Settings.Theme}" SelectedValueBinding="{Binding Code}"
+                              DisplayMemberBinding="{Binding Name}" />
+                </StackPanel>
+            </Border>
+
             <!-- Язык -->
             <Border Classes="card">
                 <StackPanel>
@@ -199,7 +209,7 @@
                         <Border Classes="divider" Margin="0,16" />
                         <TextBlock Classes="label" Text="{loc:T Settings_Task}" />
                         <TextBlock Classes="caption" Text="{loc:T Settings_TaskHint}" Margin="0,8,0,0" TextWrapping="Wrap" />
-                        <TextBlock Classes="caption" Foreground="{StaticResource TextSecondary}" Text="{Binding TaskStatus}"
+                        <TextBlock Classes="caption" Foreground="{DynamicResource TextSecondary}" Text="{Binding TaskStatus}"
                                    Margin="0,6,0,0" TextWrapping="Wrap" />
                         <WrapPanel Margin="0,12,0,0">
                             <Button Content="{loc:T Settings_CreateTask}" Command="{Binding InstallTask}" Margin="0,0,8,0" />

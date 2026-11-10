@@ -29,7 +29,7 @@
         <ListBox Grid.Row="1" Classes="plain tight" Margin="0,16,0,0" ItemsSource="{Binding Connections}">
             <ListBox.ItemTemplate>
                 <DataTemplate x:DataType="models:ConnectionInfo">
-                    <Border Background="{StaticResource Surface}" CornerRadius="{StaticResource Radius}" Padding="14,10">
+                    <Border Classes="item compact">
                         <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
                             <StackPanel Grid.Column="0">
                                 <StackPanel Orientation="Horizontal" Spacing="9">
@@ -37,15 +37,15 @@
                                     <Border Classes="tag" Classes.direct="{Binding IsDirect}">
                                         <TextBlock FontFamily="{StaticResource Font.Mono}" Text="{Binding Outbound}" />
                                     </Border>
-                                    <TextBlock Classes="mono" Foreground="{StaticResource Text}" Text="{Binding Endpoint}"
+                                    <TextBlock Classes="mono" Foreground="{DynamicResource Text}" Text="{Binding Endpoint}"
                                                VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
                                 </StackPanel>
                                 <WrapPanel Margin="0,5,0,0">
                                     <TextBlock Classes="caption" Text="{Binding Rule}" TextTrimming="CharacterEllipsis"
                                                MaxWidth="260" Margin="0,0,10,0" />
-                                    <TextBlock Classes="caption" Foreground="{StaticResource TextFaint}"
+                                    <TextBlock Classes="caption" Foreground="{DynamicResource TextFaint}"
                                                Text="{Binding Process}" Margin="0,0,10,0" />
-                                    <TextBlock Classes="caption" Foreground="{StaticResource TextFaint}"
+                                    <TextBlock Classes="caption" Foreground="{DynamicResource TextFaint}"
                                                Text="{Binding Network}" />
                                 </WrapPanel>
                             </StackPanel>
@@ -53,7 +53,7 @@
                             <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="12,0,0,0">
                                 <TextBlock Classes="mono" FontSize="{StaticResource Size.Caption}"
                                            Text="{Binding TrafficLabel}" HorizontalAlignment="Right" />
-                                <TextBlock Classes="caption" Foreground="{StaticResource TextFaint}"
+                                <TextBlock Classes="caption" Foreground="{DynamicResource TextFaint}"
                                            Text="{Binding DurationLabel}" HorizontalAlignment="Right" Margin="0,3,0,0" />
                             </StackPanel>
 
@@ -74,10 +74,12 @@
                                         ToolTip.Tip="{loc:T Connections_MakeBlockHint}"
                                         Command="{Binding #Root.((vm:ConnectionsViewModel)DataContext).RuleBlock}"
                                         CommandParameter="{Binding}" />
-                                <Button Classes="ghost small" Content="✕"
+                                <Button Classes="ghost small icon"
                                         ToolTip.Tip="{loc:T Connections_CloseHint}"
                                         Command="{Binding #Root.((vm:ConnectionsViewModel)DataContext).CloseConnection}"
-                                        CommandParameter="{Binding}" />
+                                        CommandParameter="{Binding}">
+                                    <Path Classes="icon" Data="{StaticResource Icon.X}" />
+                                </Button>
                             </WrapPanel>
                         </Grid>
                     </Border>

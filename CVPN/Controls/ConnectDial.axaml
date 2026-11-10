@@ -13,20 +13,27 @@
     <UserControl.Styles>
         <!-- Дуга состояния: серая - отключено, акцент с бегущим сегментом - подключение,
              зелёная - подключено, красная - ошибка -->
+        <!-- Длина и цвет дуги меняются плавно: «отключено» стягивается в «подключено» -->
         <Style Selector="Arc#StateArc">
-            <Setter Property="Stroke" Value="{StaticResource TextFaint}" />
+            <Setter Property="Stroke" Value="{DynamicResource TextFaint}" />
             <Setter Property="SweepAngle" Value="300" />
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="SweepAngle" Duration="0:0:0.6" Easing="CubicEaseInOut" />
+                    <BrushTransition Property="Stroke" Duration="0:0:0.4" />
+                </Transitions>
+            </Setter>
         </Style>
         <Style Selector="Arc#StateArc.connected">
-            <Setter Property="Stroke" Value="{StaticResource Connected}" />
+            <Setter Property="Stroke" Value="{DynamicResource Connected}" />
             <Setter Property="SweepAngle" Value="360" />
         </Style>
         <Style Selector="Arc#StateArc.failing">
-            <Setter Property="Stroke" Value="{StaticResource Danger}" />
+            <Setter Property="Stroke" Value="{DynamicResource Danger}" />
             <Setter Property="SweepAngle" Value="360" />
         </Style>
         <Style Selector="Arc#StateArc.connecting">
-            <Setter Property="Stroke" Value="{StaticResource Accent}" />
+            <Setter Property="Stroke" Value="{DynamicResource Accent}" />
             <Setter Property="SweepAngle" Value="70" />
             <Style.Animations>
                 <Animation Duration="0:0:1.4" IterationCount="Infinite">
@@ -40,50 +47,79 @@
             </Style.Animations>
         </Style>
 
-        <!-- Ядро круга - кнопка -->
+        <!-- Свечение вокруг дуги: «дышит», пока туннель работает -->
+        <Style Selector="Ellipse#Halo">
+            <Setter Property="Stroke" Value="{DynamicResource Glow}" />
+            <Setter Property="Opacity" Value="0" />
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.4" />
+                </Transitions>
+            </Setter>
+        </Style>
+        <Style Selector="Ellipse#Halo.connecting">
+            <Setter Property="Opacity" Value="0.6" />
+        </Style>
+        <Style Selector="Ellipse#Halo.connected">
+            <Setter Property="Stroke" Value="{DynamicResource GlowConnected}" />
+            <Style.Animations>
+                <Animation Duration="0:0:2.4" IterationCount="Infinite" PlaybackDirection="Alternate"
+                           Easing="SineEaseInOut">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="0.35" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="1" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+
+        <!-- Ядро круга - кнопка. При наведении чуть приближается -->
         <Style Selector="Button#Core">
-            <Setter Property="Background" Value="{StaticResource Surface}" />
-            <Setter Property="BorderBrush" Value="{StaticResource Line}" />
+            <Setter Property="Background" Value="{DynamicResource Surface}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource Line}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="CornerRadius" Value="76" />
             <Setter Property="Padding" Value="0" />
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
-        <Style Selector="Button#Core:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Background" Value="{StaticResource SurfaceRaised}" />
-            <Setter Property="BorderBrush" Value="{StaticResource LineStrong}" />
+        <Style Selector="Button#Core:pointerover">
+            <Setter Property="Background" Value="{DynamicResource SurfaceRaised}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource LineHover}" />
+            <Setter Property="RenderTransform" Value="scale(1.03)" />
         </Style>
-        <Style Selector="Button#Core:pressed /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Background" Value="{StaticResource SurfaceHover}" />
+        <Style Selector="Button#Core:pressed">
+            <Setter Property="RenderTransform" Value="scale(0.97)" />
         </Style>
-        <Style Selector="Button#Core:focus-visible /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="BorderBrush" Value="{StaticResource Accent}" />
+        <Style Selector="Button#Core /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="BoxShadow" Value="0 10 30 0 #33000000" />
         </Style>
 
         <Style Selector="TextBlock#Metric.connected">
-            <Setter Property="Foreground" Value="{StaticResource Connected}" />
+            <Setter Property="Foreground" Value="{DynamicResource Connected}" />
         </Style>
         <Style Selector="TextBlock#Metric.failing">
-            <Setter Property="Foreground" Value="{StaticResource Danger}" />
+            <Setter Property="Foreground" Value="{DynamicResource Danger}" />
         </Style>
 
         <Style Selector="TextBlock#Action">
-            <Setter Property="Foreground" Value="{StaticResource Accent}" />
+            <Setter Property="Foreground" Value="{DynamicResource Accent}" />
         </Style>
         <Style Selector="TextBlock#Action.connected">
-            <Setter Property="Foreground" Value="{StaticResource TextMuted}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextMuted}" />
         </Style>
 
         <Style Selector="Line.tick">
-            <Setter Property="Stroke" Value="{StaticResource LineStrong}" />
+            <Setter Property="Stroke" Value="{DynamicResource LineStrong}" />
             <Setter Property="StrokeThickness" Value="1" />
         </Style>
     </UserControl.Styles>
 
     <Panel>
         <!-- Внешний обод -->
-        <Ellipse Width="210" Height="210" Stroke="{StaticResource Line}" StrokeThickness="1" />
+        <Ellipse Width="210" Height="210" Stroke="{DynamicResource Line}" StrokeThickness="1" />
 
         <!-- Тиковая шкала -->
         <Canvas Width="240" Height="240">
@@ -97,8 +133,13 @@
             <Line Classes="tick" StartPoint="40.8,40.8" EndPoint="46.5,46.5" />
         </Canvas>
 
+        <!-- Свечение -->
+        <Ellipse x:Name="Halo" Width="192" Height="192" StrokeThickness="14"
+                 Classes.connected="{Binding IsConnected}"
+                 Classes.connecting="{Binding IsConnecting}" />
+
         <!-- Дорожка -->
-        <Ellipse Width="180" Height="180" Stroke="{StaticResource LineStrong}" StrokeThickness="6" />
+        <Ellipse Width="180" Height="180" Stroke="{DynamicResource LineStrong}" StrokeThickness="6" />
 
         <!-- Дуга состояния -->
         <Arc x:Name="StateArc" Width="180" Height="180" StrokeThickness="6" StrokeLineCap="Round"
@@ -117,7 +158,7 @@
             <StackPanel Width="130">
                 <!-- Значок страны: картинкой, потому что не каждая ОС рисует флаги-эмодзи -->
                 <Border HorizontalAlignment="Center" CornerRadius="4" Padding="7,2" Margin="0,0,0,7"
-                        Background="{StaticResource SurfaceHover}"
+                        Background="{DynamicResource SurfaceHover}"
                         IsVisible="{Binding Active.CountryCode, FallbackValue='', Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
                     <StackPanel Orientation="Horizontal" Spacing="6">
                         <Image Width="16" Height="11" VerticalAlignment="Center"
@@ -139,7 +180,7 @@
                            Classes.connected="{Binding IsConnected}"
                            Classes.failing="{Binding IsFailing}" />
 
-                <Border Height="1" Background="{StaticResource Line}" Margin="24,9,24,7" />
+                <Border Height="1" Background="{DynamicResource Line}" Margin="24,9,24,7" />
 
                 <TextBlock x:Name="Action" Text="{Binding PrimaryActionLabel}" HorizontalAlignment="Center"
                            Classes.connected="{Binding IsConnected}" />

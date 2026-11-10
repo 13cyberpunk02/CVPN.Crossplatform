@@ -1,0 +1,91 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:CVPN.ViewModels"
+             xmlns:loc="using:CVPN.Localization"
+             xmlns:chrome="using:Avalonia.Controls.Chrome"
+             x:Class="CVPN.Controls.TitleBar"
+             x:DataType="vm:MainViewModel"
+             Height="40">
+
+    <!--
+        Своя шапка окна. Перетаскивание и двойной клик отдаём платформе через
+        роль TitleBar (Avalonia 12): так окно прилипает к краям экрана и
+        разворачивается жестами ОС, как у родной шапки. Кнопки помечены ролью
+        User - иначе клик по ним тоже начинал бы перетаскивание.
+    -->
+    <UserControl.Styles>
+        <Style Selector="Border#StatePill">
+            <Setter Property="Background" Value="{DynamicResource SurfaceHover}" />
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.3" />
+                </Transitions>
+            </Setter>
+        </Style>
+        <Style Selector="Border#StatePill.connected">
+            <Setter Property="Background" Value="{DynamicResource Tint.Connected}" />
+        </Style>
+        <Style Selector="Border#StatePill.failing">
+            <Setter Property="Background" Value="{DynamicResource Tint.Danger}" />
+        </Style>
+        <Style Selector="Border#StatePill.connecting">
+            <Setter Property="Background" Value="{DynamicResource Tint.Accent}" />
+        </Style>
+    </UserControl.Styles>
+
+    <Border Background="{DynamicResource Chrome}" BorderBrush="{DynamicResource Line}" BorderThickness="0,0,0,1">
+        <Grid ColumnDefinitions="Auto,*,Auto">
+
+            <!-- Логотип и название -->
+            <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10" Margin="14,0,0,0"
+                        VerticalAlignment="Center" IsHitTestVisible="False">
+                <Border Width="20" Height="20" CornerRadius="6" Background="{DynamicResource AccentGradient}">
+                    <Path Data="{StaticResource Icon.connection}" Width="11" Height="11" Stretch="Uniform"
+                          Stroke="{DynamicResource OnAccent}" StrokeThickness="2.2" StrokeLineCap="Round" />
+                </Border>
+                <TextBlock Text="CVPN" FontWeight="Bold" FontSize="{StaticResource Size.Body}"
+                           LetterSpacing="0.8" VerticalAlignment="Center" />
+            </StackPanel>
+
+            <!-- Зона перетаскивания и состояние туннеля посередине -->
+            <Border x:Name="DragArea" Grid.Column="1" Background="Transparent"
+                    chrome:WindowDecorationProperties.ElementRole="TitleBar">
+                <Border x:Name="StatePill" HorizontalAlignment="Center" VerticalAlignment="Center"
+                        CornerRadius="10" Padding="10,3" IsHitTestVisible="False"
+                        Classes.connected="{Binding IsConnected}"
+                        Classes.connecting="{Binding IsConnecting}"
+                        Classes.failing="{Binding IsFailing}">
+                    <StackPanel Orientation="Horizontal" Spacing="7">
+                        <Ellipse Classes="dot"
+                                 Classes.connected="{Binding IsConnected}"
+                                 Classes.connecting="{Binding IsConnecting}"
+                                 Classes.failing="{Binding IsFailing}" />
+                        <TextBlock Classes="mono" Text="{Binding StateLabel}" FontSize="{StaticResource Size.Caption}" />
+                    </StackPanel>
+                </Border>
+            </Border>
+
+            <!-- Кнопки -->
+            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <Button x:Name="ThemeButton" Classes="caption" Click="OnToggleTheme"
+                        ToolTip.Tip="{loc:T TitleBar_Theme}"
+                        chrome:WindowDecorationProperties.ElementRole="User">
+                    <Path x:Name="ThemeIcon" Classes="icon" Data="{StaticResource Icon.Sun}" />
+                </Button>
+                <Border Width="1" Height="18" Background="{DynamicResource Line}" Margin="4,0" VerticalAlignment="Center" />
+                <Button Classes="caption" Click="OnMinimize" ToolTip.Tip="{loc:T TitleBar_Minimize}"
+                        chrome:WindowDecorationProperties.ElementRole="User">
+                    <Path Classes="icon" Data="{StaticResource Icon.Minimize}" Stretch="None" Width="24" Height="24" />
+                </Button>
+                <Button Classes="caption" Click="OnMaximize" ToolTip.Tip="{loc:T TitleBar_Maximize}"
+                        chrome:WindowDecorationProperties.ElementRole="User">
+                    <Path x:Name="MaximizeIcon" Classes="icon" Data="{StaticResource Icon.Maximize}" Stretch="None" Width="24" Height="24" />
+                </Button>
+                <Button Classes="caption close" Click="OnClose" ToolTip.Tip="{loc:T TitleBar_Close}"
+                        chrome:WindowDecorationProperties.ElementRole="User">
+                    <Path Classes="icon" Data="{StaticResource Icon.Close}" Stretch="None" Width="24" Height="24" />
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

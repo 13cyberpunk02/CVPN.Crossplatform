@@ -2,17 +2,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:conv="using:CVPN.Converters"
              x:Class="CVPN.App"
-             RequestedThemeVariant="Dark">
-    <!-- Тема одна - тёмная, как в WPF-клиенте -->
+             RequestedThemeVariant="Default">
+    <!-- Тема задаётся настройкой (App.ApplyTheme): системная, тёмная или светлая -->
 
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceInclude Source="avares://CVPN/Theme/Palette.axaml" />
+                <ResourceInclude Source="avares://CVPN/Theme/Icons.axaml" />
+                <ResourceInclude Source="avares://CVPN/Theme/Kit.axaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <conv:EqualsConverter x:Key="Eq" />
             <conv:FlagConverter x:Key="Flag" />
+            <conv:IconConverter x:Key="Icon" />
         </ResourceDictionary>
     </Application.Resources>
 

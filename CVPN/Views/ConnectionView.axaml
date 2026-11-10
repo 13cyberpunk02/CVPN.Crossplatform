@@ -30,7 +30,7 @@
                              Classes.connecting="{Binding IsConnecting}"
                              Classes.failing="{Binding IsFailing}" />
                     <TextBlock Classes="mono" Text="{Binding StateLabel}"
-                               FontSize="{StaticResource Size.Caption}" Foreground="{StaticResource TextMuted}" />
+                               FontSize="{StaticResource Size.Caption}" Foreground="{DynamicResource TextMuted}" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
                     <Button Classes="ghost small" Content="{loc:T Connection_Measure}"
@@ -85,19 +85,19 @@
                     </Grid>
                     <UniformGrid Classes="session" Margin="0,10,0,0">
                         <StackPanel Margin="0,0,0,6">
-                            <TextBlock Classes="mono" Foreground="{StaticResource Text}" Text="{Binding Session.DurationLabel}" />
+                            <TextBlock Classes="mono" Foreground="{DynamicResource Text}" Text="{Binding Session.DurationLabel}" />
                             <TextBlock Classes="caption" Text="{loc:T Connection_Duration}" Margin="0,3,0,0" />
                         </StackPanel>
                         <StackPanel Margin="0,0,0,6">
-                            <TextBlock Classes="mono" Foreground="{StaticResource Text}" Text="{Binding Session.DownloadLabel}" />
+                            <TextBlock Classes="mono" Foreground="{DynamicResource Text}" Text="{Binding Session.DownloadLabel}" />
                             <TextBlock Classes="caption" Text="{loc:T Connection_Received}" Margin="0,3,0,0" />
                         </StackPanel>
                         <StackPanel Margin="0,0,0,6">
-                            <TextBlock Classes="mono" Foreground="{StaticResource Text}" Text="{Binding Session.UploadLabel}" />
+                            <TextBlock Classes="mono" Foreground="{DynamicResource Text}" Text="{Binding Session.UploadLabel}" />
                             <TextBlock Classes="caption" Text="{loc:T Connection_Sent}" Margin="0,3,0,0" />
                         </StackPanel>
                         <StackPanel Margin="0,0,0,6">
-                            <TextBlock Classes="mono" Foreground="{StaticResource Text}" Text="{Binding Session.PeakLabel}" />
+                            <TextBlock Classes="mono" Foreground="{DynamicResource Text}" Text="{Binding Session.PeakLabel}" />
                             <TextBlock Classes="caption" Text="{loc:T Connection_Peak}" Margin="0,3,0,0" />
                         </StackPanel>
                     </UniformGrid>

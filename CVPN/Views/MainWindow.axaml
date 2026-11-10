@@ -2,13 +2,44 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:CVPN.ViewModels"
         xmlns:views="using:CVPN.Views"
+        xmlns:c="using:CVPN.Controls"
+        xmlns:chrome="using:Avalonia.Controls.Chrome"
         x:Class="CVPN.Views.MainWindow"
         x:DataType="vm:MainViewModel"
-        Width="980" Height="660" MinWidth="380" MinHeight="520"
+        Width="1000" Height="680" MinWidth="380" MinHeight="520"
         WindowStartupLocation="CenterScreen"
-        Background="{StaticResource Bg}"
+        Background="{DynamicResource Bg}"
         Icon="/Assets/cvpn.ico"
-        Title="CVPN">
-    <!-- Системная рамка окна: своя (WindowChrome в WPF) на Linux ведёт себя по-разному в разных DE -->
-    <views:MainView x:Name="Main" />
+        Title="CVPN"
+        ExtendClientAreaToDecorationsHint="True"
+        WindowDecorations="BorderOnly">
+
+    <!--
+        Системный заголовок убран (BorderOnly), содержимое растянуто на всю
+        площадь окна - сверху своя шапка TitleBar. Рамка изменения размера
+        остаётся системной; по краям ещё и наши невидимые зоны с ролями Resize*
+        для платформ, где системной рамки нет.
+    -->
+    <Window.Styles>
+        <Style Selector="Border.grip">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+    </Window.Styles>
+
+    <Panel>
+        <DockPanel>
+            <c:TitleBar DockPanel.Dock="Top" />
+            <views:MainView x:Name="Main" />
+        </DockPanel>
+
+        <!-- Зоны изменения размера -->
+        <Border Classes="grip" Height="4" VerticalAlignment="Top" chrome:WindowDecorationProperties.ElementRole="ResizeN" />
+        <Border Classes="grip" Height="4" VerticalAlignment="Bottom" chrome:WindowDecorationProperties.ElementRole="ResizeS" />
+        <Border Classes="grip" Width="4" HorizontalAlignment="Left" chrome:WindowDecorationProperties.ElementRole="ResizeW" />
+        <Border Classes="grip" Width="4" HorizontalAlignment="Right" chrome:WindowDecorationProperties.ElementRole="ResizeE" />
+        <Border Classes="grip" Width="8" Height="8" HorizontalAlignment="Left" VerticalAlignment="Top" chrome:WindowDecorationProperties.ElementRole="ResizeNW" />
+        <Border Classes="grip" Width="8" Height="8" HorizontalAlignment="Right" VerticalAlignment="Top" chrome:WindowDecorationProperties.ElementRole="ResizeNE" />
+        <Border Classes="grip" Width="8" Height="8" HorizontalAlignment="Left" VerticalAlignment="Bottom" chrome:WindowDecorationProperties.ElementRole="ResizeSW" />
+        <Border Classes="grip" Width="8" Height="8" HorizontalAlignment="Right" VerticalAlignment="Bottom" chrome:WindowDecorationProperties.ElementRole="ResizeSE" />
+    </Panel>
 </Window>

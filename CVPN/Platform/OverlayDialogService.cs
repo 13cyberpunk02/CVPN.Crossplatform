@@ -55,12 +55,14 @@ public sealed class OverlayDialogService(IClipboardService clipboard) : IDialogS
 
         var content = build(Close);
 
-        var scrim = new Border { Background = (Avalonia.Media.IBrush?)Application.Current!.FindResource("Scrim") };
+        // Цвета и анимация появления - в стилях Border.scrim и Border.dialog (Controls.axaml)
+        var scrim = new Border { Classes = { "scrim" } };
         scrim.PointerPressed += (_, _) => Close(cancelResult);
 
         var card = new Border
         {
             Classes = { "card", "dialog" },
+            RenderTransform = new Avalonia.Media.ScaleTransform(1, 1),
             MaxWidth = 540,
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,

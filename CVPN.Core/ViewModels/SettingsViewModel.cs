@@ -55,6 +55,14 @@ public sealed class SettingsViewModel : PageViewModel
     /// <summary>Языки интерфейса для выпадающего списка.</summary>
     public IReadOnlyList<LanguageOption> Languages => Loc.Available;
 
+    /// <summary>Темы. Применяются сразу, без перезапуска.</summary>
+    public IReadOnlyList<LanguageOption> Themes { get; } =
+    [
+        new("", Loc.T("Theme_System")),
+        new("dark", Loc.T("Theme_Dark")),
+        new("light", Loc.T("Theme_Light"))
+    ];
+
     // Что показывать на этой платформе
     public bool ShowCorePicker => Platform.CanPickBinaries;
     public bool ShowService => Platform.Service.IsSupported;

@@ -123,6 +123,13 @@ public sealed class AppSettings : ObservableObject
     /// Код языка интерфейса: «en», «ru» или пустая строка - язык системы.
     /// Применяется при запуске.
     /// </summary>
+    /// <summary>Тема интерфейса: «dark», «light» или пустая строка - как в системе.</summary>
+    public string Theme
+    {
+        get;
+        set => Set(ref field, value ?? string.Empty);
+    } = string.Empty;
+
     public string Language
     {
         get;

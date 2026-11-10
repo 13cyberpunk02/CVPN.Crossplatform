@@ -1032,4 +1032,28 @@ Restart CVPN now?</value>
   <data name="Android_VpnNotReady" xml:space="preserve">
     <value>VPN mode on Android is not ready yet. Turn TUN off to use the local proxy on 127.0.0.1.</value>
   </data>
+  <data name="Settings_Theme" xml:space="preserve">
+    <value>theme</value>
+  </data>
+  <data name="Theme_System" xml:space="preserve">
+    <value>As in the system</value>
+  </data>
+  <data name="Theme_Dark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="Theme_Light" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="TitleBar_Minimize" xml:space="preserve">
+    <value>Minimize</value>
+  </data>
+  <data name="TitleBar_Maximize" xml:space="preserve">
+    <value>Maximize / restore</value>
+  </data>
+  <data name="TitleBar_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="TitleBar_Theme" xml:space="preserve">
+    <value>Switch theme</value>
+  </data>
 </root>

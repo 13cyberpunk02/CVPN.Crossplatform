@@ -1032,4 +1032,28 @@
   <data name="Android_VpnNotReady" xml:space="preserve">
     <value>Режим VPN на Android пока не готов. Выключите TUN, чтобы пользоваться локальным прокси на 127.0.0.1.</value>
   </data>
+  <data name="Settings_Theme" xml:space="preserve">
+    <value>тема</value>
+  </data>
+  <data name="Theme_System" xml:space="preserve">
+    <value>Как в системе</value>
+  </data>
+  <data name="Theme_Dark" xml:space="preserve">
+    <value>Тёмная</value>
+  </data>
+  <data name="Theme_Light" xml:space="preserve">
+    <value>Светлая</value>
+  </data>
+  <data name="TitleBar_Minimize" xml:space="preserve">
+    <value>Свернуть</value>
+  </data>
+  <data name="TitleBar_Maximize" xml:space="preserve">
+    <value>Развернуть / восстановить</value>
+  </data>
+  <data name="TitleBar_Close" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="TitleBar_Theme" xml:space="preserve">
+    <value>Сменить тему</value>
+  </data>
 </root>
