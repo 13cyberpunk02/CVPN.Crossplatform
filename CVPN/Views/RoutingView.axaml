@@ -8,9 +8,205 @@
              x:Name="Root">
 
     <UserControl.Styles>
-        <Style Selector="TextBlock.test">
-            <Setter Property="FontSize" Value="{StaticResource Size.Caption}" />
+        <!-- ===== подсказка «как это работает» ===== -->
+        <Style Selector="UniformGrid.steps">
+            <Setter Property="Columns" Value="3" />
+        </Style>
+        <Style Selector=".narrow UniformGrid.steps">
+            <Setter Property="Columns" Value="1" />
+        </Style>
+        <Style Selector="UniformGrid.steps > Grid">
+            <Setter Property="Margin" Value="0,0,14,10" />
+        </Style>
+        <Style Selector="Border.step">
+            <Setter Property="Width" Value="26" />
+            <Setter Property="Height" Value="26" />
+            <Setter Property="CornerRadius" Value="13" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+            <Setter Property="Background" Value="{DynamicResource Tint.Accent}" />
+        </Style>
+        <Style Selector="Border.step TextBlock">
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="{StaticResource Size.Small}" />
             <Setter Property="Foreground" Value="{DynamicResource Accent}" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <!-- ===== готовые правила ===== -->
+        <Style Selector="UniformGrid.presets">
+            <Setter Property="Columns" Value="2" />
+        </Style>
+        <Style Selector=".narrow UniformGrid.presets">
+            <Setter Property="Columns" Value="1" />
+        </Style>
+        <Style Selector="Button.preset">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Padding" Value="12,10" />
+            <Setter Property="Margin" Value="0,0,8,8" />
+            <Setter Property="FontWeight" Value="Normal" />
+        </Style>
+        <Style Selector="Button.preset Path.add">
+            <Setter Property="Width" Value="13" />
+            <Setter Property="Height" Value="13" />
+            <Setter Property="Stroke" Value="{DynamicResource TextFaint}" />
+        </Style>
+        <Style Selector="Button.preset:pointerover Path.add">
+            <Setter Property="Stroke" Value="{DynamicResource Accent}" />
+        </Style>
+
+        <!-- «Всё остальное»: переключатель справа, на телефоне - под текстом -->
+        <Style Selector="Border.fallbackSwitch">
+            <Setter Property="Grid.Column" Value="2" />
+        </Style>
+        <Style Selector=".narrow Border.fallbackSwitch">
+            <Setter Property="Grid.Row" Value="1" />
+            <Setter Property="Grid.Column" Value="0" />
+            <Setter Property="Grid.ColumnSpan" Value="3" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="Margin" Value="0,10,0,0" />
+        </Style>
+
+        <!-- Значок: круг с подложкой цвета действия -->
+        <Style Selector="Border.badge">
+            <Setter Property="Width" Value="34" />
+            <Setter Property="Height" Value="34" />
+            <Setter Property="CornerRadius" Value="17" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Background" Value="{DynamicResource Tint.Accent}" />
+        </Style>
+        <Style Selector="Border.badge Path.icon">
+            <Setter Property="Width" Value="16" />
+            <Setter Property="Height" Value="16" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Stroke" Value="{DynamicResource Accent}" />
+        </Style>
+        <Style Selector="Border.badge.direct">
+            <Setter Property="Background" Value="{DynamicResource Tint.Connected}" />
+        </Style>
+        <Style Selector="Border.badge.direct Path.icon">
+            <Setter Property="Stroke" Value="{DynamicResource Connected}" />
+        </Style>
+        <Style Selector="Border.badge.block">
+            <Setter Property="Background" Value="{DynamicResource Tint.Danger}" />
+        </Style>
+        <Style Selector="Border.badge.block Path.icon">
+            <Setter Property="Stroke" Value="{DynamicResource Danger}" />
+        </Style>
+        <Style Selector="Border.badge.neutral">
+            <Setter Property="Background" Value="{DynamicResource SurfaceHover}" />
+        </Style>
+        <Style Selector="Border.badge.neutral Path.icon">
+            <Setter Property="Stroke" Value="{DynamicResource TextSecondary}" />
+        </Style>
+
+        <!-- ===== форма правила ===== -->
+        <Style Selector="ComboBox.kind">
+            <Setter Property="Width" Value="210" />
+        </Style>
+        <Style Selector=".narrow ComboBox.kind">
+            <Setter Property="Width" Value="150" />
+        </Style>
+
+        <!-- ===== строка правила ===== -->
+        <Style Selector="Grid.rule > Panel.body">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.2" />
+                </Transitions>
+            </Setter>
+        </Style>
+        <!-- Выключенное правило бледнеет: видно, что оно есть, но не работает -->
+        <Style Selector="Grid.rule.off > :is(Control).body">
+            <Setter Property="Opacity" Value="0.45" />
+        </Style>
+        <Style Selector="Border.ruleTag">
+            <Setter Property="Grid.Column" Value="3" />
+            <Setter Property="Margin" Value="8,0,0,0" />
+        </Style>
+        <Style Selector="StackPanel.ruleActions">
+            <Setter Property="Grid.Column" Value="4" />
+            <Setter Property="Margin" Value="6,0,0,0" />
+        </Style>
+        <!-- На телефоне вторая строка: слева действие, справа кнопки -->
+        <Style Selector=".narrow StackPanel.ruleActions">
+            <Setter Property="Grid.Row" Value="1" />
+            <Setter Property="Grid.Column" Value="3" />
+            <Setter Property="Grid.ColumnSpan" Value="2" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="Margin" Value="0,6,0,0" />
+        </Style>
+        <Style Selector=".narrow Border.ruleTag">
+            <Setter Property="Grid.Row" Value="1" />
+            <Setter Property="Grid.Column" Value="2" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="12,6,0,0" />
+        </Style>
+        <Style Selector="Border.tag Path.icon">
+            <Setter Property="Width" Value="11" />
+            <Setter Property="Height" Value="11" />
+            <Setter Property="StrokeThickness" Value="2" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Stroke" Value="{DynamicResource Accent}" />
+        </Style>
+        <Style Selector="Border.tag.direct Path.icon">
+            <Setter Property="Stroke" Value="{DynamicResource Connected}" />
+        </Style>
+        <Style Selector="Border.tag.block Path.icon">
+            <Setter Property="Stroke" Value="{DynamicResource Danger}" />
+        </Style>
+        <Style Selector="Border.tag.byedpi Path.icon">
+            <Setter Property="Stroke" Value="{DynamicResource Warning}" />
+        </Style>
+
+        <!-- ===== «всё остальное»: два положения в одной рамке ===== -->
+        <Style Selector="Border.segments">
+            <Setter Property="Background" Value="{DynamicResource Surface}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource LineStrong}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="{StaticResource Radius}" />
+            <Setter Property="Padding" Value="3" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Border.segments Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="MinHeight" Value="30" />
+            <Setter Property="Padding" Value="12,4" />
+            <Setter Property="FontSize" Value="{StaticResource Size.Small}" />
+            <Setter Property="CornerRadius" Value="{StaticResource RadiusSmall}" />
+        </Style>
+        <Style Selector="Border.segments Button.on">
+            <Setter Property="Background" Value="{DynamicResource Tint.Accent}" />
+            <Setter Property="Foreground" Value="{DynamicResource Accent}" />
+        </Style>
+        <Style Selector="Border.segments Button.on.direct">
+            <Setter Property="Background" Value="{DynamicResource Tint.Connected}" />
+            <Setter Property="Foreground" Value="{DynamicResource Connected}" />
+        </Style>
+
+        <!-- ===== результат проверки ===== -->
+        <Style Selector="Border.result">
+            <Setter Property="CornerRadius" Value="{StaticResource Radius}" />
+            <Setter Property="Padding" Value="12,10" />
+            <Setter Property="Background" Value="{DynamicResource Tint.Accent}" />
+        </Style>
+        <Style Selector="Border.result.direct">
+            <Setter Property="Background" Value="{DynamicResource Tint.Connected}" />
+        </Style>
+        <Style Selector="Border.result.block">
+            <Setter Property="Background" Value="{DynamicResource Tint.Danger}" />
+        </Style>
+        <Style Selector="Border.result.byedpi">
+            <Setter Property="Background" Value="{DynamicResource Tint.Warning}" />
+        </Style>
+        <Style Selector="TextBlock.test">
+            <Setter Property="FontSize" Value="{StaticResource Size.Small}" />
+            <Setter Property="Foreground" Value="{DynamicResource Accent}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
         <Style Selector="TextBlock.test.direct">
             <Setter Property="Foreground" Value="{DynamicResource Connected}" />
@@ -23,119 +219,287 @@
         </Style>
     </UserControl.Styles>
 
-    <Grid Classes="page" RowDefinitions="Auto,Auto,Auto,Auto,*,Auto">
-        <StackPanel Grid.Row="0">
-            <TextBlock Classes="title" Text="{loc:T Nav_Routing}" />
-            <TextBlock Classes="secondary" Text="{loc:T Routing_Subtitle}" Margin="0,4,0,0" TextWrapping="Wrap" />
-            <TextBlock Classes="status" Text="{Binding Status}" Margin="0,6,0,0" />
-        </StackPanel>
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Classes="page" Spacing="12">
 
-        <!-- Набор правил -->
-        <Grid Grid.Row="1" ColumnDefinitions="*,Auto,Auto" Margin="0,12,0,0">
-            <ComboBox ItemsSource="{Binding RoutingProfiles}" SelectedItem="{Binding ActiveRouting}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate x:DataType="models:RoutingProfile">
-                        <TextBlock Text="{Binding Name}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-            <Button Grid.Column="1" Content="{loc:T Common_New}" Command="{Binding AddSet}" Margin="8,0,0,0" />
-            <Button Grid.Column="2" Classes="danger" Content="{loc:T Common_Delete}" Command="{Binding RemoveSet}"
-                    Margin="6,0,0,0" />
-        </Grid>
+            <!-- Заголовок -->
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel>
+                    <TextBlock Classes="title" Text="{loc:T Nav_Routing}" />
+                    <TextBlock Classes="secondary" Text="{loc:T Routing_Subtitle}" Margin="0,4,0,0" TextWrapping="Wrap" />
+                    <TextBlock Classes="status" Text="{Binding Status}" Margin="0,6,0,0" />
+                </StackPanel>
+                <Button Grid.Column="1" Classes="ghost small" VerticalAlignment="Top" Margin="10,0,0,0"
+                        Command="{Binding ToggleHelp}" IsVisible="{Binding !ShowHelp}">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <Path Classes="icon" Data="{StaticResource Icon.Info}" />
+                        <TextBlock Text="{loc:T Routing_HelpShow}" />
+                    </StackPanel>
+                </Button>
+            </Grid>
 
-        <!-- Новое правило -->
-        <Border Grid.Row="2" Classes="card" Margin="0,12,0,0" Padding="14">
-            <StackPanel Spacing="8">
-                <Grid ColumnDefinitions="164,*">
-                    <ComboBox ItemsSource="{Binding MatchOptions}" SelectedIndex="{Binding NewMatchIndex}" />
-                    <TextBox Grid.Column="1" Margin="8,0,0,0" Text="{Binding NewValue}"
-                             PlaceholderText="{Binding ValueHint}" />
-                </Grid>
-                <Grid ColumnDefinitions="164,*,Auto">
-                    <ComboBox ItemsSource="{Binding ActionOptions}" SelectedIndex="{Binding NewActionIndex}" />
-                    <Button Grid.Column="1" HorizontalAlignment="Left" Margin="8,0,0,0"
-                            Content="{loc:T Routing_PickSrs}" Command="{Binding PickSrs}"
-                            IsVisible="{Binding ShowPickSrs}" />
-                    <Button Grid.Column="2" Classes="primary" Command="{Binding AddNewRule}">
-                            <StackPanel Orientation="Horizontal" Spacing="8">
-                                <Path Classes="icon" Data="{StaticResource Icon.Plus}" Width="14" Height="14" />
-                                <TextBlock Text="{loc:T Common_Add}" />
+            <!-- Как это работает: три шага -->
+            <Border Classes="card" Padding="16,14,16,4" IsVisible="{Binding ShowHelp}">
+                <StackPanel>
+                    <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,0,0,12">
+                        <Path Classes="icon" Data="{StaticResource Icon.Info}" Stroke="{DynamicResource Accent}" />
+                        <TextBlock Grid.Column="1" Classes="field" Text="{loc:T Routing_HelpTitle}" Margin="8,0,0,0"
+                                   VerticalAlignment="Center" />
+                        <Button Grid.Column="2" Classes="small" Content="{loc:T Routing_HelpHide}" Command="{Binding HideHelp}" />
+                    </Grid>
+                    <UniformGrid Classes="steps">
+                        <Grid ColumnDefinitions="Auto,*">
+                            <Border Classes="step"><TextBlock Text="1" /></Border>
+                            <StackPanel Grid.Column="1" Margin="10,2,0,0">
+                                <TextBlock FontWeight="SemiBold" Text="{loc:T Routing_Step1Title}" />
+                                <TextBlock Classes="caption" Text="{loc:T Routing_Step1}" TextWrapping="Wrap" Margin="0,2,0,0" />
                             </StackPanel>
+                        </Grid>
+                        <Grid ColumnDefinitions="Auto,*">
+                            <Border Classes="step"><TextBlock Text="2" /></Border>
+                            <StackPanel Grid.Column="1" Margin="10,2,0,0">
+                                <TextBlock FontWeight="SemiBold" Text="{loc:T Routing_Step2Title}" />
+                                <TextBlock Classes="caption" Text="{loc:T Routing_Step2}" TextWrapping="Wrap" Margin="0,2,0,0" />
+                            </StackPanel>
+                        </Grid>
+                        <Grid ColumnDefinitions="Auto,*">
+                            <Border Classes="step"><TextBlock Text="3" /></Border>
+                            <StackPanel Grid.Column="1" Margin="10,2,0,0">
+                                <TextBlock FontWeight="SemiBold" Text="{loc:T Routing_Step3Title}" />
+                                <TextBlock Classes="caption" Text="{loc:T Routing_Step3}" TextWrapping="Wrap" Margin="0,2,0,0" />
+                            </StackPanel>
+                        </Grid>
+                    </UniformGrid>
+                </StackPanel>
+            </Border>
+
+            <!-- Набор правил -->
+            <StackPanel Spacing="6">
+                <TextBlock Classes="field" Text="{loc:T Routing_Set}" ToolTip.Tip="{loc:T Routing_SetHint}" />
+                <Grid ColumnDefinitions="*,Auto,Auto">
+                    <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding RoutingProfiles}"
+                              SelectedItem="{Binding ActiveRouting}" ToolTip.Tip="{loc:T Routing_SetHint}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate x:DataType="models:RoutingProfile">
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <Button Grid.Column="1" Margin="8,0,0,0" Command="{Binding AddSet}">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <Path Classes="icon" Data="{StaticResource Icon.Plus}" />
+                            <TextBlock Text="{loc:T Common_New}" />
+                        </StackPanel>
+                    </Button>
+                    <Button Grid.Column="2" Classes="danger icon" Width="38" Height="38" Margin="6,0,0,0"
+                            ToolTip.Tip="{loc:T Common_Delete}" Command="{Binding RemoveSet}">
+                        <Path Classes="icon" Data="{StaticResource Icon.Trash}" />
                     </Button>
                 </Grid>
             </StackPanel>
-        </Border>
 
-        <!-- Проверка домена до сохранения правил -->
-        <Border Grid.Row="3" Classes="card" Margin="0,10,0,0" Padding="14,12">
-            <StackPanel>
-                <Grid ColumnDefinitions="*,Auto">
-                    <TextBox Text="{Binding TestInput}" PlaceholderText="{loc:T Routing_TestHint}" />
-                    <Button Grid.Column="1" Content="{loc:T Common_Check}" Command="{Binding TestDomain}"
-                            Margin="8,0,0,0" />
-                </Grid>
-                <TextBlock Classes="test" Text="{Binding TestResult}" Margin="0,10,0,0" TextWrapping="Wrap"
-                           IsVisible="{Binding HasTestResult}"
-                           Classes.direct="{Binding TestOutcome, Converter={StaticResource Eq}, ConverterParameter=Direct}"
-                           Classes.block="{Binding TestOutcome, Converter={StaticResource Eq}, ConverterParameter=Block}"
-                           Classes.byedpi="{Binding TestOutcome, Converter={StaticResource Eq}, ConverterParameter=ByeDpi}" />
-            </StackPanel>
-        </Border>
-
-        <ListBox Grid.Row="4" Classes="plain tight" Margin="0,14,0,0" ItemsSource="{Binding Rules}">
-            <ListBox.ItemTemplate>
-                <DataTemplate x:DataType="models:RouteRule">
-                    <Border Classes="item compact">
-                        <Grid ColumnDefinitions="Auto,*,Auto,Auto">
-                            <ToggleSwitch IsChecked="{Binding Enabled}" HorizontalAlignment="Left" />
-
-                            <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
-                                <TextBlock Classes="mono" FontSize="{StaticResource Size.Small}"
-                                           Foreground="{DynamicResource TextFaint}" Text="{Binding MatchLabel}" />
-                                <TextBlock Classes="mono" Foreground="{DynamicResource Text}" Text="{Binding DisplayValue}"
-                                           ToolTip.Tip="{Binding Value}" TextTrimming="CharacterEllipsis" />
-                            </StackPanel>
-
-                            <Border Grid.Column="2" Classes="tag" Margin="8,0,0,0"
-                                    Classes.direct="{Binding Action, Converter={StaticResource Eq}, ConverterParameter=Direct}"
-                                    Classes.block="{Binding Action, Converter={StaticResource Eq}, ConverterParameter=Block}"
-                                    Classes.byedpi="{Binding Action, Converter={StaticResource Eq}, ConverterParameter=ByeDpi}">
-                                <TextBlock Text="{Binding ActionLabel}" />
-                            </Border>
-
-                            <StackPanel Grid.Column="3" Orientation="Horizontal" Margin="6,0,0,0">
-                                <Button Classes="ghost small icon" ToolTip.Tip="{loc:T Routing_MoveUpHint}"
-                                        Command="{Binding #Root.((vm:RoutingViewModel)DataContext).MoveUp}"
-                                        CommandParameter="{Binding}">
-                                    <Path Classes="icon" Data="{StaticResource Icon.ChevronUp}" />
-                                </Button>
-                                <Button Classes="ghost small icon" ToolTip.Tip="{loc:T Routing_MoveDownHint}"
-                                        Command="{Binding #Root.((vm:RoutingViewModel)DataContext).MoveDown}"
-                                        CommandParameter="{Binding}">
-                                    <Path Classes="icon" Data="{StaticResource Icon.ChevronDown}" />
-                                </Button>
-                                <Button Classes="ghost small icon remove" ToolTip.Tip="{loc:T Common_Delete}"
-                                        Command="{Binding #Root.((vm:RoutingViewModel)DataContext).RemoveRule}"
-                                        CommandParameter="{Binding}">
-                                    <Path Classes="icon" Data="{StaticResource Icon.Trash}" />
-                                </Button>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-
-        <Border Grid.Row="5" Classes="card" Padding="14,12" Margin="0,4,0,0" BorderThickness="0">
-            <Grid ColumnDefinitions="*,Auto">
-                <StackPanel Margin="0,0,10,0">
-                    <TextBlock Text="{loc:T Routing_Fallback}" />
-                    <TextBlock Classes="caption" Text="{loc:T Routing_FallbackHint}" Margin="0,3,0,0" TextWrapping="Wrap" />
+            <!-- Готовые правила -->
+            <StackPanel Spacing="8">
+                <StackPanel Orientation="Horizontal" Spacing="7">
+                    <Path Classes="icon" Data="{StaticResource Icon.Sparkle}" Width="14" Height="14"
+                          Stroke="{DynamicResource Accent}" VerticalAlignment="Center" />
+                    <TextBlock Classes="field" Text="{loc:T Routing_QuickTitle}" VerticalAlignment="Center" />
                 </StackPanel>
-                <ComboBox Grid.Column="1" Width="164" ItemsSource="{Binding FallbackOptions}"
-                          SelectedIndex="{Binding FallbackIndex}" VerticalAlignment="Center" />
-            </Grid>
-        </Border>
-    </Grid>
+                <ItemsControl ItemsSource="{Binding Presets}" Margin="0,0,-8,-8">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Classes="presets" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:RoutingPreset">
+                            <Button Classes="preset" CommandParameter="{Binding}"
+                                    Command="{Binding #Root.((vm:RoutingViewModel)DataContext).ApplyPreset}">
+                                <Grid ColumnDefinitions="Auto,*,Auto">
+                                    <Border Classes="badge" Classes.direct="{Binding IsDirect}" Classes.block="{Binding IsBlock}">
+                                        <Path Classes="icon" Data="{Binding Icon, Converter={StaticResource Icon}}" />
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center">
+                                        <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource Text}" Text="{Binding Title}"
+                                                   TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Classes="caption" Text="{Binding Hint}" TextTrimming="CharacterEllipsis" />
+                                    </StackPanel>
+                                    <Path Grid.Column="2" Classes="icon add" Data="{StaticResource Icon.Plus}" Margin="8,0,0,0"
+                                          VerticalAlignment="Center" />
+                                </Grid>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+
+            <!-- Своё правило: «что» и «куда» -->
+            <Border Classes="card" Padding="16,14">
+                <StackPanel Spacing="10">
+                    <TextBlock Classes="field" Text="{loc:T Routing_AddTitle}" />
+                    <StackPanel Spacing="5">
+                        <TextBlock Classes="caption" Text="{loc:T Routing_What}" />
+                        <Grid ColumnDefinitions="Auto,*">
+                            <ComboBox Classes="kind" ItemsSource="{Binding MatchOptions}" SelectedIndex="{Binding NewMatchIndex}" />
+                            <TextBox Grid.Column="1" Margin="8,0,0,0" Text="{Binding NewValue}"
+                                     PlaceholderText="{Binding ValueHint}" />
+                        </Grid>
+                        <TextBlock Classes="caption" Foreground="{DynamicResource TextFaint}" TextWrapping="Wrap"
+                                   Text="{Binding MatchDescription}" />
+                    </StackPanel>
+                    <StackPanel Spacing="5">
+                        <TextBlock Classes="caption" Text="{loc:T Routing_Where}" />
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <ComboBox Classes="kind" ItemsSource="{Binding ActionOptions}" SelectedIndex="{Binding NewActionIndex}" />
+                            <Button Grid.Column="1" HorizontalAlignment="Left" Margin="8,0,0,0"
+                                    Command="{Binding PickSrs}" IsVisible="{Binding ShowPickSrs}">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <Path Classes="icon" Data="{StaticResource Icon.Folder}" />
+                                    <TextBlock Text="{loc:T Routing_PickSrs}" />
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="2" Classes="primary" Margin="8,0,0,0" Command="{Binding AddNewRule}">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <Path Classes="icon" Data="{StaticResource Icon.Plus}" Width="14" Height="14" />
+                                    <TextBlock Text="{loc:T Common_Add}" />
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Правила -->
+            <StackPanel Spacing="8">
+                <TextBlock VerticalAlignment="Center">
+                    <Run Classes="field" Text="{loc:T Routing_RulesTitle}" FontWeight="SemiBold"
+                         Foreground="{DynamicResource TextSecondary}" FontSize="{StaticResource Size.Small}" />
+                    <Run Text="{Binding RuleCount}" FontFamily="{StaticResource Font.Mono}"
+                         Foreground="{DynamicResource TextFaint}" FontSize="{StaticResource Size.Small}" />
+                    <Run Text=" · " Foreground="{DynamicResource TextFaint}" FontSize="{StaticResource Size.Caption}" />
+                    <Run Text="{loc:T Routing_RulesHint}" Foreground="{DynamicResource TextFaint}"
+                         FontSize="{StaticResource Size.Caption}" />
+                </TextBlock>
+
+                <Border Classes="card" Padding="16" IsVisible="{Binding !HasRules}">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <Path Classes="icon" Data="{StaticResource Icon.routing}" Stroke="{DynamicResource TextFaint}" />
+                        <TextBlock Classes="secondary" Text="{loc:T Routing_Empty}" TextWrapping="Wrap" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Border>
+
+                <ItemsControl ItemsSource="{Binding Rules}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Spacing="6" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="models:RouteRule">
+                            <Border Classes="item compact">
+                                <Grid Classes="rule" Classes.off="{Binding !Enabled}"
+                                      ColumnDefinitions="Auto,Auto,*,Auto,Auto" RowDefinitions="Auto,Auto">
+                                    <ToggleSwitch IsChecked="{Binding Enabled}" HorizontalAlignment="Left" MinWidth="0"
+                                                  OnContent="" OffContent="" />
+
+                                    <!-- У страны вместо значка - флажок, если он есть -->
+                                    <Panel Grid.Column="1" Classes="body" Margin="4,0,0,0">
+                                        <Border Classes="badge neutral" IsVisible="{Binding #Flag.Source, Converter={x:Static ObjectConverters.IsNull}}">
+                                            <Path Classes="icon" Data="{Binding KindIcon, Converter={StaticResource Icon}}" />
+                                        </Border>
+                                        <Border Width="34" Height="34" IsVisible="{Binding #Flag.Source, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                            <Image x:Name="Flag" Width="24" Height="17" VerticalAlignment="Center"
+                                                   Source="{Binding FlagCode, Converter={StaticResource Flag}}" />
+                                        </Border>
+                                    </Panel>
+
+                                    <StackPanel Grid.Column="2" Classes="body" Margin="12,0,0,0" VerticalAlignment="Center">
+                                        <TextBlock Classes="mono" Foreground="{DynamicResource Text}" FontWeight="SemiBold"
+                                                   Text="{Binding DisplayValue}" ToolTip.Tip="{Binding Value}"
+                                                   TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Classes="caption" Text="{Binding KindTitle}" ToolTip.Tip="{Binding MatchLabel}" />
+                                    </StackPanel>
+
+                                    <Border Classes="tag body ruleTag" Padding="8,3"
+                                            Classes.direct="{Binding Action, Converter={StaticResource Eq}, ConverterParameter=Direct}"
+                                            Classes.block="{Binding Action, Converter={StaticResource Eq}, ConverterParameter=Block}"
+                                            Classes.byedpi="{Binding Action, Converter={StaticResource Eq}, ConverterParameter=ByeDpi}">
+                                        <StackPanel Orientation="Horizontal" Spacing="5">
+                                            <Path Classes="icon" Data="{StaticResource Icon.Direct}" />
+                                            <TextBlock Text="{Binding ActionLabel}" />
+                                        </StackPanel>
+                                    </Border>
+
+                                    <StackPanel Classes="ruleActions" Orientation="Horizontal">
+                                        <Button Classes="ghost small icon" ToolTip.Tip="{loc:T Routing_MoveUpHint}"
+                                                Command="{Binding #Root.((vm:RoutingViewModel)DataContext).MoveUp}"
+                                                CommandParameter="{Binding}">
+                                            <Path Classes="icon" Data="{StaticResource Icon.ChevronUp}" />
+                                        </Button>
+                                        <Button Classes="ghost small icon" ToolTip.Tip="{loc:T Routing_MoveDownHint}"
+                                                Command="{Binding #Root.((vm:RoutingViewModel)DataContext).MoveDown}"
+                                                CommandParameter="{Binding}">
+                                            <Path Classes="icon" Data="{StaticResource Icon.ChevronDown}" />
+                                        </Button>
+                                        <Button Classes="ghost small icon remove" ToolTip.Tip="{loc:T Common_Delete}"
+                                                Command="{Binding #Root.((vm:RoutingViewModel)DataContext).RemoveRule}"
+                                                CommandParameter="{Binding}">
+                                            <Path Classes="icon" Data="{StaticResource Icon.Trash}" />
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Всё остальное - по сути последнее правило списка -->
+                <Border Classes="card" Padding="16,12" BorderThickness="1,1,1,1" BorderBrush="{DynamicResource LineStrong}">
+                    <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+                        <Border Classes="badge neutral">
+                            <Path Classes="icon" Data="{StaticResource Icon.Rules}" />
+                        </Border>
+                        <StackPanel Grid.Column="1" Margin="12,0,10,0" VerticalAlignment="Center">
+                            <TextBlock FontWeight="SemiBold" Text="{loc:T Routing_Fallback}" />
+                            <TextBlock Classes="caption" Text="{loc:T Routing_FallbackHint}" Margin="0,2,0,0" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <Border Classes="segments fallbackSwitch">
+                            <StackPanel Orientation="Horizontal" Spacing="2">
+                                <Button Content="{loc:T Routing_ToProxy}" Command="{Binding SetFallbackTo}" CommandParameter="proxy"
+                                        Classes.on="{Binding FallbackIsProxy}" />
+                                <Button Classes="direct" Content="{loc:T Routing_ToDirect}" Command="{Binding SetFallbackTo}"
+                                        CommandParameter="direct" Classes.on="{Binding !FallbackIsProxy}" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Border>
+            </StackPanel>
+
+            <!-- Проверка сайта: какое правило сработает, без подключения -->
+            <Border Classes="card" Padding="16,14">
+                <StackPanel Spacing="10">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Path Classes="icon" Data="{StaticResource Icon.Search}" Stroke="{DynamicResource Accent}" />
+                        <TextBlock Classes="field" Text="{loc:T Routing_TestTitle}" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <TextBox Text="{Binding TestInput}" PlaceholderText="{loc:T Routing_TestHint}" />
+                        <Button Grid.Column="1" Content="{loc:T Common_Check}" Command="{Binding TestDomain}" Margin="8,0,0,0" />
+                    </Grid>
+                    <Border Classes="result" IsVisible="{Binding HasTestResult}"
+                            Classes.direct="{Binding TestOutcome, Converter={StaticResource Eq}, ConverterParameter=Direct}"
+                            Classes.block="{Binding TestOutcome, Converter={StaticResource Eq}, ConverterParameter=Block}"
+                            Classes.byedpi="{Binding TestOutcome, Converter={StaticResource Eq}, ConverterParameter=ByeDpi}">
+                        <TextBlock Classes="test" Text="{Binding TestResult}"
+                                   Classes.direct="{Binding TestOutcome, Converter={StaticResource Eq}, ConverterParameter=Direct}"
+                                   Classes.block="{Binding TestOutcome, Converter={StaticResource Eq}, ConverterParameter=Block}"
+                                   Classes.byedpi="{Binding TestOutcome, Converter={StaticResource Eq}, ConverterParameter=ByeDpi}" />
+                    </Border>
+                    <!-- «Введите домен» - без подсветки исхода -->
+                    <TextBlock Classes="caption" Text="{Binding TestResult}"
+                               IsVisible="{Binding ShowTestHint}" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

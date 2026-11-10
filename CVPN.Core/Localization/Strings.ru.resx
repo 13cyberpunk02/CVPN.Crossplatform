@@ -532,7 +532,7 @@
     <value>Всё остальное</value>
   </data>
   <data name="Routing_FallbackHint" xml:space="preserve">
-    <value>Что делать с трафиком, не попавшим ни в одно правило</value>
+    <value>Куда идёт трафик, который не подошёл ни под одно правило</value>
   </data>
   <data name="Routing_MatchedRule" xml:space="preserve">
     <value>правило {0} {1}</value>
@@ -577,10 +577,10 @@
     <value>Наборы правил sing-box (*.srs)|*.srs|Все файлы (*.*)|*.*</value>
   </data>
   <data name="Routing_Subtitle" xml:space="preserve">
-    <value>Правила проверяются сверху вниз. Первое совпадение решает судьбу соединения.</value>
+    <value>Решите, что идёт через прокси, что напрямую, а что блокируется.</value>
   </data>
   <data name="Routing_TestHint" xml:space="preserve">
-    <value>проверить домен: youtube.com</value>
+    <value>youtube.com</value>
   </data>
   <data name="Routing_UnknownGeoip" xml:space="preserve">
     <value>Выше есть geoip ({0}): сработает, если домен резолвится в адрес этой страны - проверить это без подключения нельзя.</value>
@@ -1213,5 +1213,155 @@
   </data>
   <data name="Logs_NothingFound" xml:space="preserve">
     <value>Ничего не найдено</value>
+  </data>
+  <data name="Match_SuffixHint" xml:space="preserve">
+    <value>Сам домен и все его поддомены: example.com, www.example.com, cdn.example.com</value>
+  </data>
+  <data name="Preset_Ads" xml:space="preserve">
+    <value>Блокировать рекламу</value>
+  </data>
+  <data name="Routing_SetHint" xml:space="preserve">
+    <value>Можно держать несколько наборов и переключаться между ними</value>
+  </data>
+  <data name="Routing_HelpHide" xml:space="preserve">
+    <value>Понятно</value>
+  </data>
+  <data name="Match_SetRemote" xml:space="preserve">
+    <value>Набор по ссылке</value>
+  </data>
+  <data name="Routing_Step1" xml:space="preserve">
+    <value>Сайт, сервис, страна или программа</value>
+  </data>
+  <data name="Routing_AddTitle" xml:space="preserve">
+    <value>Своё правило</value>
+  </data>
+  <data name="Match_SetLocalHint" xml:space="preserve">
+    <value>Свой файл .srs с диска</value>
+  </data>
+  <data name="Match_Geoip" xml:space="preserve">
+    <value>Страна по IP</value>
+  </data>
+  <data name="Preset_YouTube" xml:space="preserve">
+    <value>YouTube через прокси</value>
+  </data>
+  <data name="Routing_Step2Title" xml:space="preserve">
+    <value>Куда</value>
+  </data>
+  <data name="Preset_YouTubeHint" xml:space="preserve">
+    <value>Видео, превью и комментарии</value>
+  </data>
+  <data name="Routing_Step2" xml:space="preserve">
+    <value>Через прокси, напрямую, блокировать или через ByeDPI</value>
+  </data>
+  <data name="Routing_What" xml:space="preserve">
+    <value>Что</value>
+  </data>
+  <data name="Match_SetLocal" xml:space="preserve">
+    <value>Набор из файла</value>
+  </data>
+  <data name="Routing_ToByeDpi" xml:space="preserve">
+    <value>Через ByeDPI</value>
+  </data>
+  <data name="Routing_Empty" xml:space="preserve">
+    <value>Правил пока нет. Добавьте готовые или своё правило выше.</value>
+  </data>
+  <data name="Routing_ToProxy" xml:space="preserve">
+    <value>Через прокси</value>
+  </data>
+  <data name="Routing_PresetAdded" xml:space="preserve">
+    <value>Добавлено правил: {0}</value>
+  </data>
+  <data name="Preset_Ru" xml:space="preserve">
+    <value>Российские сайты напрямую</value>
+  </data>
+  <data name="Routing_PresetExists" xml:space="preserve">
+    <value>Эти правила уже есть</value>
+  </data>
+  <data name="Match_GeositeHint" xml:space="preserve">
+    <value>Готовый список доменов сервиса из базы sing-geosite: youtube, twitch, netflix, category-ads-all</value>
+  </data>
+  <data name="Routing_HelpTitle" xml:space="preserve">
+    <value>Как это работает</value>
+  </data>
+  <data name="Match_GeoipHint" xml:space="preserve">
+    <value>Все адреса страны по двухбуквенному коду: ru, de, us</value>
+  </data>
+  <data name="Match_ProcessHint" xml:space="preserve">
+    <value>Весь трафик программы по имени её файла</value>
+  </data>
+  <data name="Match_SetRemoteHint" xml:space="preserve">
+    <value>Свой файл .srs из интернета: ядро скачает его само</value>
+  </data>
+  <data name="Routing_ToBlock" xml:space="preserve">
+    <value>Блокировать</value>
+  </data>
+  <data name="Match_Domain" xml:space="preserve">
+    <value>Точный домен</value>
+  </data>
+  <data name="Match_KeywordHint" xml:space="preserve">
+    <value>Любой домен, в котором встречается это слово</value>
+  </data>
+  <data name="Routing_HelpShow" xml:space="preserve">
+    <value>Как это работает?</value>
+  </data>
+  <data name="Routing_Step3" xml:space="preserve">
+    <value>Правила проверяются сверху вниз, срабатывает первое подходящее. Всё, что не подошло, - по настройке внизу</value>
+  </data>
+  <data name="Match_Suffix" xml:space="preserve">
+    <value>Домен и поддомены</value>
+  </data>
+  <data name="Match_Geosite" xml:space="preserve">
+    <value>Сервис из базы</value>
+  </data>
+  <data name="Match_Keyword" xml:space="preserve">
+    <value>Слово в домене</value>
+  </data>
+  <data name="Match_Process" xml:space="preserve">
+    <value>Программа</value>
+  </data>
+  <data name="Routing_Set" xml:space="preserve">
+    <value>Набор правил</value>
+  </data>
+  <data name="Routing_Where" xml:space="preserve">
+    <value>Куда</value>
+  </data>
+  <data name="Preset_RuHint" xml:space="preserve">
+    <value>.ru, .рф и российские IP - мимо прокси</value>
+  </data>
+  <data name="Preset_AdsHint" xml:space="preserve">
+    <value>Реклама и трекеры</value>
+  </data>
+  <data name="Routing_RulesHint" xml:space="preserve">
+    <value>проверяются сверху вниз</value>
+  </data>
+  <data name="Routing_Step3Title" xml:space="preserve">
+    <value>Порядок</value>
+  </data>
+  <data name="Routing_QuickTitle" xml:space="preserve">
+    <value>Готовые правила</value>
+  </data>
+  <data name="Routing_RulesTitle" xml:space="preserve">
+    <value>Правила</value>
+  </data>
+  <data name="Routing_TestTitle" xml:space="preserve">
+    <value>Проверить сайт</value>
+  </data>
+  <data name="Routing_ToDirect" xml:space="preserve">
+    <value>Напрямую</value>
+  </data>
+  <data name="Preset_TelegramHint" xml:space="preserve">
+    <value>Сайт и веб-версия Telegram</value>
+  </data>
+  <data name="Match_DomainHint" xml:space="preserve">
+    <value>Только этот адрес, без поддоменов</value>
+  </data>
+  <data name="Preset_Telegram" xml:space="preserve">
+    <value>Telegram через прокси</value>
+  </data>
+  <data name="Routing_Step1Title" xml:space="preserve">
+    <value>Что</value>
+  </data>
+  <data name="Routing_ApplyAfterReconnect" xml:space="preserve">
+    <value>Применятся после переподключения.</value>
   </data>
 </root>

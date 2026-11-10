@@ -41,8 +41,122 @@ public sealed class RoutingViewModel : PageViewModel
         AddNewRule = new RelayCommand(AddFromForm);
         PickSrs = new RelayCommand(async () => await PickSrsAsync());
 
+        ApplyPreset = new RelayCommand(p =>
+        {
+            if (p is RoutingPreset preset) AddPreset(preset);
+        });
+        HideHelp = new RelayCommand(() => ShowHelp = false);
+        ToggleHelp = new RelayCommand(() => ShowHelp = !ShowHelp);
+        SetFallbackTo = new RelayCommand(p => FallbackIndex = p as string == "direct" ? 1 : 0);
+
         shell.PropertyChanged += OnShellChanged;
+        WatchRules();
     }
+
+    private ObservableCollection<RouteRule>? _watched;
+
+    /// <summary>У каждого набора свой список правил - следим за текущим.</summary>
+    private void WatchRules()
+    {
+        if (ReferenceEquals(_watched, Shell.Rules)) return;
+
+        if (_watched is not null) _watched.CollectionChanged -= OnRulesChanged;
+        _watched = Shell.Rules;
+        _watched.CollectionChanged += OnRulesChanged;
+
+        RaiseRuleCount();
+    }
+
+    private void OnRulesChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) =>
+        RaiseRuleCount();
+
+    // ===================== подсказка и готовые правила =====================
+
+    /// <summary>«Как это работает» - видна, пока её не закрыли.</summary>
+    public bool ShowHelp
+    {
+        get => !Shell.Settings.RoutingHelpHidden;
+        set
+        {
+            if (value == ShowHelp) return;
+
+            Shell.Settings.RoutingHelpHidden = !value;
+            Shell.Persist();
+            Raise();
+        }
+    }
+
+    public ICommand HideHelp { get; }
+    public ICommand ToggleHelp { get; }
+
+    /// <summary>
+    /// Готовые правила в одно нажатие - то, ради чего на эту страницу обычно
+    /// и заходят. Наборы geosite и geoip берутся из баз SagerNet, как и в своих правилах.
+    /// </summary>
+    public IReadOnlyList<RoutingPreset> Presets { get; } =
+    [
+        new("ads", Loc.T("Preset_Ads"), Loc.T("Preset_AdsHint"), "Ban", RouteAction.Block,
+            [(MatchKind.Geosite, "category-ads-all")]),
+        new("ru", Loc.T("Preset_Ru"), Loc.T("Preset_RuHint"), "Direct", RouteAction.Direct,
+            [(MatchKind.DomainSuffix, "ru"), (MatchKind.DomainSuffix, "xn--p1ai"), (MatchKind.Geoip, "ru")]),
+        new("youtube", Loc.T("Preset_YouTube"), Loc.T("Preset_YouTubeHint"), "Play", RouteAction.Proxy,
+            [(MatchKind.Geosite, "youtube")]),
+        new("telegram", Loc.T("Preset_Telegram"), Loc.T("Preset_TelegramHint"), "Globe", RouteAction.Proxy,
+            [(MatchKind.Geosite, "telegram")])
+    ];
+
+    public ICommand ApplyPreset { get; }
+
+    /// <summary>
+    /// Добавляет правила набора, которых ещё нет. Если такое правило есть, но
+    /// ведёт в другое место, его не трогаем: пользователь мог поставить его сам.
+    /// </summary>
+    internal int AddPreset(RoutingPreset preset)
+    {
+        var added = 0;
+
+        foreach (var (match, value) in preset.Rules)
+        {
+            if (Rules.Any(r => r.Match == match && string.Equals(r.Value, value, StringComparison.OrdinalIgnoreCase)))
+                continue;
+
+            Shell.AddRule(match, value, preset.Action);
+            added++;
+        }
+
+        if (added == 0) Shell.Notify(Loc.T("Routing_PresetExists"));
+        else if (Shell.IsConnected) Shell.Notify($"{Loc.T("Routing_PresetAdded", added)}. {Loc.T("Routing_ApplyAfterReconnect")}");
+        else Shell.Notify(Loc.T("Routing_PresetAdded", added));
+
+        return added;
+    }
+
+    public int RuleCount => Rules.Count;
+    public bool HasRules => Rules.Count > 0;
+
+    private void RaiseRuleCount()
+    {
+        Raise(nameof(RuleCount));
+        Raise(nameof(HasRules));
+    }
+
+    public ICommand SetFallbackTo { get; }
+
+    public bool FallbackIsProxy => FallbackIndex == 0;
+
+    /// <summary>Пояснение к выбранному виду правила - под полем ввода.</summary>
+    public string MatchDescription => NewMatch switch
+    {
+        MatchKind.Geosite => Loc.T("Match_GeositeHint"),
+        MatchKind.Geoip => Loc.T("Match_GeoipHint"),
+        MatchKind.Domain => Loc.T("Match_DomainHint"),
+        MatchKind.DomainSuffix => Loc.T("Match_SuffixHint"),
+        MatchKind.DomainKeyword => Loc.T("Match_KeywordHint"),
+        MatchKind.Process => Loc.T("Match_ProcessHint"),
+        MatchKind.RuleSetRemote => Loc.T("Match_SetRemoteHint"),
+        MatchKind.RuleSetLocal => Loc.T("Match_SetLocalHint"),
+        _ => ""
+    };
 
     // ===================== форма нового правила =====================
     // Раньше жила в code-behind WPF-разметки; здесь её используют все платформы.
@@ -61,14 +175,11 @@ public sealed class RoutingViewModel : PageViewModel
 
     /// <summary>Порядок совпадает с MatchKind.</summary>
     public IReadOnlyList<string> MatchOptions { get; } =
-    [
-        "geosite", "geoip", "domain", "domain_suffix", "domain_keyword", "process_name",
-        Loc.T("Routing_SetRemote"), Loc.T("Routing_SetLocal")
-    ];
+        [.. Enum.GetValues<MatchKind>().Select(RouteRule.KindTitleOf)];
 
     /// <summary>Порядок совпадает с RouteAction.</summary>
     public IReadOnlyList<string> ActionOptions { get; } =
-        [Loc.T("Common_ViaProxy"), Loc.T("Common_Direct"), Loc.T("Common_Block"), Loc.T("Common_ByeDpi")];
+        [Loc.T("Routing_ToProxy"), Loc.T("Routing_ToDirect"), Loc.T("Routing_ToBlock"), Loc.T("Routing_ToByeDpi")];
 
     public IReadOnlyList<string> FallbackOptions { get; } = [Loc.T("Common_ViaProxy"), Loc.T("Common_Direct")];
 
@@ -80,6 +191,7 @@ public sealed class RoutingViewModel : PageViewModel
             Set(ref field, Math.Max(0, value));
             Raise(nameof(ValueHint));
             Raise(nameof(ShowPickSrs));
+            Raise(nameof(MatchDescription));
         }
     }
 
@@ -111,6 +223,7 @@ public sealed class RoutingViewModel : PageViewModel
             if (value < 0 || value == FallbackIndex) return;
             SetFallback(value == 0);
             Raise();
+            Raise(nameof(FallbackIsProxy));
         }
     }
 
@@ -186,7 +299,11 @@ public sealed class RoutingViewModel : PageViewModel
     public string TestResult
     {
         get;
-        private set => Set(ref field, value);
+        private set
+        {
+            Set(ref field, value);
+            Raise(nameof(ShowTestHint));
+        }
     } = string.Empty;
 
     /// <summary>Исход проверки - по нему подсвечивается результат.</summary>
@@ -197,10 +314,14 @@ public sealed class RoutingViewModel : PageViewModel
         {
             Set(ref field, value);
             Raise(nameof(HasTestResult));
+            Raise(nameof(ShowTestHint));
         }
     }
 
     public bool HasTestResult => TestOutcome is not null;
+
+    /// <summary>Подсказка без исхода - например, «Введите домен».</summary>
+    public bool ShowTestHint => !HasTestResult && TestResult.Length > 0;
 
     /// <summary>
     /// Проверяет домен по текущим правилам, не поднимая туннель. Отвечает
@@ -335,6 +456,20 @@ public sealed class RoutingViewModel : PageViewModel
 
             // Смена набора меняет и значение «всё остальное»
             Raise(nameof(FallbackIndex));
+            Raise(nameof(FallbackIsProxy));
+            WatchRules();
         }
     }
+}
+/// <summary>Готовый набор правил в одно нажатие.</summary>
+public sealed record RoutingPreset(
+    string Key,
+    string Title,
+    string Hint,
+    string Icon,
+    RouteAction Action,
+    IReadOnlyList<(MatchKind Match, string Value)> Rules)
+{
+    public bool IsBlock => Action == RouteAction.Block;
+    public bool IsDirect => Action == RouteAction.Direct;
 }

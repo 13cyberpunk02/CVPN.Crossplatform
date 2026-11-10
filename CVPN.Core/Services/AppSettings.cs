@@ -77,6 +77,13 @@ public sealed class AppSettings : ObservableObject
         set => Set(ref field, value);
     } = true;
 
+    /// <summary>Подсказку «как это работает» на странице маршрутов уже прочитали и закрыли.</summary>
+    public bool RoutingHelpHidden
+    {
+        get;
+        set => Set(ref field, value);
+    }
+
     /// <summary>Запись в разделе автозапуска Windows. Окно открывается сразу в трее.</summary>
     public bool AutoStart
     {

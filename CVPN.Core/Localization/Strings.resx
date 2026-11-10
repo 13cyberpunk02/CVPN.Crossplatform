@@ -532,7 +532,7 @@ If you decline, you can turn TUN off in settings - traffic will then go through 
     <value>Everything else</value>
   </data>
   <data name="Routing_FallbackHint" xml:space="preserve">
-    <value>What to do with traffic that matched no rule</value>
+    <value>Where traffic that matches no rule goes</value>
   </data>
   <data name="Routing_MatchedRule" xml:space="preserve">
     <value>rule {0} {1}</value>
@@ -577,10 +577,10 @@ If you decline, you can turn TUN off in settings - traffic will then go through 
     <value>sing-box rule sets (*.srs)|*.srs|All files (*.*)|*.*</value>
   </data>
   <data name="Routing_Subtitle" xml:space="preserve">
-    <value>Rules are checked top to bottom. The first match decides.</value>
+    <value>Decide what goes through the proxy, what goes direct and what gets blocked.</value>
   </data>
   <data name="Routing_TestHint" xml:space="preserve">
-    <value>test a domain: youtube.com</value>
+    <value>youtube.com</value>
   </data>
   <data name="Routing_UnknownGeoip" xml:space="preserve">
     <value>Above there is geoip ({0}): it wins if the domain resolves to an address in that country - this cannot be checked without connecting.</value>
@@ -1213,5 +1213,155 @@ Restart CVPN now?</value>
   </data>
   <data name="Logs_NothingFound" xml:space="preserve">
     <value>Nothing found</value>
+  </data>
+  <data name="Match_SuffixHint" xml:space="preserve">
+    <value>The domain and all its subdomains: example.com, www.example.com, cdn.example.com</value>
+  </data>
+  <data name="Preset_Ads" xml:space="preserve">
+    <value>Block ads</value>
+  </data>
+  <data name="Routing_SetHint" xml:space="preserve">
+    <value>Keep several sets and switch between them</value>
+  </data>
+  <data name="Routing_HelpHide" xml:space="preserve">
+    <value>Got it</value>
+  </data>
+  <data name="Match_SetRemote" xml:space="preserve">
+    <value>Rule set by URL</value>
+  </data>
+  <data name="Routing_Step1" xml:space="preserve">
+    <value>A site, service, country or app</value>
+  </data>
+  <data name="Routing_AddTitle" xml:space="preserve">
+    <value>Custom rule</value>
+  </data>
+  <data name="Match_SetLocalHint" xml:space="preserve">
+    <value>Your own .srs file from disk</value>
+  </data>
+  <data name="Match_Geoip" xml:space="preserve">
+    <value>Country by IP</value>
+  </data>
+  <data name="Preset_YouTube" xml:space="preserve">
+    <value>YouTube via proxy</value>
+  </data>
+  <data name="Routing_Step2Title" xml:space="preserve">
+    <value>Where</value>
+  </data>
+  <data name="Preset_YouTubeHint" xml:space="preserve">
+    <value>Videos, thumbnails and comments</value>
+  </data>
+  <data name="Routing_Step2" xml:space="preserve">
+    <value>Through the proxy, direct, blocked or through ByeDPI</value>
+  </data>
+  <data name="Routing_What" xml:space="preserve">
+    <value>Match</value>
+  </data>
+  <data name="Match_SetLocal" xml:space="preserve">
+    <value>Rule set from file</value>
+  </data>
+  <data name="Routing_ToByeDpi" xml:space="preserve">
+    <value>Via ByeDPI</value>
+  </data>
+  <data name="Routing_Empty" xml:space="preserve">
+    <value>No rules yet. Add a quick rule or your own above.</value>
+  </data>
+  <data name="Routing_ToProxy" xml:space="preserve">
+    <value>Via proxy</value>
+  </data>
+  <data name="Routing_PresetAdded" xml:space="preserve">
+    <value>Rules added: {0}</value>
+  </data>
+  <data name="Preset_Ru" xml:space="preserve">
+    <value>Russian sites direct</value>
+  </data>
+  <data name="Routing_PresetExists" xml:space="preserve">
+    <value>These rules are already there</value>
+  </data>
+  <data name="Match_GeositeHint" xml:space="preserve">
+    <value>A ready list of a service's domains from sing-geosite: youtube, twitch, netflix, category-ads-all</value>
+  </data>
+  <data name="Routing_HelpTitle" xml:space="preserve">
+    <value>How it works</value>
+  </data>
+  <data name="Match_GeoipHint" xml:space="preserve">
+    <value>All addresses of a country by its two-letter code: ru, de, us</value>
+  </data>
+  <data name="Match_ProcessHint" xml:space="preserve">
+    <value>All traffic of an app, by its file name</value>
+  </data>
+  <data name="Match_SetRemoteHint" xml:space="preserve">
+    <value>Your own .srs file from the web: the core downloads it</value>
+  </data>
+  <data name="Routing_ToBlock" xml:space="preserve">
+    <value>Block</value>
+  </data>
+  <data name="Match_Domain" xml:space="preserve">
+    <value>Exact domain</value>
+  </data>
+  <data name="Match_KeywordHint" xml:space="preserve">
+    <value>Any domain that contains this word</value>
+  </data>
+  <data name="Routing_HelpShow" xml:space="preserve">
+    <value>How does it work?</value>
+  </data>
+  <data name="Routing_Step3" xml:space="preserve">
+    <value>Rules are checked top to bottom and the first match wins. Anything else follows the setting at the bottom</value>
+  </data>
+  <data name="Match_Suffix" xml:space="preserve">
+    <value>Domain and subdomains</value>
+  </data>
+  <data name="Match_Geosite" xml:space="preserve">
+    <value>Service from the list</value>
+  </data>
+  <data name="Match_Keyword" xml:space="preserve">
+    <value>Word in domain</value>
+  </data>
+  <data name="Match_Process" xml:space="preserve">
+    <value>App</value>
+  </data>
+  <data name="Routing_Set" xml:space="preserve">
+    <value>Rule set</value>
+  </data>
+  <data name="Routing_Where" xml:space="preserve">
+    <value>Send to</value>
+  </data>
+  <data name="Preset_RuHint" xml:space="preserve">
+    <value>.ru, .рф and Russian IPs bypass the proxy</value>
+  </data>
+  <data name="Preset_AdsHint" xml:space="preserve">
+    <value>Ads and trackers</value>
+  </data>
+  <data name="Routing_RulesHint" xml:space="preserve">
+    <value>checked top to bottom</value>
+  </data>
+  <data name="Routing_Step3Title" xml:space="preserve">
+    <value>Order</value>
+  </data>
+  <data name="Routing_QuickTitle" xml:space="preserve">
+    <value>Quick rules</value>
+  </data>
+  <data name="Routing_RulesTitle" xml:space="preserve">
+    <value>Rules</value>
+  </data>
+  <data name="Routing_TestTitle" xml:space="preserve">
+    <value>Test a site</value>
+  </data>
+  <data name="Routing_ToDirect" xml:space="preserve">
+    <value>Direct</value>
+  </data>
+  <data name="Preset_TelegramHint" xml:space="preserve">
+    <value>Telegram site and web app</value>
+  </data>
+  <data name="Match_DomainHint" xml:space="preserve">
+    <value>Only this address, no subdomains</value>
+  </data>
+  <data name="Preset_Telegram" xml:space="preserve">
+    <value>Telegram via proxy</value>
+  </data>
+  <data name="Routing_Step1Title" xml:space="preserve">
+    <value>What</value>
+  </data>
+  <data name="Routing_ApplyAfterReconnect" xml:space="preserve">
+    <value>They apply after reconnecting.</value>
   </data>
 </root>

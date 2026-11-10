@@ -45,13 +45,12 @@ public sealed class FlagConverter : IValueConverter
 {
     private static readonly ConcurrentDictionary<string, Bitmap?> Cache = new(StringComparer.OrdinalIgnoreCase);
 
-    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        var code = value as string;
-        if (string.IsNullOrWhiteSpace(code) || code.Length != 2) return null;
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) =>
+        Get(value as string);
 
-        return Cache.GetOrAdd(code, Load);
-    }
+    /// <summary>Флаг по коду страны - и для разметки, и для меню трея.</summary>
+    public static Bitmap? Get(string? code) =>
+        string.IsNullOrWhiteSpace(code) || code.Length != 2 ? null : Cache.GetOrAdd(code, Load);
 
     private static Bitmap? Load(string code)
     {
