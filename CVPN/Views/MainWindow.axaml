@@ -4,9 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="using:CVPN.Views"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="600"
         x:Class="CVPN.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Width="900" Height="640"
         Icon="/Assets/cvpn.ico"
         Title="CVPN">
-        <views:MainView />
+    <views:MainView />
 </Window>

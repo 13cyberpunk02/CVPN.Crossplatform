@@ -1,14 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Точка входа для Windows и Linux. Платформенный код - в Platform/Windows и Platform/Linux. -->
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <!--If you are willing to use platform-specific APIs, use conditional compilation.
-    See https://docs.avaloniaui.net/docs/guides/platforms/platform-specific-code/dotnet for more details.-->
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
-  </PropertyGroup>
-
-  <PropertyGroup>
+    <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>..\CVPN\Assets\cvpn.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,5 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CVPN\CVPN.csproj" />
+    <ProjectReference Include="..\CVPN.Core\CVPN.Core.csproj" />
   </ItemGroup>
 </Project>

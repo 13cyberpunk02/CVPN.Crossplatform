@@ -3,16 +3,50 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:CVPN.ViewModels"
+             xmlns:loc="using:CVPN.Localization"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="CVPN.Views.MainView"
              x:DataType="vm:MainViewModel">
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainViewModel />
-    </Design.DataContext>
 
-    <TextBox Text="{Binding Greeting}"
-             HorizontalAlignment="Center"
-             VerticalAlignment="Center" />
+    <!--
+        Временный экран этапа 1: проверка, что оболочка, платформенные сервисы
+        и подключение работают. Настоящие страницы, тема и круг подключения -
+        этап 2.
+    -->
+    <Grid RowDefinitions="Auto,Auto,Auto,*" Margin="16">
+        <StackPanel Grid.Row="0" Spacing="4">
+            <TextBlock Text="{Binding StateLabel}" FontSize="22" FontWeight="SemiBold" />
+            <TextBlock Text="{Binding ActiveName}" />
+            <TextBlock Text="{Binding ModeTitle}" Opacity="0.7" />
+            <TextBlock Text="{Binding SingBoxVersion}" Opacity="0.7" />
+        </StackPanel>
+
+        <WrapPanel Grid.Row="1" Margin="0,12">
+            <Button Content="{Binding PrimaryActionLabel}" Command="{Binding ToggleConnection}" Margin="0,0,8,8" />
+            <Button Content="{loc:T Common_Check}" Command="{Binding CheckConfig}" Margin="0,0,8,8" />
+            <ComboBox ItemsSource="{Binding Profiles}" SelectedItem="{Binding Active}" MinWidth="200" Margin="0,0,8,8">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </WrapPanel>
+
+        <StackPanel Grid.Row="2" Spacing="6" Margin="0,0,0,12">
+            <Grid ColumnDefinitions="*,Auto">
+                <TextBox Text="{Binding ProfilesPage.LinkText}" PlaceholderText="vless://… anytls://… naive+https://…" />
+                <Button Grid.Column="1" Margin="8,0,0,0" Content="{loc:T Common_Add}"
+                        Command="{Binding ProfilesPage.ImportLink}" />
+            </Grid>
+            <TextBlock Text="{Binding Status}" TextWrapping="Wrap" Foreground="OrangeRed" />
+            <TextBlock>
+                <Run Text="↓" /><Run Text="{Binding Download}" /><Run Text=" " /><Run Text="{Binding DownloadUnit}" />
+                <Run Text="   ↑" /><Run Text="{Binding Upload}" /><Run Text=" " /><Run Text="{Binding UploadUnit}" />
+                <Run Text="   " /><Run Text="{Binding Uptime}" />
+            </TextBlock>
+        </StackPanel>
+
+        <ListBox Grid.Row="3" ItemsSource="{Binding Log}" FontFamily="Consolas,Menlo,monospace" FontSize="12" />
+    </Grid>
 </UserControl>

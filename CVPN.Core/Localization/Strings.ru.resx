@@ -1020,4 +1020,16 @@
   <data name="Settings_TunIpv6Hint" xml:space="preserve">
     <value>Чтобы при подключении открывались локальные приложения, которые слушают IPv6 (::1), - например, dev-серверы Angular и Vite. Интернет-трафик по-прежнему идёт по IPv4.</value>
   </data>
+  <data name="Linux_TunNeedsCap" xml:space="preserve">
+    <value>Для TUN ядру нужны права на управление сетью. Выдайте их один раз: sudo setcap cap_net_admin,cap_net_raw,cap_net_bind_service+ep "{0}" - или используйте режим системного прокси.</value>
+  </data>
+  <data name="Common_Yes" xml:space="preserve">
+    <value>Да</value>
+  </data>
+  <data name="Common_No" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="Android_VpnNotReady" xml:space="preserve">
+    <value>Режим VPN на Android пока не готов. Выключите TUN, чтобы пользоваться локальным прокси на 127.0.0.1.</value>
+  </data>
 </root>
