@@ -100,8 +100,10 @@ public static class ConfigSanitizer
             if (set["type"]?.GetValue<string>() == "local")
             {
                 // Только имя файла: так «..\..\windows\evil.srs» превращается
-                // в «evil.srs» и никуда за пределы каталога не уводит
-                var name = Path.GetFileName(set["path"]?.GetValue<string>() ?? "");
+                // в «evil.srs» и никуда за пределы каталога не уводит. Оба разделителя:
+                // на Linux Path.GetFileName обратную косую черту разделителем не считает
+                var raw = set["path"]?.GetValue<string>() ?? "";
+                var name = Path.GetFileName(raw.Replace('\\', '/'));
                 var full = Path.Combine(rulesDir, name);
 
                 if (name.Length == 0 || !File.Exists(full))

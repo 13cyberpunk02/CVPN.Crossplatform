@@ -21,7 +21,8 @@ public class ProtectedSerializationTests
  
         Assert.DoesNotContain(profile.Uuid, json);
         Assert.DoesNotContain("пароль-для-теста", json);
-        Assert.Contains("dpapi:", json);
+        // DPAPI на Windows, AES-GCM на остальных ОС
+        Assert.Contains(OperatingSystem.IsWindows() ? "dpapi:" : "aes:", json);
     }
  
     [Fact]

@@ -125,8 +125,19 @@ public class XhttpConfigTests
 
     // ===================== ByeDPI =====================
 
+    /// <summary>
+    /// Вне Windows свой путь к ciadpi не выбирается: берётся вшитый byedpi/ciadpi рядом
+    /// с приложением. Для тестов кладём туда пустышку, иначе ByeDPI считается
+    /// не установленным и в конфиг не попадает.
+    /// </summary>
     private static AppSettings WithByeDpi(string path = @"C:\tools\byedpi\ciadpi.exe", int port = 1081)
     {
+        if (!AppSettings.CanChooseByeDpi && !File.Exists(AppPaths.BundledByeDpiPath))
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(AppPaths.BundledByeDpiPath)!);
+            File.WriteAllBytes(AppPaths.BundledByeDpiPath, []);
+        }
+
         var settings = TestData.Settings();
         settings.ByeDpiEnabled = true;
         settings.ByeDpiPath = path;
@@ -174,18 +185,34 @@ public class XhttpConfigTests
 
         Assert.True(guard >= 2, "после sniff и hijack-dns");
         Assert.True(guard < user);
-        Assert.Equal("ciadpi.exe", rules[guard].GetProperty("process_name").EnumerateArray().Single().GetString());
+        Assert.Equal(OperatingSystem.IsWindows() ? "ciadpi.exe" : "ciadpi",
+            rules[guard].GetProperty("process_name").EnumerateArray().Single().GetString());
         Assert.Equal("direct", rules[guard].Str("outbound"));
     }
 
+    /// <summary>Только Windows: свой ciadpi выбирают лишь там.</summary>
     [Fact]
     public void Имя_процесса_берётся_из_пути_а_не_угадывается()
     {
+        if (!AppSettings.CanChooseByeDpi) return;
+
         var config = TestData.BuildConfig(settings: WithByeDpi(@"D:\bin\my-dpi.exe"));
         var rules = config.GetProperty("route").GetProperty("rules").EnumerateArray();
         var guard = rules.Single(r => r.TryGetProperty("process_name", out _));
 
         Assert.Equal("my-dpi.exe", guard.GetProperty("process_name").EnumerateArray().Single().GetString());
+    }
+
+    [Fact]
+    public void Вне_Windows_свой_путь_игнорируется_и_берётся_вшитый_ciadpi()
+    {
+        if (AppSettings.CanChooseByeDpi) return;
+
+        var config = TestData.BuildConfig(settings: WithByeDpi("/home/me/my-dpi"));
+        var rules = config.GetProperty("route").GetProperty("rules").EnumerateArray();
+        var guard = rules.Single(r => r.TryGetProperty("process_name", out _));
+
+        Assert.Equal("ciadpi", guard.GetProperty("process_name").EnumerateArray().Single().GetString());
     }
 
     [Fact]
@@ -245,9 +272,12 @@ public class XhttpConfigTests
         Assert.NotEqual("byedpi", tags[profile]);
     }
 
+    /// <summary>Только Windows: вне Windows путь не вводится, пустое поле значит вшитый ciadpi.</summary>
     [Fact]
     public void Byedpi_без_пути_считается_выключенным()
     {
+        if (!AppSettings.CanChooseByeDpi) return;
+
         var settings = TestData.Settings();
         settings.ByeDpiEnabled = true;
         settings.ByeDpiPath = "  ";
