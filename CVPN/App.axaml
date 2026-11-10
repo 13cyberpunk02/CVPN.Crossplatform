@@ -8,9 +8,9 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="avares://CVPN/Theme/Palette.axaml" />
-                <ResourceInclude Source="avares://CVPN/Theme/Icons.axaml" />
-                <ResourceInclude Source="avares://CVPN/Theme/Kit.axaml" />
+                <ResourceInclude Source="avares://CVPN.UI/Theme/Palette.axaml" />
+                <ResourceInclude Source="avares://CVPN.UI/Theme/Icons.axaml" />
+                <ResourceInclude Source="avares://CVPN.UI/Theme/Kit.axaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <conv:EqualsConverter x:Key="Eq" />
@@ -21,6 +21,6 @@
 
     <Application.Styles>
         <FluentTheme />
-        <StyleInclude Source="avares://CVPN/Theme/Controls.axaml" />
+        <StyleInclude Source="avares://CVPN.UI/Theme/Controls.axaml" />
     </Application.Styles>
 </Application>

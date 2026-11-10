@@ -7,6 +7,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>..\CVPN\Assets\cvpn.ico</ApplicationIcon>
+    <!-- CVPN.exe / ./CVPN - как в WPF-версии: ярлыки, автозапуск и задача планировщика не меняются -->
+    <AssemblyName>CVPN</AssemblyName>
+    <RootNamespace>CVPN.Desktop</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

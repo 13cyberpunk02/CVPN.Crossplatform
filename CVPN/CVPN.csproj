@@ -5,6 +5,8 @@
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>CVPN</RootNamespace>
+    <!-- Имя CVPN занято исполняемым файлом (CVPN.exe из CVPN.Desktop) -->
+    <AssemblyName>CVPN.UI</AssemblyName>
   </PropertyGroup>
   
   <ItemGroup>

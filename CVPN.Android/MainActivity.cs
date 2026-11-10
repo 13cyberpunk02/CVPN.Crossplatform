@@ -6,7 +6,7 @@ using Avalonia.Android;
 namespace CVPN.Android;
 
 [Activity(
-    Label = "CVPN.Android",
+    Label = "CVPN",
     Theme = "@style/MyTheme.NoActionBar",
     Icon = "@drawable/icon",
     MainLauncher = true,

@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=CVPN
+GenericName=VPN client
+GenericName[ru]=VPN-клиент
+Comment=sing-box client with routing rules
+Comment[ru]=Клиент sing-box с правилами маршрутизации
+Exec=CVPN %U
+Icon=cvpn
+Terminal=false
+Categories=Network;
+Keywords=vpn;proxy;sing-box;vless;
+StartupWMClass=CVPN

@@ -30,7 +30,7 @@ public sealed class TrayController : IDisposable
 
         _idle = Load("cvpn-idle.ico");
         _connected = Load("cvpn-connected.ico");
-        _failing = Load("cvpn.ico");
+        _failing = Load("cvpn-failing.ico");
 
         var open = new NativeMenuItem(Loc.T("Tray_Open"));
         open.Click += (_, _) => show();
@@ -132,7 +132,7 @@ public sealed class TrayController : IDisposable
     }
 
     private static WindowIcon Load(string fileName) =>
-        new(AssetLoader.Open(new Uri($"avares://CVPN/Assets/{fileName}")));
+        new(AssetLoader.Open(new Uri($"avares://CVPN.UI/Assets/{fileName}")));
 
     public void Dispose()
     {

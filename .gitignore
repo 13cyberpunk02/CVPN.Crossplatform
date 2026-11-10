@@ -455,3 +455,8 @@ $RECYCLE.BIN/
 
 .idea/
 *.DotSettings.user
+
+# Сборка пакетов
+build/
+dist/
+packaging/windows/payload/

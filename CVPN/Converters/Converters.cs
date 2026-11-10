@@ -55,7 +55,7 @@ public sealed class FlagConverter : IValueConverter
 
     private static Bitmap? Load(string code)
     {
-        var uri = new Uri($"avares://CVPN/Assets/Flags/{code.ToLowerInvariant()}.png");
+        var uri = new Uri($"avares://CVPN.UI/Assets/Flags/{code.ToLowerInvariant()}.png");
 
         try
         {
