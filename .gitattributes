@@ -1,2 +1,3 @@
-# Скрипты для Linux - только LF, иначе /bin/sh спотыкается о 
+# Скрипты и ярлыки для Linux - только LF: /bin/sh и меню приложений не понимают CRLF
 *.sh text eol=lf
+*.desktop text eol=lf
