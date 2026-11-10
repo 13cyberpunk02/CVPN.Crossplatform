@@ -69,18 +69,89 @@ public sealed class ConnectionsViewModel : PageViewModel
 
     private async Task RefreshAsync()
     {
+        if (_frozen) return;
+
         if (Shell.Api is null || !Shell.IsConnected)
         {
-            if (Connections.Count > 0) Connections.Clear();
+            Show([]);
             return;
         }
 
-        var fresh = await Shell.Api.GetConnectionsAsync();
+        Show(await Shell.Api.GetConnectionsAsync());
+    }
+
+    private IReadOnlyList<ConnectionInfo> _all = [];
+    private bool _frozen;
+
+    /// <summary>Поиск по домену, процессу, правилу и выходу. Сводка сверху его не учитывает.</summary>
+    public string Filter
+    {
+        get;
+        set
+        {
+            if (Set(ref field, value)) ApplyFilter();
+        }
+    } = string.Empty;
+
+    public int TotalCount => _all.Count;
+    public bool HasAny => _all.Count > 0;
+    public int ProxyCount => _all.Count(c => c.IsProxy);
+    public int DirectCount => _all.Count(c => c.IsDirect);
+    public int ByeDpiCount => _all.Count(c => c.IsByeDpi);
+
+    public string TotalDownloadLabel => ByteFormat.Size(_all.Sum(c => c.Download));
+    public string TotalUploadLabel => ByteFormat.Size(_all.Sum(c => c.Upload));
+
+    /// <summary>Есть соединения, но поиск их все отсеял.</summary>
+    public bool NothingFound => _all.Count > 0 && Connections.Count == 0;
+
+    private void Show(IReadOnlyList<ConnectionInfo> fresh)
+    {
+        // Полоска под строкой - доля от самого тяжёлого соединения, а не от суммы:
+        // иначе при сотне соединений все полоски были бы пустыми
+        var heaviest = fresh.Count == 0 ? 0 : fresh.Max(c => c.Download + c.Upload);
+        foreach (var item in fresh)
+            item.Share = heaviest > 0 ? (double)(item.Download + item.Upload) / heaviest : 0;
+
+        _all = [.. fresh.OrderByDescending(c => c.Download + c.Upload)];
+        ApplyFilter();
+
+        Raise(nameof(TotalCount));
+        Raise(nameof(HasAny));
+        Raise(nameof(ProxyCount));
+        Raise(nameof(DirectCount));
+        Raise(nameof(ByeDpiCount));
+        Raise(nameof(TotalDownloadLabel));
+        Raise(nameof(TotalUploadLabel));
+    }
+
+    private void ApplyFilter()
+    {
+        var query = Filter.Trim();
+
         Connections.Clear();
 
-        foreach (var item in fresh.OrderByDescending(c => c.Download + c.Upload))
+        foreach (var item in _all.Where(c => Matches(c, query)))
             Connections.Add(item);
+
+        Raise(nameof(NothingFound));
     }
+
+    internal static bool Matches(ConnectionInfo c, string query) =>
+        query.Length == 0
+        || c.Endpoint.Contains(query, StringComparison.OrdinalIgnoreCase)
+        || c.Process.Contains(query, StringComparison.OrdinalIgnoreCase)
+        || c.Rule.Contains(query, StringComparison.OrdinalIgnoreCase)
+        || c.Outbound.Contains(query, StringComparison.OrdinalIgnoreCase);
+
+#if DEBUG
+    /// <summary>Отладочный снимок экрана: показать готовый список и не опрашивать ядро.</summary>
+    public void ShowDemo(IReadOnlyList<ConnectionInfo> items)
+    {
+        _frozen = true;
+        Show(items);
+    }
+#endif
 
     /// <summary>
     /// Правило прямо из списка - ради этого страница и нужна: увидел домен

@@ -70,3 +70,16 @@ public sealed class FlagConverter : IValueConverter
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) =>
         throw new NotSupportedException();
 }
+
+/// <summary>
+/// Число → ширина колонки в звёздах: доли полоски «прокси / напрямую / ByeDPI»
+/// задаются прямо количеством соединений.
+/// </summary>
+public sealed class StarConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture) =>
+        new GridLength(System.Convert.ToDouble(value ?? 0, CultureInfo.InvariantCulture), GridUnitType.Star);
+
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) =>
+        throw new NotSupportedException();
+}

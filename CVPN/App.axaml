@@ -16,6 +16,7 @@
             <conv:EqualsConverter x:Key="Eq" />
             <conv:FlagConverter x:Key="Flag" />
             <conv:IconConverter x:Key="Icon" />
+            <conv:StarConverter x:Key="Star" />
         </ResourceDictionary>
     </Application.Resources>
 

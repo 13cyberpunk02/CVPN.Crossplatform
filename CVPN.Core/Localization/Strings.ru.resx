@@ -1142,4 +1142,31 @@
   <data name="Profiles_PasteHint" xml:space="preserve">
     <value>Добавляет ссылки из буфера обмена, по одной в строке. Адрес https:// считается ссылкой подписки.</value>
   </data>
+  <data name="Connections_Traffic" xml:space="preserve">
+    <value>Трафик</value>
+  </data>
+  <data name="Connection_Traffic" xml:space="preserve">
+    <value>Трафик</value>
+  </data>
+  <data name="Connections_Direct" xml:space="preserve">
+    <value>Напрямую</value>
+  </data>
+  <data name="Connections_Total" xml:space="preserve">
+    <value>Всего</value>
+  </data>
+  <data name="Connections_NothingFound" xml:space="preserve">
+    <value>Ничего не найдено</value>
+  </data>
+  <data name="Connections_Search" xml:space="preserve">
+    <value>Домен, процесс или правило</value>
+  </data>
+  <data name="Connection_ChartEmpty" xml:space="preserve">
+    <value>График появится после подключения</value>
+  </data>
+  <data name="Connection_LastMinute" xml:space="preserve">
+    <value>за последнюю минуту</value>
+  </data>
+  <data name="Connections_ViaProxy" xml:space="preserve">
+    <value>Через прокси</value>
+  </data>
 </root>

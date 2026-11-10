@@ -88,6 +88,9 @@ public partial class App : Application
         var theme = Environment.GetCommandLineArgs()
             .FirstOrDefault(a => a.StartsWith("--theme=", StringComparison.Ordinal))?["--theme=".Length..];
         if (theme is not null) ApplyTheme(theme);
+
+        // --demo - график и список соединений с выдуманными данными: для снимков вёрстки
+        if (Environment.GetCommandLineArgs().Contains("--demo")) FillDemo(Shell);
 #endif
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
@@ -166,6 +169,43 @@ public partial class App : Application
             (ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.Shutdown();
         };
     }
+
+#if DEBUG
+    private static void FillDemo(MainViewModel shell)
+    {
+        var random = new Random(7);
+
+        shell.Session.Begin("Amsterdam - Reality");
+        for (var i = 0; i < 60; i++)
+        {
+            var wave = Math.Sin(i / 6.0) * 0.5 + 0.5;
+            var down = (long)((300 + 2200 * wave + random.Next(0, 600)) * 1024);
+            var up = (long)((40 + 260 * (1 - wave) + random.Next(0, 90)) * 1024);
+            if (i is > 38 and < 44) down *= 2;
+
+            shell.Session.Add(up, down);
+            shell.Traffic.Push(up, down);
+        }
+
+        var now = DateTimeOffset.Now;
+        Models.ConnectionInfo Make(string host, int port, string outbound, string rule, string process, string net,
+            long down, long up, int seconds) => new()
+        {
+            Id = host, Host = host, Port = port, Outbound = outbound, Rule = rule, Process = process,
+            Network = net, Download = down, Upload = up, Started = now.AddSeconds(-seconds)
+        };
+
+        shell.ConnectionsPage.ShowDemo(
+        [
+            Make("rr4---sn-n8v7znsl.googlevideo.com", 443, "proxy", "final", "chrome.exe", "tcp", 48_200_000, 1_100_000, 312),
+            Make("api.telegram.org", 443, "proxy", "domain_suffix=telegram.org", "Telegram.exe", "tcp", 6_400_000, 820_000, 1260),
+            Make("steamcdn-a.akamaihd.net", 443, "direct", "domain_suffix=akamaihd.net", "steam.exe", "tcp", 21_000_000, 240_000, 95),
+            Make("discord.com", 443, "byedpi", "domain_suffix=discord.com", "Discord.exe", "udp", 3_100_000, 1_900_000, 640),
+            Make("gosuslugi.ru", 443, "direct", "geosite-ru", "msedge.exe", "tcp", 900_000, 120_000, 48),
+            Make("github.com", 443, "proxy", "final", "git.exe", "tcp", 310_000, 64_000, 12)
+        ]);
+    }
+#endif
 
     /// <summary>«dark» / «light» / пусто - как в системе (Avalonia следит за ней сама).</summary>
     private void ApplyTheme(string code) => RequestedThemeVariant = code switch

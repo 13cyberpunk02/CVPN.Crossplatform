@@ -35,6 +35,21 @@ public sealed class ConnectionInfo
 
     public bool IsDirect => Outbound.Equals("direct", StringComparison.OrdinalIgnoreCase);
 
+    public bool IsByeDpi => Outbound.Equals("byedpi", StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>Всё, что не напрямую и не через ByeDPI, ушло в туннель.</summary>
+    public bool IsProxy => !IsDirect && !IsByeDpi;
+
+    public string DownloadLabel => ByteFormat.Size(Download);
+
+    public string UploadLabel => ByteFormat.Size(Upload);
+
+    /// <summary>
+    /// Доля от самого «тяжёлого» соединения в списке, 0..1 - для полоски под строкой.
+    /// Считается страницей: соединение само не знает о соседях.
+    /// </summary>
+    public double Share { get; set; }
+
     public string TrafficLabel => $"↑ {ByteFormat.Size(Upload)}  ↓ {ByteFormat.Size(Download)}";
 
     public string DurationLabel

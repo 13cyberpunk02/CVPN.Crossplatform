@@ -1142,4 +1142,31 @@ Restart CVPN now?</value>
   <data name="Profiles_PasteHint" xml:space="preserve">
     <value>Adds links from the clipboard, one per line. An https:// address is treated as a subscription URL.</value>
   </data>
+  <data name="Connections_Traffic" xml:space="preserve">
+    <value>Traffic</value>
+  </data>
+  <data name="Connection_Traffic" xml:space="preserve">
+    <value>Traffic</value>
+  </data>
+  <data name="Connections_Direct" xml:space="preserve">
+    <value>Direct</value>
+  </data>
+  <data name="Connections_Total" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="Connections_NothingFound" xml:space="preserve">
+    <value>Nothing found</value>
+  </data>
+  <data name="Connections_Search" xml:space="preserve">
+    <value>Domain, process or rule</value>
+  </data>
+  <data name="Connection_ChartEmpty" xml:space="preserve">
+    <value>The chart appears once you connect</value>
+  </data>
+  <data name="Connection_LastMinute" xml:space="preserve">
+    <value>last minute</value>
+  </data>
+  <data name="Connections_ViaProxy" xml:space="preserve">
+    <value>Via proxy</value>
+  </data>
 </root>

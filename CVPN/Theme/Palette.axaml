@@ -67,6 +67,10 @@
             <SolidColorBrush x:Key="Tint.Danger" Color="#FFFF6B6B" Opacity="0.14" />
             <SolidColorBrush x:Key="Tint.Warning" Color="#FFF2B54A" Opacity="0.14" />
 
+            <!-- Отдача на графиках и в карточках: фиолетовый, чтобы не спорить с лазурным приёмом -->
+            <SolidColorBrush x:Key="Upload" Color="#FFA78BFA" />
+            <SolidColorBrush x:Key="Tint.Upload" Color="#FFA78BFA" Opacity="0.14" />
+
             <!-- Акцентный градиент: главная кнопка, логотип, дуга круга -->
             <LinearGradientBrush x:Key="AccentGradient" StartPoint="0%,0%" EndPoint="100%,100%">
                 <GradientStop Offset="0" Color="#FF2EA8F0" />
@@ -242,6 +246,9 @@
             <SolidColorBrush x:Key="Tint.Connected" Color="#FF0E9F7B" Opacity="0.14" />
             <SolidColorBrush x:Key="Tint.Danger" Color="#FFD63B3B" Opacity="0.14" />
             <SolidColorBrush x:Key="Tint.Warning" Color="#FFB97800" Opacity="0.14" />
+
+            <SolidColorBrush x:Key="Upload" Color="#FF7C5CE0" />
+            <SolidColorBrush x:Key="Tint.Upload" Color="#FF7C5CE0" Opacity="0.14" />
 
             <!-- Акцентный градиент: главная кнопка, логотип, дуга круга -->
             <LinearGradientBrush x:Key="AccentGradient" StartPoint="0%,0%" EndPoint="100%,100%">

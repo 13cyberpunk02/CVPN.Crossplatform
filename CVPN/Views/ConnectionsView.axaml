@@ -7,22 +7,195 @@
              x:DataType="vm:ConnectionsViewModel"
              x:Name="Root">
 
-    <Grid Classes="page" RowDefinitions="Auto,*">
-        <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
-            <StackPanel>
-                <TextBlock Classes="title" Text="{loc:T Nav_Connections}" />
-                <TextBlock Classes="secondary" Text="{loc:T Connections_Subtitle}" Margin="0,4,0,0" TextWrapping="Wrap" />
-                <TextBlock Classes="status" Text="{Binding Status}" Margin="0,6,0,0" />
-            </StackPanel>
-            <TextBlock Grid.Column="1" Classes="mono" FontSize="{StaticResource Size.Caption}" Margin="10,4,0,0">
-                <Run Text="{Binding Connections.Count, Mode=OneWay}" />
-                <Run Text="{loc:T Common_Active}" />
-            </TextBlock>
-        </Grid>
+    <UserControl.Styles>
+        <!-- Сводка: четыре плитки в ряд, на телефоне по две -->
+        <Style Selector="UniformGrid.summary">
+            <Setter Property="Columns" Value="4" />
+        </Style>
+        <Style Selector=".narrow UniformGrid.summary">
+            <Setter Property="Columns" Value="2" />
+        </Style>
+        <Style Selector="UniformGrid.summary > Border">
+            <Setter Property="Margin" Value="0,0,8,8" />
+        </Style>
+        <Style Selector="Border.tile">
+            <Setter Property="Background" Value="{DynamicResource Surface}" />
+            <Setter Property="CornerRadius" Value="{StaticResource RadiusCard}" />
+            <Setter Property="Padding" Value="12,10" />
+        </Style>
+
+        <!-- Значок: цвет по выходу соединения - главное, что читается взглядом -->
+        <Style Selector="Border.badge">
+            <Setter Property="Width" Value="34" />
+            <Setter Property="Height" Value="34" />
+            <Setter Property="CornerRadius" Value="17" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Background" Value="{DynamicResource Tint.Accent}" />
+        </Style>
+        <Style Selector="Border.badge Path.icon">
+            <Setter Property="Width" Value="16" />
+            <Setter Property="Height" Value="16" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Stroke" Value="{DynamicResource Accent}" />
+        </Style>
+        <Style Selector="Border.badge.direct">
+            <Setter Property="Background" Value="{DynamicResource Tint.Connected}" />
+        </Style>
+        <Style Selector="Border.badge.direct Path.icon">
+            <Setter Property="Stroke" Value="{DynamicResource Connected}" />
+        </Style>
+        <Style Selector="Border.badge.byedpi">
+            <Setter Property="Background" Value="{DynamicResource Tint.Warning}" />
+        </Style>
+        <Style Selector="Border.badge.byedpi Path.icon">
+            <Setter Property="Stroke" Value="{DynamicResource Warning}" />
+        </Style>
+        <Style Selector="Border.badge.neutral">
+            <Setter Property="Background" Value="{DynamicResource SurfaceHover}" />
+        </Style>
+        <Style Selector="Border.badge.neutral Path.icon">
+            <Setter Property="Stroke" Value="{DynamicResource TextSecondary}" />
+        </Style>
+        <Style Selector="Border.badge.small">
+            <Setter Property="Width" Value="28" />
+            <Setter Property="Height" Value="28" />
+            <Setter Property="CornerRadius" Value="14" />
+        </Style>
+        <Style Selector="Border.badge.small Path.icon">
+            <Setter Property="Width" Value="14" />
+            <Setter Property="Height" Value="14" />
+        </Style>
+
+        <!-- Мелкая иконка перед подписью: правило, процесс, протокол -->
+        <Style Selector="Path.meta">
+            <Setter Property="Width" Value="12" />
+            <Setter Property="Height" Value="12" />
+            <Setter Property="StrokeThickness" Value="1.75" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Stroke" Value="{DynamicResource TextFaint}" />
+        </Style>
+
+        <!-- Полоска доли трафика: тонкая, цвета выхода -->
+        <Style Selector="ProgressBar.share">
+            <Setter Property="Height" Value="3" />
+            <Setter Property="MinHeight" Value="3" />
+            <Setter Property="CornerRadius" Value="2" />
+            <Setter Property="Minimum" Value="0" />
+            <Setter Property="Maximum" Value="1" />
+            <Setter Property="Background" Value="{DynamicResource Line}" />
+            <Setter Property="Foreground" Value="{DynamicResource Accent}" />
+        </Style>
+        <Style Selector="ProgressBar.share.direct">
+            <Setter Property="Foreground" Value="{DynamicResource Connected}" />
+        </Style>
+        <Style Selector="ProgressBar.share.byedpi">
+            <Setter Property="Foreground" Value="{DynamicResource Warning}" />
+        </Style>
+
+        <!-- Действия строки: на десктопе справа от полоски доли, на телефоне - отдельной строкой -->
+        <Style Selector="StackPanel.rowActions">
+            <Setter Property="Grid.Row" Value="1" />
+            <Setter Property="Grid.Column" Value="2" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="Margin" Value="16,8,0,0" />
+        </Style>
+        <Style Selector=".narrow StackPanel.rowActions">
+            <Setter Property="Grid.Row" Value="2" />
+            <Setter Property="Grid.Column" Value="0" />
+            <Setter Property="Grid.ColumnSpan" Value="3" />
+            <Setter Property="Margin" Value="0,9,0,0" />
+        </Style>
+        <Style Selector=".narrow ProgressBar.share">
+            <Setter Property="Grid.ColumnSpan" Value="2" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid Classes="page" RowDefinitions="Auto,Auto,Auto,*">
+        <StackPanel Grid.Row="0">
+            <TextBlock Classes="title" Text="{loc:T Nav_Connections}" />
+            <TextBlock Classes="secondary" Text="{loc:T Connections_Subtitle}" Margin="0,4,0,0" TextWrapping="Wrap" />
+            <TextBlock Classes="status" Text="{Binding Status}" Margin="0,6,0,0" />
+        </StackPanel>
+
+        <!-- Сводка -->
+        <UniformGrid Grid.Row="1" Classes="summary" Margin="0,16,-8,0">
+            <Border Classes="tile">
+                <Grid ColumnDefinitions="Auto,*">
+                    <Border Classes="badge small neutral">
+                        <Path Classes="icon" Data="{StaticResource Icon.connections}" />
+                    </Border>
+                    <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
+                        <TextBlock Classes="metric" FontSize="17" Text="{Binding TotalCount}" />
+                        <TextBlock Classes="caption" Text="{loc:T Connections_Total}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+            <Border Classes="tile">
+                <Grid ColumnDefinitions="Auto,*">
+                    <Border Classes="badge small">
+                        <Path Classes="icon" Data="{StaticResource Icon.Globe}" />
+                    </Border>
+                    <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
+                        <TextBlock Classes="metric" FontSize="17" Text="{Binding ProxyCount}" />
+                        <TextBlock Classes="caption" Text="{loc:T Connections_ViaProxy}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+            <Border Classes="tile">
+                <Grid ColumnDefinitions="Auto,*">
+                    <Border Classes="badge small direct">
+                        <Path Classes="icon" Data="{StaticResource Icon.Direct}" />
+                    </Border>
+                    <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
+                        <TextBlock Classes="metric" FontSize="17" Text="{Binding DirectCount}" />
+                        <TextBlock Classes="caption" Text="{loc:T Connections_Direct}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+            <Border Classes="tile">
+                <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
+                    <Border Grid.RowSpan="2" Classes="badge small neutral">
+                        <Path Classes="icon" Data="{StaticResource Icon.Chart}" />
+                    </Border>
+                    <StackPanel Grid.Column="1" Margin="10,0,0,0" Orientation="Horizontal" Spacing="5">
+                        <Path Classes="icon meta" Data="{StaticResource Icon.Down}" Stroke="{DynamicResource Accent}" />
+                        <TextBlock Classes="mono" Foreground="{DynamicResource Text}" Text="{Binding TotalDownloadLabel}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="1" Margin="10,2,0,0" Orientation="Horizontal" Spacing="5">
+                        <Path Classes="icon meta" Data="{StaticResource Icon.Up}" Stroke="{DynamicResource Upload}" />
+                        <TextBlock Classes="mono" Foreground="{DynamicResource Text}" Text="{Binding TotalUploadLabel}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </UniformGrid>
+
+        <!-- Доли выходов одной полосой и поиск -->
+        <StackPanel Grid.Row="2" Spacing="12" Margin="0,4,0,0" IsVisible="{Binding HasAny}">
+            <Border Height="6" CornerRadius="3" ClipToBounds="True">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="{Binding ProxyCount, Converter={StaticResource Star}}" />
+                        <ColumnDefinition Width="{Binding DirectCount, Converter={StaticResource Star}}" />
+                        <ColumnDefinition Width="{Binding ByeDpiCount, Converter={StaticResource Star}}" />
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" Background="{DynamicResource Accent}" />
+                    <Border Grid.Column="1" Background="{DynamicResource Connected}" />
+                    <Border Grid.Column="2" Background="{DynamicResource Warning}" />
+                </Grid>
+            </Border>
+
+            <TextBox Text="{Binding Filter}" PlaceholderText="{loc:T Connections_Search}">
+                <TextBox.InnerLeftContent>
+                    <Path Classes="icon" Data="{StaticResource Icon.Search}" Width="14" Height="14"
+                          Stroke="{DynamicResource TextFaint}" Margin="12,0,0,0" />
+                </TextBox.InnerLeftContent>
+            </TextBox>
+        </StackPanel>
 
         <!-- Пустой список при отключённом туннеле - не ошибка, а нормальное состояние -->
-        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="14"
-                    IsVisible="{Binding Connections.Count, Converter={StaticResource Eq}, ConverterParameter=0}">
+        <StackPanel Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="14"
+                    IsVisible="{Binding !HasAny}">
             <Border Width="56" Height="56" CornerRadius="28" HorizontalAlignment="Center"
                     Background="{DynamicResource Surface}" BorderBrush="{DynamicResource Line}" BorderThickness="1">
                 <Path Classes="icon large" Data="{StaticResource Icon.connections}"
@@ -32,61 +205,110 @@
                        TextWrapping="Wrap" MaxWidth="320" TextAlignment="Center" />
         </StackPanel>
 
-        <ListBox Grid.Row="1" Classes="plain tight" Margin="0,16,0,0" ItemsSource="{Binding Connections}">
+        <StackPanel Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="12"
+                    IsVisible="{Binding NothingFound}">
+            <Path Classes="icon large" Data="{StaticResource Icon.Search}" Stroke="{DynamicResource TextFaint}"
+                  HorizontalAlignment="Center" />
+            <TextBlock Classes="secondary" Text="{loc:T Connections_NothingFound}" HorizontalAlignment="Center" />
+        </StackPanel>
+
+        <ListBox Grid.Row="3" Classes="plain tight" Margin="0,12,0,0" ItemsSource="{Binding Connections}">
             <ListBox.ItemTemplate>
                 <DataTemplate x:DataType="models:ConnectionInfo">
                     <Border Classes="item compact">
-                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
-                            <StackPanel Grid.Column="0">
-                                <StackPanel Orientation="Horizontal" Spacing="9">
-                                    <!-- Цвет метки выхода - главное, что читается взглядом -->
-                                    <Border Classes="tag" Classes.direct="{Binding IsDirect}">
+                        <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto,Auto">
+                            <Border Classes="badge" Classes.direct="{Binding IsDirect}" Classes.byedpi="{Binding IsByeDpi}">
+                                <Panel>
+                                    <Path Classes="icon" Data="{StaticResource Icon.Globe}" IsVisible="{Binding IsProxy}" />
+                                    <Path Classes="icon" Data="{StaticResource Icon.Direct}" IsVisible="{Binding IsDirect}" />
+                                    <Path Classes="icon" Data="{StaticResource Icon.Bolt}" IsVisible="{Binding IsByeDpi}" />
+                                </Panel>
+                            </Border>
+
+                            <StackPanel Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center">
+                                <TextBlock Classes="mono" Foreground="{DynamicResource Text}" FontWeight="SemiBold"
+                                           Text="{Binding Endpoint}" TextTrimming="CharacterEllipsis" />
+                                <WrapPanel Margin="0,4,0,0">
+                                    <Border Classes="tag" Classes.direct="{Binding IsDirect}" Classes.byedpi="{Binding IsByeDpi}"
+                                            Padding="6,1" Margin="0,0,10,2">
                                         <TextBlock FontFamily="{StaticResource Font.Mono}" Text="{Binding Outbound}" />
                                     </Border>
-                                    <TextBlock Classes="mono" Foreground="{DynamicResource Text}" Text="{Binding Endpoint}"
-                                               VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
-                                </StackPanel>
-                                <WrapPanel Margin="0,5,0,0">
-                                    <TextBlock Classes="caption" Text="{Binding Rule}" TextTrimming="CharacterEllipsis"
-                                               MaxWidth="260" Margin="0,0,10,0" />
-                                    <TextBlock Classes="caption" Foreground="{DynamicResource TextFaint}"
-                                               Text="{Binding Process}" Margin="0,0,10,0" />
-                                    <TextBlock Classes="caption" Foreground="{DynamicResource TextFaint}"
-                                               Text="{Binding Network}" />
+                                    <StackPanel Orientation="Horizontal" Spacing="4" Margin="0,0,10,2"
+                                                IsVisible="{Binding Rule, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                                        <Path Classes="icon meta" Data="{StaticResource Icon.routing}" />
+                                        <TextBlock Classes="caption" Text="{Binding Rule}" TextTrimming="CharacterEllipsis"
+                                                   MaxWidth="240" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Spacing="4" Margin="0,0,10,2"
+                                                IsVisible="{Binding Process, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                                        <Path Classes="icon meta" Data="{StaticResource Icon.App}" />
+                                        <TextBlock Classes="caption" Text="{Binding Process}" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                    <Border Classes="tag neutral" Padding="6,1" Margin="0,0,0,2">
+                                        <TextBlock Text="{Binding Network}" />
+                                    </Border>
                                 </WrapPanel>
                             </StackPanel>
 
-                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="12,0,0,0">
-                                <TextBlock Classes="mono" FontSize="{StaticResource Size.Caption}"
-                                           Text="{Binding TrafficLabel}" HorizontalAlignment="Right" />
-                                <TextBlock Classes="caption" Foreground="{DynamicResource TextFaint}"
-                                           Text="{Binding DurationLabel}" HorizontalAlignment="Right" Margin="0,3,0,0" />
+                            <!-- Трафик и время: цифры столбиком, как на главной -->
+                            <StackPanel Grid.Column="2" Margin="12,0,0,0" VerticalAlignment="Center" Spacing="2">
+                                <StackPanel Orientation="Horizontal" Spacing="4" HorizontalAlignment="Right">
+                                    <Path Classes="icon meta" Data="{StaticResource Icon.Down}" Stroke="{DynamicResource Accent}" />
+                                    <TextBlock Classes="mono" FontSize="{StaticResource Size.Caption}"
+                                               Foreground="{DynamicResource Text}" Text="{Binding DownloadLabel}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Spacing="4" HorizontalAlignment="Right">
+                                    <Path Classes="icon meta" Data="{StaticResource Icon.Up}" Stroke="{DynamicResource Upload}" />
+                                    <TextBlock Classes="mono" FontSize="{StaticResource Size.Caption}" Text="{Binding UploadLabel}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Spacing="4" HorizontalAlignment="Right">
+                                    <Path Classes="icon meta" Data="{StaticResource Icon.Clock}" />
+                                    <TextBlock Classes="caption" Foreground="{DynamicResource TextFaint}"
+                                               FontFamily="{StaticResource Font.Mono}" Text="{Binding DurationLabel}" />
+                                </StackPanel>
                             </StackPanel>
+
+                            <!-- Доля от самого тяжёлого соединения -->
+                            <ProgressBar Grid.Row="1" Grid.Column="1" Classes="share" VerticalAlignment="Center"
+                                         Classes.direct="{Binding IsDirect}" Classes.byedpi="{Binding IsByeDpi}"
+                                         Margin="12,8,0,0" Value="{Binding Share}" />
 
                             <!-- Предлагаем противоположное тому, что происходит сейчас:
                                  для прокси - «напрямую», для прямого - «через прокси» -->
-                            <WrapPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="0,6,0,0">
-                                <Button Classes="small" Content="{loc:T Connections_MakeDirect}"
-                                        ToolTip.Tip="{loc:T Connections_MakeDirectHint}"
+                            <StackPanel Classes="rowActions" Orientation="Horizontal" Spacing="6">
+                                <Button Classes="small" ToolTip.Tip="{loc:T Connections_MakeDirectHint}"
                                         IsVisible="{Binding !IsDirect}"
                                         Command="{Binding #Root.((vm:ConnectionsViewModel)DataContext).RuleDirect}"
-                                        CommandParameter="{Binding}" />
-                                <Button Classes="small" Content="{loc:T Connections_MakeProxy}"
-                                        ToolTip.Tip="{loc:T Connections_MakeProxyHint}"
+                                        CommandParameter="{Binding}">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <Path Classes="icon" Data="{StaticResource Icon.Direct}" />
+                                        <TextBlock Text="{loc:T Connections_MakeDirect}" />
+                                    </StackPanel>
+                                </Button>
+                                <Button Classes="small" ToolTip.Tip="{loc:T Connections_MakeProxyHint}"
                                         IsVisible="{Binding IsDirect}"
                                         Command="{Binding #Root.((vm:ConnectionsViewModel)DataContext).RuleProxy}"
-                                        CommandParameter="{Binding}" />
-                                <Button Classes="small" Content="{loc:T Connections_MakeBlock}"
-                                        ToolTip.Tip="{loc:T Connections_MakeBlockHint}"
+                                        CommandParameter="{Binding}">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <Path Classes="icon" Data="{StaticResource Icon.Globe}" />
+                                        <TextBlock Text="{loc:T Connections_MakeProxy}" />
+                                    </StackPanel>
+                                </Button>
+                                <Button Classes="small" ToolTip.Tip="{loc:T Connections_MakeBlockHint}"
                                         Command="{Binding #Root.((vm:ConnectionsViewModel)DataContext).RuleBlock}"
-                                        CommandParameter="{Binding}" />
-                                <Button Classes="ghost small icon"
+                                        CommandParameter="{Binding}">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <Path Classes="icon" Data="{StaticResource Icon.Ban}" />
+                                        <TextBlock Text="{loc:T Connections_MakeBlock}" />
+                                    </StackPanel>
+                                </Button>
+                                <Button Classes="ghost small icon remove"
                                         ToolTip.Tip="{loc:T Connections_CloseHint}"
                                         Command="{Binding #Root.((vm:ConnectionsViewModel)DataContext).CloseConnection}"
                                         CommandParameter="{Binding}">
                                     <Path Classes="icon" Data="{StaticResource Icon.X}" />
                                 </Button>
-                            </WrapPanel>
+                            </StackPanel>
                         </Grid>
                     </Border>
                 </DataTemplate>

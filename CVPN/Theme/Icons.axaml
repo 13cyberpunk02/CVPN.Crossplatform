@@ -51,4 +51,22 @@
     <StreamGeometry x:Key="Icon.Check">M 5 12.5 L 10 17 L 19 7</StreamGeometry>
     <StreamGeometry x:Key="Icon.X">M 7 7 L 17 17 M 17 7 L 7 17</StreamGeometry>
     <StreamGeometry x:Key="Icon.Rules">M 9 6 L 20 6 M 9 12 L 20 12 M 9 18 L 20 18 M 4 6 L 4.01 6 M 4 12 L 4.01 12 M 4 18 L 4.01 18</StreamGeometry>
+
+    <!-- ===== статистика ===== -->
+    <StreamGeometry x:Key="Icon.Clock">M 12 3 A 9 9 0 1 1 11.99 3 Z M 12 7 L 12 12 L 15.5 14</StreamGeometry>
+    <!-- Пик: спидометр -->
+    <StreamGeometry x:Key="Icon.Gauge">M 4.2 17 A 9 9 0 1 1 19.8 17 M 12 13 L 16 8.5 M 12 13 A 0.5 0.5 0 1 0 12.01 13</StreamGeometry>
+    <!-- Через прокси: глобус -->
+    <StreamGeometry x:Key="Icon.Globe">M 12 3 A 9 9 0 1 1 11.99 3 Z M 3 12 L 21 12 M 12 3 C 8.5 7 8.5 17 12 21 M 12 3 C 15.5 7 15.5 17 12 21</StreamGeometry>
+    <!-- Напрямую: стрелка вправо -->
+    <StreamGeometry x:Key="Icon.Direct">M 4 12 L 19 12 M 13 6 L 19 12 L 13 18</StreamGeometry>
+    <!-- ByeDPI в строке соединения: молния -->
+    <StreamGeometry x:Key="Icon.Bolt">M 13 2 L 4 14 L 12 14 L 11 22 L 20 10 L 12 10 Z</StreamGeometry>
+    <!-- Блокировать: перечёркнутый круг -->
+    <StreamGeometry x:Key="Icon.Ban">M 12 3 A 9 9 0 1 1 11.99 3 Z M 5.6 5.6 L 18.4 18.4</StreamGeometry>
+    <StreamGeometry x:Key="Icon.Search">M 10.5 4 A 6.5 6.5 0 1 1 10.49 4 Z M 15.5 15.5 L 20 20</StreamGeometry>
+    <!-- Процесс: окно приложения -->
+    <StreamGeometry x:Key="Icon.App">M 4 5 L 20 5 L 20 19 L 4 19 Z M 4 9 L 20 9 M 7 7 L 7.01 7 M 9.5 7 L 9.51 7</StreamGeometry>
+    <!-- Трафик: график -->
+    <StreamGeometry x:Key="Icon.Chart">M 3 3 L 3 21 L 21 21 M 7 15 L 11 10 L 14 13 L 20 6</StreamGeometry>
 </ResourceDictionary>

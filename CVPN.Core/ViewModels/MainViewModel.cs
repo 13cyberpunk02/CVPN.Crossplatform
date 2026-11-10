@@ -157,6 +157,9 @@ public sealed class MainViewModel : ObservableObject
     /// <summary>Итоги текущей сессии: сколько прошло трафика и за какое время.</summary>
     public SessionStats Session { get; } = new();
 
+    /// <summary>Скорость за последнюю минуту - для графика на главной странице.</summary>
+    public TrafficHistory Traffic { get; } = new();
+
     public AppSettings Settings { get; }
 
     public ICommand ToggleConnection { get; }
@@ -466,6 +469,7 @@ public sealed class MainViewModel : ObservableObject
 
         _adapterErrorSeen = false;
         Session.Begin(Active.Name);
+        Traffic.Clear();
         _connectedAt = DateTime.Now;
         _uptimeTimer.Start();
         State = TunnelState.Connected;
@@ -704,6 +708,7 @@ public sealed class MainViewModel : ObservableObject
         (Download, DownloadUnit) = ByteFormat.Rate(down);
 
         Session.Add(up, down);
+        Traffic.Push(up, down);
     });
 
     public void AddRule(MatchKind match, string value, RouteAction action)

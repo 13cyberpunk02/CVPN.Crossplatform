@@ -14,6 +14,9 @@
         <Style Selector=".narrow UniformGrid.session">
             <Setter Property="Columns" Value="2" />
         </Style>
+        <Style Selector="UniformGrid.session > Grid.stat">
+            <Setter Property="Margin" Value="0,0,8,8" />
+        </Style>
         <!-- Выбор сервера: фиксированной ширины на десктопе, во всю строку на телефоне -->
         <Style Selector="ComboBox.server">
             <Setter Property="Width" Value="300" />
@@ -27,6 +30,86 @@
             <Setter Property="Padding" Value="14,12" />
             <Setter Property="BorderThickness" Value="0" />
         </Style>
+        <Style Selector="Border.chart">
+            <Setter Property="Padding" Value="16,14,16,10" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+
+        <!-- Значок показателя: круг с подложкой цвета показателя -->
+        <Style Selector="Border.badge">
+            <Setter Property="Width" Value="38" />
+            <Setter Property="Height" Value="38" />
+            <Setter Property="CornerRadius" Value="19" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Background" Value="{DynamicResource SurfaceHover}" />
+        </Style>
+        <Style Selector="Border.badge Path.icon">
+            <Setter Property="Width" Value="17" />
+            <Setter Property="Height" Value="17" />
+            <Setter Property="StrokeThickness" Value="2" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Stroke" Value="{DynamicResource TextSecondary}" />
+        </Style>
+        <Style Selector="Border.badge.small">
+            <Setter Property="Width" Value="32" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="CornerRadius" Value="16" />
+        </Style>
+        <Style Selector="Border.badge.small Path.icon">
+            <Setter Property="Width" Value="15" />
+            <Setter Property="Height" Value="15" />
+            <Setter Property="StrokeThickness" Value="1.75" />
+        </Style>
+        <Style Selector="Border.badge.down">
+            <Setter Property="Background" Value="{DynamicResource Tint.Accent}" />
+        </Style>
+        <Style Selector="Border.badge.down Path.icon">
+            <Setter Property="Stroke" Value="{DynamicResource Accent}" />
+        </Style>
+        <Style Selector="Border.badge.up">
+            <Setter Property="Background" Value="{DynamicResource Tint.Upload}" />
+        </Style>
+        <Style Selector="Border.badge.up Path.icon">
+            <Setter Property="Stroke" Value="{DynamicResource Upload}" />
+        </Style>
+        <Style Selector="Border.badge.rules">
+            <Setter Property="Background" Value="{DynamicResource Tint.Connected}" />
+        </Style>
+        <Style Selector="Border.badge.rules Path.icon">
+            <Setter Property="Stroke" Value="{DynamicResource Connected}" />
+        </Style>
+        <Style Selector="Border.badge.peak">
+            <Setter Property="Background" Value="{DynamicResource Tint.Warning}" />
+        </Style>
+        <Style Selector="Border.badge.peak Path.icon">
+            <Setter Property="Stroke" Value="{DynamicResource Warning}" />
+        </Style>
+
+        <!-- Скорость: три карточки в ряд; на телефоне значок встаёт над цифрой, иначе не влезает -->
+        <Style Selector="UniformGrid.speeds > Border">
+            <Setter Property="Margin" Value="0,0,10,0" />
+        </Style>
+        <Style Selector=".narrow UniformGrid.speeds > Border">
+            <Setter Property="Margin" Value="0,0,8,0" />
+        </Style>
+        <Style Selector="StackPanel.speed">
+            <Setter Property="Orientation" Value="Horizontal" />
+            <Setter Property="Spacing" Value="12" />
+        </Style>
+        <Style Selector=".narrow StackPanel.speed">
+            <Setter Property="Orientation" Value="Vertical" />
+            <Setter Property="Spacing" Value="8" />
+        </Style>
+        <Style Selector=".narrow StackPanel.speed TextBlock.metric">
+            <Setter Property="FontSize" Value="17" />
+        </Style>
+        <Style Selector=".narrow Border.badge">
+            <Setter Property="Width" Value="32" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="CornerRadius" Value="16" />
+        </Style>
+
         <!-- Сияние за кругом: лазурное, при подключении плавно сменяется зелёным -->
         <Style Selector="Border.glow">
             <Setter Property="Transitions">
@@ -49,7 +132,7 @@
     <Border Classes="glow live" Classes.on="{Binding IsConnected}" Background="{DynamicResource HeroGlowConnected}" />
 
     <ScrollViewer HorizontalScrollBarVisibility="Disabled">
-        <Grid Classes="page" RowDefinitions="Auto,*,Auto,Auto,Auto,Auto">
+        <Grid Classes="page" RowDefinitions="Auto,*,Auto,Auto,Auto,Auto,Auto">
 
             <!-- Сервер выбирается прямо здесь; состояние уже показано в шапке окна и кругом -->
             <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
@@ -70,79 +153,161 @@
                 <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
                     <Button Classes="small" Content="{loc:T Connection_Measure}"
                             FontSize="{StaticResource Size.Caption}" Command="{Binding MeasureDelay}" />
-                    <TextBlock Classes="mono" Text="{Binding Uptime}" VerticalAlignment="Center"
-                               FontSize="{StaticResource Size.Caption}" />
+                    <StackPanel Orientation="Horizontal" Spacing="5" VerticalAlignment="Center">
+                        <Path Classes="icon" Data="{StaticResource Icon.Clock}" Width="13" Height="13"
+                              Stroke="{DynamicResource TextMuted}" />
+                        <TextBlock Classes="mono" Text="{Binding Uptime}" VerticalAlignment="Center"
+                                   FontSize="{StaticResource Size.Caption}" />
+                    </StackPanel>
                 </StackPanel>
             </Grid>
 
             <c:ConnectDial Grid.Row="1" Margin="0,16" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
-            <!-- Показатели -->
-            <UniformGrid Grid.Row="2" Columns="3">
-                <Border Classes="card metric" Margin="0,0,5,0">
-                    <StackPanel>
-                        <TextBlock Classes="caption" Text="{loc:T Connection_Download}" />
-                        <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,3,0,0">
-                            <TextBlock Classes="metric" Text="{Binding Download}" />
-                            <TextBlock Classes="caption" Text="{Binding DownloadUnit}" VerticalAlignment="Bottom"
-                                       Margin="0,0,0,2" />
+            <!-- Скорость сейчас: у приёма и отдачи свой цвет - тот же, что на графике -->
+            <UniformGrid Grid.Row="2" Classes="speeds" Columns="3" Margin="0,0,-10,0">
+                <Border Classes="card metric">
+                    <StackPanel Classes="speed">
+                        <Border Classes="badge down">
+                            <Path Classes="icon" Data="{StaticResource Icon.Down}" />
+                        </Border>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Classes="caption" Text="{loc:T Connection_Download}" />
+                            <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,1,0,0">
+                                <TextBlock Classes="metric" Text="{Binding Download}" />
+                                <TextBlock Classes="caption" Text="{Binding DownloadUnit}"
+                                           VerticalAlignment="Bottom" Margin="0,0,0,3" />
+                            </StackPanel>
                         </StackPanel>
                     </StackPanel>
                 </Border>
-                <Border Classes="card metric" Margin="5,0">
-                    <StackPanel>
-                        <TextBlock Classes="caption" Text="{loc:T Connection_Upload}" />
-                        <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,3,0,0">
-                            <TextBlock Classes="metric" Text="{Binding Upload}" />
-                            <TextBlock Classes="caption" Text="{Binding UploadUnit}" VerticalAlignment="Bottom"
-                                       Margin="0,0,0,2" />
+                <Border Classes="card metric">
+                    <StackPanel Classes="speed">
+                        <Border Classes="badge up">
+                            <Path Classes="icon" Data="{StaticResource Icon.Up}" />
+                        </Border>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Classes="caption" Text="{loc:T Connection_Upload}" />
+                            <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,1,0,0">
+                                <TextBlock Classes="metric" Text="{Binding Upload}" />
+                                <TextBlock Classes="caption" Text="{Binding UploadUnit}"
+                                           VerticalAlignment="Bottom" Margin="0,0,0,3" />
+                            </StackPanel>
                         </StackPanel>
                     </StackPanel>
                 </Border>
-                <Border Classes="card metric" Margin="5,0,0,0">
-                    <StackPanel>
-                        <TextBlock Classes="caption" Text="{loc:T Connection_Rules}" />
-                        <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,3,0,0">
-                            <TextBlock Classes="metric" Text="{Binding ActiveRuleCount}" />
-                            <TextBlock Classes="caption" Text="{loc:T Common_Active}" VerticalAlignment="Bottom"
-                                       Margin="0,0,0,2" />
+                <Border Classes="card metric rules">
+                    <StackPanel Classes="speed">
+                        <Border Classes="badge rules">
+                            <Path Classes="icon" Data="{StaticResource Icon.Rules}" />
+                        </Border>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Classes="caption" Text="{loc:T Connection_Rules}" />
+                            <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,1,0,0">
+                                <TextBlock Classes="metric" Text="{Binding ActiveRuleCount}" />
+                                <TextBlock Classes="caption" Text="{loc:T Common_Active}"
+                                           VerticalAlignment="Bottom" Margin="0,0,0,3" />
+                            </StackPanel>
                         </StackPanel>
                     </StackPanel>
                 </Border>
             </UniformGrid>
 
+            <!-- График скорости за последнюю минуту -->
+            <Border Grid.Row="3" Classes="card chart" Margin="0,10,0,0">
+                <Grid RowDefinitions="Auto,Auto">
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <Path Classes="icon" Data="{StaticResource Icon.Chart}" Stroke="{DynamicResource Accent}" />
+                        <TextBlock Grid.Column="1" Margin="9,0,0,0" VerticalAlignment="Center"
+                                   TextTrimming="CharacterEllipsis">
+                            <Run Text="{loc:T Connection_Traffic}" FontWeight="SemiBold" />
+                            <Run Text=" " />
+                            <Run Text="{loc:T Connection_LastMinute}" FontSize="{StaticResource Size.Caption}"
+                                 Foreground="{DynamicResource TextFaint}" />
+                        </TextBlock>
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="14" VerticalAlignment="Center"
+                                    Margin="10,0,0,0">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <Ellipse Width="8" Height="8" Fill="{DynamicResource Accent}" VerticalAlignment="Center" />
+                                <TextBlock Classes="caption" Text="{loc:T Connection_Download}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <Ellipse Width="8" Height="8" Fill="{DynamicResource Upload}" VerticalAlignment="Center" />
+                                <TextBlock Classes="caption" Text="{loc:T Connection_Upload}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                    <Panel Grid.Row="1" Height="150" Margin="0,14,0,0">
+                        <c:TrafficChart History="{Binding Traffic}"
+                                        DownloadBrush="{DynamicResource Accent}"
+                                        UploadBrush="{DynamicResource Upload}"
+                                        GridBrush="{DynamicResource Line}"
+                                        LabelBrush="{DynamicResource TextFaint}"
+                                        FontFamily="{StaticResource Font.Mono}" />
+                        <TextBlock Classes="caption" Text="{loc:T Connection_ChartEmpty}"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center" Margin="58,0,0,0"
+                                   IsVisible="{Binding !Session.HasData}" />
+                    </Panel>
+                </Grid>
+            </Border>
+
             <!-- Итоги сессии остаются после отключения: их для того и собирали -->
-            <Border Grid.Row="3" Classes="card metric" Margin="0,10,0,0" IsVisible="{Binding Session.HasData}">
+            <Border Grid.Row="4" Classes="card metric" Margin="0,10,0,0" IsVisible="{Binding Session.HasData}">
                 <StackPanel>
                     <Grid ColumnDefinitions="*,Auto">
-                        <TextBlock Classes="label" Text="{loc:T Connection_Session}" />
-                        <TextBlock Grid.Column="1" Classes="caption" Text="{Binding Session.Server}" />
+                        <TextBlock Classes="label" Text="{loc:T Connection_Session}" VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="1" Classes="caption" Text="{Binding Session.Server}"
+                                   TextTrimming="CharacterEllipsis" Margin="12,0,0,0" />
                     </Grid>
-                    <UniformGrid Classes="session" Margin="0,10,0,0">
-                        <StackPanel Margin="0,0,0,6">
-                            <TextBlock Classes="mono" Foreground="{DynamicResource Text}" Text="{Binding Session.DurationLabel}" />
-                            <TextBlock Classes="caption" Text="{loc:T Connection_Duration}" Margin="0,3,0,0" />
-                        </StackPanel>
-                        <StackPanel Margin="0,0,0,6">
-                            <TextBlock Classes="mono" Foreground="{DynamicResource Text}" Text="{Binding Session.DownloadLabel}" />
-                            <TextBlock Classes="caption" Text="{loc:T Connection_Received}" Margin="0,3,0,0" />
-                        </StackPanel>
-                        <StackPanel Margin="0,0,0,6">
-                            <TextBlock Classes="mono" Foreground="{DynamicResource Text}" Text="{Binding Session.UploadLabel}" />
-                            <TextBlock Classes="caption" Text="{loc:T Connection_Sent}" Margin="0,3,0,0" />
-                        </StackPanel>
-                        <StackPanel Margin="0,0,0,6">
-                            <TextBlock Classes="mono" Foreground="{DynamicResource Text}" Text="{Binding Session.PeakLabel}" />
-                            <TextBlock Classes="caption" Text="{loc:T Connection_Peak}" Margin="0,3,0,0" />
-                        </StackPanel>
+                    <UniformGrid Classes="session" Margin="0,12,0,-8">
+                        <Grid Classes="stat" ColumnDefinitions="Auto,*">
+                            <Border Classes="badge small">
+                                <Path Classes="icon" Data="{StaticResource Icon.Clock}" />
+                            </Border>
+                            <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
+                                <TextBlock Classes="mono" Foreground="{DynamicResource Text}"
+                                           Text="{Binding Session.DurationLabel}" />
+                                <TextBlock Classes="caption" Text="{loc:T Connection_Duration}" />
+                            </StackPanel>
+                        </Grid>
+                        <Grid Classes="stat" ColumnDefinitions="Auto,*">
+                            <Border Classes="badge small down">
+                                <Path Classes="icon" Data="{StaticResource Icon.Down}" />
+                            </Border>
+                            <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
+                                <TextBlock Classes="mono" Foreground="{DynamicResource Text}"
+                                           Text="{Binding Session.DownloadLabel}" />
+                                <TextBlock Classes="caption" Text="{loc:T Connection_Received}" />
+                            </StackPanel>
+                        </Grid>
+                        <Grid Classes="stat" ColumnDefinitions="Auto,*">
+                            <Border Classes="badge small up">
+                                <Path Classes="icon" Data="{StaticResource Icon.Up}" />
+                            </Border>
+                            <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
+                                <TextBlock Classes="mono" Foreground="{DynamicResource Text}"
+                                           Text="{Binding Session.UploadLabel}" />
+                                <TextBlock Classes="caption" Text="{loc:T Connection_Sent}" />
+                            </StackPanel>
+                        </Grid>
+                        <Grid Classes="stat" ColumnDefinitions="Auto,*">
+                            <Border Classes="badge small peak">
+                                <Path Classes="icon" Data="{StaticResource Icon.Gauge}" />
+                            </Border>
+                            <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
+                                <TextBlock Classes="mono" Foreground="{DynamicResource Text}"
+                                           Text="{Binding Session.PeakLabel}" />
+                                <TextBlock Classes="caption" Text="{loc:T Connection_Peak}" />
+                            </StackPanel>
+                        </Grid>
                     </UniformGrid>
                 </StackPanel>
             </Border>
 
-            <TextBlock Grid.Row="4" Classes="status" Text="{Binding Status}" Margin="0,10,0,0" />
+            <TextBlock Grid.Row="5" Classes="status" Text="{Binding Status}" Margin="0,10,0,0" />
 
             <!-- Действия -->
-            <WrapPanel Grid.Row="5" Margin="0,10,0,0">
+            <WrapPanel Grid.Row="6" Margin="0,10,0,0">
                 <Button Classes="small" Content="{loc:T Connection_CheckConfig}" Command="{Binding CheckConfig}" Margin="0,0,6,0" />
                 <Button Classes="small" Content="{loc:T Connection_OpenConfig}" Command="{Binding OpenConfig}"
                         IsVisible="{Binding Platform.Launcher.CanOpenFiles}" />
