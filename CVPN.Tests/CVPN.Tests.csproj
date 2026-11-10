@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="coverlet.collector" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" />
+        <PackageReference Include="xunit" />
+        <PackageReference Include="xunit.runner.visualstudio" />
+    </ItemGroup>
+    <ItemGroup>
+        <Using Include="Xunit" />
+        <!-- Тесты на ещё не перенесённый код (служба, адаптеры Windows) -->
+        <Compile Remove="Pending/**" />
+        <None Include="Pending/**" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\CVPN.Core\CVPN.Core.csproj" />
+    </ItemGroup>
+</Project>

@@ -1,0 +1,1023 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Action_Connect" xml:space="preserve">
+    <value>Connect</value>
+  </data>
+  <data name="Action_Disconnect" xml:space="preserve">
+    <value>Disconnect</value>
+  </data>
+  <data name="Common_Active" xml:space="preserve">
+    <value>active</value>
+  </data>
+  <data name="Common_Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Common_Block" xml:space="preserve">
+    <value>block</value>
+  </data>
+  <data name="Common_Browse" xml:space="preserve">
+    <value>Browse</value>
+  </data>
+  <data name="Common_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Common_Check" xml:space="preserve">
+    <value>Check</value>
+  </data>
+  <data name="Common_Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="Common_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Common_Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="Common_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Common_Direct" xml:space="preserve">
+    <value>direct</value>
+  </data>
+  <data name="Common_Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Common_Mode" xml:space="preserve">
+    <value>mode</value>
+  </data>
+  <data name="Common_New" xml:space="preserve">
+    <value>New</value>
+  </data>
+  <data name="Common_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Common_Select" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="Common_ViaProxy" xml:space="preserve">
+    <value>through proxy</value>
+  </data>
+  <data name="Config_BuildFailed" xml:space="preserve">
+    <value>could not build the configuration: {0}</value>
+  </data>
+  <data name="Config_NotBuilt" xml:space="preserve">
+    <value>The configuration has not been built yet</value>
+  </data>
+  <data name="Config_OpenFailed" xml:space="preserve">
+    <value>Could not open the configuration: {0}</value>
+  </data>
+  <data name="Config_Rejected" xml:space="preserve">
+    <value>configuration rejected by the core: {0}</value>
+  </data>
+  <data name="Config_UnsupportedProtocol" xml:space="preserve">
+    <value>Protocol {0} is not supported yet</value>
+  </data>
+  <data name="Connect_NoActiveProfile" xml:space="preserve">
+    <value>No profile selected. Open Profiles and press “Select”.</value>
+  </data>
+  <data name="Connect_NoProfiles" xml:space="preserve">
+    <value>No profiles yet. Add one on the Profiles page.</value>
+  </data>
+  <data name="Connection_CheckConfig" xml:space="preserve">
+    <value>Check config</value>
+  </data>
+  <data name="Connection_Download" xml:space="preserve">
+    <value>download</value>
+  </data>
+  <data name="Connection_Duration" xml:space="preserve">
+    <value>duration</value>
+  </data>
+  <data name="Connection_Measure" xml:space="preserve">
+    <value>Measure latency</value>
+  </data>
+  <data name="Connection_NoProfile" xml:space="preserve">
+    <value>No profile selected</value>
+  </data>
+  <data name="Connection_OpenConfig" xml:space="preserve">
+    <value>Open config.json</value>
+  </data>
+  <data name="Connection_Peak" xml:space="preserve">
+    <value>peak</value>
+  </data>
+  <data name="Connection_Received" xml:space="preserve">
+    <value>received</value>
+  </data>
+  <data name="Connection_Rules" xml:space="preserve">
+    <value>rules</value>
+  </data>
+  <data name="Connection_Sent" xml:space="preserve">
+    <value>sent</value>
+  </data>
+  <data name="Connection_Session" xml:space="preserve">
+    <value>session</value>
+  </data>
+  <data name="Connection_Upload" xml:space="preserve">
+    <value>upload</value>
+  </data>
+  <data name="Connections_CloseHint" xml:space="preserve">
+    <value>Close this connection</value>
+  </data>
+  <data name="Connections_Empty" xml:space="preserve">
+    <value>No connections. The list fills up while the tunnel is running.</value>
+  </data>
+  <data name="Connections_MakeBlock" xml:space="preserve">
+    <value>Block</value>
+  </data>
+  <data name="Connections_MakeBlockHint" xml:space="preserve">
+    <value>Add a rule: this domain will be blocked</value>
+  </data>
+  <data name="Connections_MakeDirect" xml:space="preserve">
+    <value>Direct</value>
+  </data>
+  <data name="Connections_MakeDirectHint" xml:space="preserve">
+    <value>Add a rule: this domain will bypass the tunnel</value>
+  </data>
+  <data name="Connections_MakeProxy" xml:space="preserve">
+    <value>Through proxy</value>
+  </data>
+  <data name="Connections_MakeProxyHint" xml:space="preserve">
+    <value>Add a rule: this domain will go through the tunnel</value>
+  </data>
+  <data name="Connections_RuleAdded" xml:space="preserve">
+    <value>{0} - “{1}”. Applies after reconnecting.</value>
+  </data>
+  <data name="Connections_RuleChanged" xml:space="preserve">
+    <value>The rule for {0} changed to “{1}”. Applies after reconnecting.</value>
+  </data>
+  <data name="Connections_RuleExists" xml:space="preserve">
+    <value>A rule for {0} already exists</value>
+  </data>
+  <data name="Connections_Subtitle" xml:space="preserve">
+    <value>What is going where right now, and by which rule</value>
+  </data>
+  <data name="Core_ConfigValid" xml:space="preserve">
+    <value>Configuration is valid</value>
+  </data>
+  <data name="Core_ExitCode" xml:space="preserve">
+    <value>The core returned code {0}</value>
+  </data>
+  <data name="Core_Exited" xml:space="preserve">
+    <value>The core exited with code {0}. See the logs for details.</value>
+  </data>
+  <data name="Core_FileNotFound" xml:space="preserve">
+    <value>sing-box.exe not found: {0}</value>
+  </data>
+  <data name="Core_NotFound" xml:space="preserve">
+    <value>core not found</value>
+  </data>
+  <data name="Core_NotResponding" xml:space="preserve">
+    <value>core not responding</value>
+  </data>
+  <data name="Core_StartFailed" xml:space="preserve">
+    <value>Could not start the core</value>
+  </data>
+  <data name="Core_Timeout" xml:space="preserve">
+    <value>The core did not respond within {0} s</value>
+  </data>
+  <data name="Crash_Message" xml:space="preserve">
+    <value>An error occurred:
+
+{0}
+
+Details written to {1}
+
+Continue running? Choosing no will close the application.</value>
+  </data>
+  <data name="Duration_HoursMinutes" xml:space="preserve">
+    <value>{0} h {1} min</value>
+  </data>
+  <data name="Duration_Minutes" xml:space="preserve">
+    <value>{0} min</value>
+  </data>
+  <data name="Duration_Seconds" xml:space="preserve">
+    <value>{0} s</value>
+  </data>
+  <data name="Editor_BadPort" xml:space="preserve">
+    <value>The port must be a number between 1 and 65535</value>
+  </data>
+  <data name="Editor_BadUuid" xml:space="preserve">
+    <value>The UUID is invalid: expected 8f1ce66e-719d-48b8-9ee6-804b52887082</value>
+  </data>
+  <data name="Editor_Country" xml:space="preserve">
+    <value>country</value>
+  </data>
+  <data name="Editor_Edit" xml:space="preserve">
+    <value>Edit profile</value>
+  </data>
+  <data name="Editor_Host" xml:space="preserve">
+    <value>server address</value>
+  </data>
+  <data name="Editor_Name" xml:space="preserve">
+    <value>name</value>
+  </data>
+  <data name="Editor_NeedCredentials" xml:space="preserve">
+    <value>NaiveProxy requires a username and a password</value>
+  </data>
+  <data name="Editor_NeedHost" xml:space="preserve">
+    <value>Enter the server address</value>
+  </data>
+  <data name="Editor_NeedPassword" xml:space="preserve">
+    <value>Enter a password</value>
+  </data>
+  <data name="Editor_NeedPublicKey" xml:space="preserve">
+    <value>Reality requires a public key</value>
+  </data>
+  <data name="Editor_New" xml:space="preserve">
+    <value>New profile</value>
+  </data>
+  <data name="Editor_Password" xml:space="preserve">
+    <value>password</value>
+  </data>
+  <data name="Editor_Port" xml:space="preserve">
+    <value>port</value>
+  </data>
+  <data name="Editor_Protocol" xml:space="preserve">
+    <value>protocol</value>
+  </data>
+  <data name="Editor_Sni" xml:space="preserve">
+    <value>sni · tls server name</value>
+  </data>
+  <data name="Editor_Subtitle" xml:space="preserve">
+    <value>The fields change with the protocol</value>
+  </data>
+  <data name="Editor_Username" xml:space="preserve">
+    <value>username</value>
+  </data>
+  <data name="Editor_Window" xml:space="preserve">
+    <value>Profile</value>
+  </data>
+  <data name="Editor_WsPath" xml:space="preserve">
+    <value>websocket path</value>
+  </data>
+  <data name="Editor_XhttpHost" xml:space="preserve">
+    <value>xhttp host header</value>
+  </data>
+  <data name="Editor_XhttpMode" xml:space="preserve">
+    <value>xhttp mode</value>
+  </data>
+  <data name="Editor_XhttpPath" xml:space="preserve">
+    <value>xhttp path</value>
+  </data>
+  <data name="Elevation_Cancelled" xml:space="preserve">
+    <value>Connection cancelled: TUN needs administrator rights</value>
+  </data>
+  <data name="Elevation_Denied" xml:space="preserve">
+    <value>Windows denied the elevation request</value>
+  </data>
+  <data name="Elevation_Question" xml:space="preserve">
+    <value>TUN mode captures all system traffic and requires administrator rights.
+
+Restart CVPN elevated?
+
+If you decline, you can turn TUN off in settings - traffic will then go through the system proxy, but only for applications that respect it.</value>
+  </data>
+  <data name="Error_NetshCode" xml:space="preserve">
+    <value>netsh returned code {0}</value>
+  </data>
+  <data name="Error_NetshStart" xml:space="preserve">
+    <value>could not start netsh</value>
+  </data>
+  <data name="Error_NoAppPath" xml:space="preserve">
+    <value>Could not determine the application path</value>
+  </data>
+  <data name="Error_ScCode" xml:space="preserve">
+    <value>sc.exe returned code {0}</value>
+  </data>
+  <data name="Error_ScStart" xml:space="preserve">
+    <value>Could not start sc.exe</value>
+  </data>
+  <data name="Error_SchtasksCode" xml:space="preserve">
+    <value>schtasks returned code {0}</value>
+  </data>
+  <data name="Error_SchtasksStart" xml:space="preserve">
+    <value>Could not start schtasks.exe</value>
+  </data>
+  <data name="Error_UacCancelled" xml:space="preserve">
+    <value>Cancelled in the UAC prompt</value>
+  </data>
+  <data name="Export_Copied" xml:space="preserve">
+    <value>Copied</value>
+  </data>
+  <data name="Export_CopyFailed" xml:space="preserve">
+    <value>Could not copy</value>
+  </data>
+  <data name="Export_CopyLink" xml:space="preserve">
+    <value>Copy link</value>
+  </data>
+  <data name="Export_Link" xml:space="preserve">
+    <value>link</value>
+  </data>
+  <data name="Export_Title" xml:space="preserve">
+    <value>Export profile</value>
+  </data>
+  <data name="Hint_Domain" xml:space="preserve">
+    <value>example.com - exact match</value>
+  </data>
+  <data name="Hint_Geoip" xml:space="preserve">
+    <value>ru · de · us - country code</value>
+  </data>
+  <data name="Hint_Keyword" xml:space="preserve">
+    <value>google - substring in the domain</value>
+  </data>
+  <data name="Hint_Process" xml:space="preserve">
+    <value>Telegram.exe - process name</value>
+  </data>
+  <data name="Hint_SetLocal" xml:space="preserve">
+    <value>C:\rules\twitch.srs - a file on disk</value>
+  </data>
+  <data name="Hint_Suffix" xml:space="preserve">
+    <value>openai.com - the domain and all subdomains</value>
+  </data>
+  <data name="Import_NoOutbounds" xml:space="preserve">
+    <value>No vless, anytls or naive outbounds found in the file</value>
+  </data>
+  <data name="Import_NotJson" xml:space="preserve">
+    <value>This does not look like JSON: {0}</value>
+  </data>
+  <data name="Import_ReadFailed" xml:space="preserve">
+    <value>Could not read the file: {0}</value>
+  </data>
+  <data name="Import_UnnamedProfile" xml:space="preserve">
+    <value>profile</value>
+  </data>
+  <data name="KillSwitch_EnableFailed" xml:space="preserve">
+    <value>Could not enable the kill switch: {0}</value>
+  </data>
+  <data name="KillSwitch_NeedsAdmin" xml:space="preserve">
+    <value>The kill switch requires administrator rights</value>
+  </data>
+  <data name="Link_Empty" xml:space="preserve">
+    <value>Empty link</value>
+  </data>
+  <data name="Link_ParseFailed" xml:space="preserve">
+    <value>Could not parse the link: {0}</value>
+  </data>
+  <data name="Link_RealityNeedsPbk" xml:space="preserve">
+    <value>reality requires the pbk parameter</value>
+  </data>
+  <data name="Link_UnsupportedScheme" xml:space="preserve">
+    <value>Only vless://, anytls:// and naive+https:// are supported</value>
+  </data>
+  <data name="Logs_CopiedLines" xml:space="preserve">
+    <value>Copied {0} lines</value>
+  </data>
+  <data name="Logs_CopyFailed" xml:space="preserve">
+    <value>Could not copy: {0}</value>
+  </data>
+  <data name="Logs_FolderFailed" xml:space="preserve">
+    <value>Could not open the log folder: {0}</value>
+  </data>
+  <data name="Logs_OpenFolder" xml:space="preserve">
+    <value>Log folder</value>
+  </data>
+  <data name="Logs_OpenFolderHint" xml:space="preserve">
+    <value>Files for the last 7 days - the ones worth attaching to a bug report</value>
+  </data>
+  <data name="Logs_Subtitle" xml:space="preserve">
+    <value>Live core output. The full history is written to file - see “Log folder”.</value>
+  </data>
+  <data name="Logs_Title" xml:space="preserve">
+    <value>Logs</value>
+  </data>
+  <data name="Mode_AllTraffic" xml:space="preserve">
+    <value>all system traffic</value>
+  </data>
+  <data name="Mode_PendingProxy" xml:space="preserve">
+    <value>after reconnecting: proxy</value>
+  </data>
+  <data name="Mode_PendingTun" xml:space="preserve">
+    <value>after reconnecting: TUN</value>
+  </data>
+  <data name="Mode_SystemProxy" xml:space="preserve">
+    <value>System proxy</value>
+  </data>
+  <data name="Mode_TunService" xml:space="preserve">
+    <value>TUN · service</value>
+  </data>
+  <data name="Nav_Connection" xml:space="preserve">
+    <value>Connection</value>
+  </data>
+  <data name="Nav_Connections" xml:space="preserve">
+    <value>Connections</value>
+  </data>
+  <data name="Nav_Logs" xml:space="preserve">
+    <value>Logs</value>
+  </data>
+  <data name="Nav_Profiles" xml:space="preserve">
+    <value>Profiles</value>
+  </data>
+  <data name="Nav_Routing" xml:space="preserve">
+    <value>Routing</value>
+  </data>
+  <data name="Nav_Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Profiles_Added" xml:space="preserve">
+    <value>Profile “{0}” added</value>
+  </data>
+  <data name="Profiles_AddedMany" xml:space="preserve">
+    <value>Profiles added: {0}</value>
+  </data>
+  <data name="Profiles_AllSubtitle" xml:space="preserve">
+    <value>A list of {0} servers in subscription format (base64)</value>
+  </data>
+  <data name="Profiles_AllTitle" xml:space="preserve">
+    <value>All profiles</value>
+  </data>
+  <data name="Profiles_CheckAll" xml:space="preserve">
+    <value>Check all</value>
+  </data>
+  <data name="Profiles_Checking" xml:space="preserve">
+    <value>Checking servers…</value>
+  </data>
+  <data name="Profiles_ConfigFilter" xml:space="preserve">
+    <value>Configurations (*.json)|*.json|All files (*.*)|*.*</value>
+  </data>
+  <data name="Profiles_Create" xml:space="preserve">
+    <value>Create manually</value>
+  </data>
+  <data name="Profiles_Created" xml:space="preserve">
+    <value>Profile “{0}” created</value>
+  </data>
+  <data name="Profiles_ExportAll" xml:space="preserve">
+    <value>Export all</value>
+  </data>
+  <data name="Profiles_FromSubscription" xml:space="preserve">
+    <value>from subscription</value>
+  </data>
+  <data name="Profiles_ImportFile" xml:space="preserve">
+    <value>Import from file</value>
+  </data>
+  <data name="Profiles_LoadingSubscription" xml:space="preserve">
+    <value>Loading subscription…</value>
+  </data>
+  <data name="Profiles_NoLinkForProtocol" xml:space="preserve">
+    <value>Links are not supported for this protocol</value>
+  </data>
+  <data name="Profiles_ParseLink" xml:space="preserve">
+    <value>Parse link</value>
+  </data>
+  <data name="Profiles_PickConfig" xml:space="preserve">
+    <value>Choose a sing-box configuration</value>
+  </data>
+  <data name="Profiles_Responded" xml:space="preserve">
+    <value>{0} of {1} responded</value>
+  </data>
+  <data name="Profiles_Share" xml:space="preserve">
+    <value>Share</value>
+  </data>
+  <data name="Profiles_SubscriptionHint" xml:space="preserve">
+    <value>https://…  -  subscription URL</value>
+  </data>
+  <data name="Profiles_SubscriptionLoaded" xml:space="preserve">
+    <value>Servers loaded from the subscription: {0}</value>
+  </data>
+  <data name="Profiles_Subtitle" xml:space="preserve">
+    <value>Paste a link or import a sing-box configuration</value>
+  </data>
+  <data name="Profiles_UpdateSubscription" xml:space="preserve">
+    <value>Update subscription</value>
+  </data>
+  <data name="Profiles_Updated" xml:space="preserve">
+    <value>Profile “{0}” updated</value>
+  </data>
+  <data name="Routing_DefaultSet" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Routing_EnterDomain" xml:space="preserve">
+    <value>Enter a domain</value>
+  </data>
+  <data name="Routing_Fallback" xml:space="preserve">
+    <value>Everything else</value>
+  </data>
+  <data name="Routing_FallbackHint" xml:space="preserve">
+    <value>What to do with traffic that matched no rule</value>
+  </data>
+  <data name="Routing_MatchedRule" xml:space="preserve">
+    <value>rule {0} {1}</value>
+  </data>
+  <data name="Routing_MoveDownHint" xml:space="preserve">
+    <value>Move down</value>
+  </data>
+  <data name="Routing_MoveUpHint" xml:space="preserve">
+    <value>Move up - the rule will match earlier</value>
+  </data>
+  <data name="Routing_NewSet" xml:space="preserve">
+    <value>New set</value>
+  </data>
+  <data name="Routing_NoRuleMatched" xml:space="preserve">
+    <value>no rule matched, the fallback applies</value>
+  </data>
+  <data name="Routing_OrderAfterReconnect" xml:space="preserve">
+    <value>The rule order applies after reconnecting</value>
+  </data>
+  <data name="Routing_PickSrs" xml:space="preserve">
+    <value>Pick .srs</value>
+  </data>
+  <data name="Routing_PickSrsTitle" xml:space="preserve">
+    <value>Choose a rule set file</value>
+  </data>
+  <data name="Routing_SetAfterReconnect" xml:space="preserve">
+    <value>The rule set applies after reconnecting</value>
+  </data>
+  <data name="Routing_SetCreated" xml:space="preserve">
+    <value>Set “{0}” created. It has no rules yet.</value>
+  </data>
+  <data name="Routing_SetDeleted" xml:space="preserve">
+    <value>Set “{0}” deleted</value>
+  </data>
+  <data name="Routing_SetLocal" xml:space="preserve">
+    <value>rule_set · file</value>
+  </data>
+  <data name="Routing_SetRemote" xml:space="preserve">
+    <value>rule_set · link</value>
+  </data>
+  <data name="Routing_SrsFilter" xml:space="preserve">
+    <value>sing-box rule sets (*.srs)|*.srs|All files (*.*)|*.*</value>
+  </data>
+  <data name="Routing_Subtitle" xml:space="preserve">
+    <value>Rules are checked top to bottom. The first match decides.</value>
+  </data>
+  <data name="Routing_TestHint" xml:space="preserve">
+    <value>test a domain: youtube.com</value>
+  </data>
+  <data name="Routing_UnknownGeoip" xml:space="preserve">
+    <value>Above there is geoip ({0}): it wins if the domain resolves to an address in that country - this cannot be checked without connecting.</value>
+  </data>
+  <data name="Routing_UnknownSets" xml:space="preserve">
+    <value>Above there are sets whose contents cannot be checked: {0} - if the domain is in one of them, that rule wins.</value>
+  </data>
+  <data name="Routing_WillBeBlocked" xml:space="preserve">
+    <value>will be blocked</value>
+  </data>
+  <data name="Server_SwitchFailed" xml:space="preserve">
+    <value>Could not switch the server. Reconnect manually.</value>
+  </data>
+  <data name="Service_CoreStopped" xml:space="preserve">
+    <value>The service reports that the core has stopped</value>
+  </data>
+  <data name="Service_FilesMissing" xml:space="preserve">
+    <value>{0} not found. Rebuild the whole solution: the service is copied into the service subfolder when the CVPN project builds.</value>
+  </data>
+  <data name="Service_NoAnswer" xml:space="preserve">
+    <value>the service did not answer</value>
+  </data>
+  <data name="Settings_AutoConnect" xml:space="preserve">
+    <value>Connect on startup</value>
+  </data>
+  <data name="Settings_AutoConnectHint" xml:space="preserve">
+    <value>Bring the tunnel up with the last selected profile</value>
+  </data>
+  <data name="Settings_AutoSelect" xml:space="preserve">
+    <value>Pick the fastest server</value>
+  </data>
+  <data name="Settings_AutoSelectHint" xml:space="preserve">
+    <value>The core keeps the connection on the fastest server and re-checks every three minutes.</value>
+  </data>
+  <data name="Settings_AutoStart" xml:space="preserve">
+    <value>Start with Windows</value>
+  </data>
+  <data name="Settings_AutoStartHint" xml:space="preserve">
+    <value>The application starts minimised to tray</value>
+  </data>
+  <data name="Settings_AutoSubscription" xml:space="preserve">
+    <value>Refresh subscription</value>
+  </data>
+  <data name="Settings_AutoSubscriptionHint" xml:space="preserve">
+    <value>Once a day at startup, if a subscription URL is set</value>
+  </data>
+  <data name="Settings_CheckNow" xml:space="preserve">
+    <value>Check now</value>
+  </data>
+  <data name="Settings_CheckUpdates" xml:space="preserve">
+    <value>Check on startup</value>
+  </data>
+  <data name="Settings_Checking" xml:space="preserve">
+    <value>checking…</value>
+  </data>
+  <data name="Settings_CloseToTray" xml:space="preserve">
+    <value>Minimise to tray</value>
+  </data>
+  <data name="Settings_CloseToTrayHint" xml:space="preserve">
+    <value>The close button hides the window instead of exiting. Use the tray menu to quit.</value>
+  </data>
+  <data name="Settings_CoreFilter" xml:space="preserve">
+    <value>sing-box (sing-box.exe)|sing-box.exe|Executables (*.exe)|*.exe</value>
+  </data>
+  <data name="Settings_CorePath" xml:space="preserve">
+    <value>core path</value>
+  </data>
+  <data name="Settings_CreateTask" xml:space="preserve">
+    <value>Create task</value>
+  </data>
+  <data name="Settings_DeleteTask" xml:space="preserve">
+    <value>Delete task</value>
+  </data>
+  <data name="Settings_DnsHint" xml:space="preserve">
+    <value>Queries outside the rules go to this resolver through the tunnel. The scheme selects the transport: https:// (DoH on 443, the most reliable), tls:// (DoT, port 853 is often blocked), quic://, udp://.</value>
+  </data>
+  <data name="Settings_InstallService" xml:space="preserve">
+    <value>Install service</value>
+  </data>
+  <data name="Settings_KillSwitch" xml:space="preserve">
+    <value>Block traffic outside the tunnel</value>
+  </data>
+  <data name="Settings_KillSwitchHint" xml:space="preserve">
+    <value>Kill switch: a dropped connection cannot fall back to a direct route. Requires administrator rights.</value>
+  </data>
+  <data name="Settings_KillSwitchWarning" xml:space="preserve">
+    <value>If the application terminates unexpectedly, the rules are removed on the next launch. The button below is for when you need connectivity right now.</value>
+  </data>
+  <data name="Settings_Language" xml:space="preserve">
+    <value>Interface language</value>
+  </data>
+  <data name="Settings_LanguageHint" xml:space="preserve">
+    <value>Applies after a restart - CVPN will offer to do it right away</value>
+  </data>
+  <data name="Settings_MixedPort" xml:space="preserve">
+    <value>Mixed port</value>
+  </data>
+  <data name="Settings_MixedPortHint" xml:space="preserve">
+    <value>When TUN is off, this port is set as the Windows system proxy</value>
+  </data>
+  <data name="Settings_OpenPageFailed" xml:space="preserve">
+    <value>Could not open the page: {0}</value>
+  </data>
+  <data name="Settings_OpenRelease" xml:space="preserve">
+    <value>Open release page</value>
+  </data>
+  <data name="Settings_PickCore" xml:space="preserve">
+    <value>Locate sing-box.exe</value>
+  </data>
+  <data name="Settings_RestartFailed" xml:space="preserve">
+    <value>Could not restart: {0}</value>
+  </data>
+  <data name="Settings_RestartQuestion" xml:space="preserve">
+    <value>The interface language applies after a restart.
+
+Restart CVPN now?</value>
+  </data>
+  <data name="Settings_RestoreDone" xml:space="preserve">
+    <value>Firewall rules removed, network restored</value>
+  </data>
+  <data name="Settings_RestoreFailed" xml:space="preserve">
+    <value>Could not remove the rules: {0}</value>
+  </data>
+  <data name="Settings_RestoreNetwork" xml:space="preserve">
+    <value>Restore network</value>
+  </data>
+  <data name="Settings_RestoreNetworkHint" xml:space="preserve">
+    <value>Removes the firewall rules if internet went away with the tunnel</value>
+  </data>
+  <data name="Settings_Service" xml:space="preserve">
+    <value>tunnel service</value>
+  </data>
+  <data name="Settings_ServiceFilesMissing" xml:space="preserve">
+    <value>service files not found: {0}</value>
+  </data>
+  <data name="Settings_ServiceHint" xml:space="preserve">
+    <value>The service runs under the system account and brings TUN up without asking for administrator rights. Installed once.</value>
+  </data>
+  <data name="Settings_ServiceInstallFailed" xml:space="preserve">
+    <value>Could not install the service: {0}</value>
+  </data>
+  <data name="Settings_ServiceInstalled" xml:space="preserve">
+    <value>Service installed</value>
+  </data>
+  <data name="Settings_ServiceMissing" xml:space="preserve">
+    <value>service not installed - press “Install service”</value>
+  </data>
+  <data name="Settings_ServiceOk" xml:space="preserve">
+    <value>service installed and responding</value>
+  </data>
+  <data name="Settings_ServiceRemoveFailed" xml:space="preserve">
+    <value>Could not remove the service: {0}</value>
+  </data>
+  <data name="Settings_ServiceRemoved" xml:space="preserve">
+    <value>Service removed</value>
+  </data>
+  <data name="Settings_Subtitle" xml:space="preserve">
+    <value>Core, interception mode and startup</value>
+  </data>
+  <data name="Settings_Task" xml:space="preserve">
+    <value>or a scheduled task</value>
+  </data>
+  <data name="Settings_TaskCreateFailed" xml:space="preserve">
+    <value>Could not create the task: {0}</value>
+  </data>
+  <data name="Settings_TaskCreated" xml:space="preserve">
+    <value>Scheduled task created</value>
+  </data>
+  <data name="Settings_TaskDeleteFailed" xml:space="preserve">
+    <value>Could not delete the task: {0}</value>
+  </data>
+  <data name="Settings_TaskDeleted" xml:space="preserve">
+    <value>Scheduled task deleted</value>
+  </data>
+  <data name="Settings_TaskHint" xml:space="preserve">
+    <value>Simpler than the service: no second project needed. The whole application runs elevated, and the tunnel only lives inside your session.</value>
+  </data>
+  <data name="Settings_TaskMissing" xml:space="preserve">
+    <value>task not created - enabling TUN will show a UAC prompt</value>
+  </data>
+  <data name="Settings_TaskOk" xml:space="preserve">
+    <value>task created - rights are granted without a prompt</value>
+  </data>
+  <data name="Settings_TaskStale" xml:space="preserve">
+    <value>the task points at a different file - recreate it</value>
+  </data>
+  <data name="Settings_Tun" xml:space="preserve">
+    <value>TUN mode</value>
+  </data>
+  <data name="Settings_TunHint" xml:space="preserve">
+    <value>Captures all system traffic. Requires administrator rights - CVPN will offer to restart.</value>
+  </data>
+  <data name="Settings_UninstallService" xml:space="preserve">
+    <value>Remove service</value>
+  </data>
+  <data name="Settings_UpToDate" xml:space="preserve">
+    <value>You have the latest version</value>
+  </data>
+  <data name="Settings_UpdateFound" xml:space="preserve">
+    <value>Version {0} is available - open the release page</value>
+  </data>
+  <data name="Settings_UseService" xml:space="preserve">
+    <value>Use the service</value>
+  </data>
+  <data name="Settings_VerboseLog" xml:space="preserve">
+    <value>Verbose log</value>
+  </data>
+  <data name="Settings_VerboseLogHint" xml:space="preserve">
+    <value>The core records which rule matched each connection. Helps explain why a site goes the wrong way.</value>
+  </data>
+  <data name="Settings_Version" xml:space="preserve">
+    <value>version</value>
+  </data>
+  <data name="Settings_VersionAvailable" xml:space="preserve">
+    <value>version {0} available</value>
+  </data>
+  <data name="Settings_VersionInstalled" xml:space="preserve">
+    <value>version {0} installed</value>
+  </data>
+  <data name="State_Connected" xml:space="preserve">
+    <value>connected</value>
+  </data>
+  <data name="State_ConnectedCaps" xml:space="preserve">
+    <value>CONNECTED</value>
+  </data>
+  <data name="State_Connecting" xml:space="preserve">
+    <value>connecting</value>
+  </data>
+  <data name="State_ConnectingCaps" xml:space="preserve">
+    <value>CONNECTING</value>
+  </data>
+  <data name="State_Disconnected" xml:space="preserve">
+    <value>disconnected</value>
+  </data>
+  <data name="State_DisconnectedCaps" xml:space="preserve">
+    <value>DISCONNECTED</value>
+  </data>
+  <data name="State_Failed" xml:space="preserve">
+    <value>error</value>
+  </data>
+  <data name="State_FailedCaps" xml:space="preserve">
+    <value>ERROR</value>
+  </data>
+  <data name="Store_DecryptFailed" xml:space="preserve">
+    <value>Could not decrypt {0} values. The credentials have to be entered again.</value>
+  </data>
+  <data name="Sub_HttpError" xml:space="preserve">
+    <value>The subscription server replied {0}</value>
+  </data>
+  <data name="Sub_LoadFailed" xml:space="preserve">
+    <value>Could not load the subscription: {0}</value>
+  </data>
+  <data name="Sub_NoServers" xml:space="preserve">
+    <value>No supported servers found in the subscription</value>
+  </data>
+  <data name="Sub_NoUrl" xml:space="preserve">
+    <value>No subscription URL specified</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="Tray_Open" xml:space="preserve">
+    <value>Open CVPN</value>
+  </data>
+  <data name="Tray_Server" xml:space="preserve">
+    <value>Server</value>
+  </data>
+  <data name="Tray_StillRunning" xml:space="preserve">
+    <value>CVPN is still running</value>
+  </data>
+  <data name="Tray_StillRunningHint" xml:space="preserve">
+    <value>Minimised to the tray. Use the icon menu to quit.</value>
+  </data>
+  <data name="Tun_AdaptersRemoved" xml:space="preserve">
+    <value>stale adapters removed: {0}</value>
+  </data>
+  <data name="Tun_Releasing" xml:space="preserve">
+    <value>Releasing the network interface…</value>
+  </data>
+  <data name="Unit_B" xml:space="preserve">
+    <value>{0} B</value>
+  </data>
+  <data name="Unit_GB" xml:space="preserve">
+    <value>{0} GB</value>
+  </data>
+  <data name="Unit_KB" xml:space="preserve">
+    <value>{0} KB</value>
+  </data>
+  <data name="Unit_KBps" xml:space="preserve">
+    <value>KB/s</value>
+  </data>
+  <data name="Unit_MB" xml:space="preserve">
+    <value>{0} MB</value>
+  </data>
+  <data name="Unit_MBps" xml:space="preserve">
+    <value>MB/s</value>
+  </data>
+  <data name="Common_ByeDpi" xml:space="preserve">
+    <value>via ByeDPI</value>
+  </data>
+  <data name="Nav_ByeDpi" xml:space="preserve">
+    <value>ByeDPI</value>
+  </data>
+  <data name="ByeDpi_Subtitle" xml:space="preserve">
+    <value>A local helper that disguises the start of a connection from your ISP's filtering. Sites routed “via ByeDPI” go straight to the internet through it, NOT through your proxy server, so they use none of its traffic.</value>
+  </data>
+  <data name="ByeDpi_Enable" xml:space="preserve">
+    <value>Use ByeDPI</value>
+  </data>
+  <data name="ByeDpi_EnableHint" xml:space="preserve">
+    <value>Starts together with the tunnel. While it is off, “via ByeDPI” rules go through the regular proxy.</value>
+  </data>
+  <data name="ByeDpi_Path" xml:space="preserve">
+    <value>Path to ciadpi.exe</value>
+  </data>
+  <data name="ByeDpi_PathHint" xml:space="preserve">
+    <value>ByeDPI comes with the installer and is filled in automatically. Point to another ciadpi.exe only if you want your own version.</value>
+  </data>
+  <data name="ByeDpi_Args" xml:space="preserve">
+    <value>Arguments</value>
+  </data>
+  <data name="ByeDpi_ArgsHint" xml:space="preserve">
+    <value>The defaults are the ones from byedpi.bat in the official Windows build. The address and port are set by the app.</value>
+  </data>
+  <data name="ByeDpi_WillRun" xml:space="preserve">
+    <value>Will be started as</value>
+  </data>
+  <data name="ByeDpi_IgnoredNote" xml:space="preserve">
+    <value>Ignored (the app sets these itself): {0}</value>
+  </data>
+  <data name="ByeDpi_Port" xml:space="preserve">
+    <value>Local port</value>
+  </data>
+  <data name="ByeDpi_PortHint" xml:space="preserve">
+    <value>SOCKS5 on 127.0.0.1 only. The port must differ from the mixed and Clash API ports.</value>
+  </data>
+  <data name="ByeDpi_PortBusy" xml:space="preserve">
+    <value>Port {0} is already used by CVPN itself.</value>
+  </data>
+  <data name="ByeDpi_BadPort" xml:space="preserve">
+    <value>The port must be between 1 and 65535.</value>
+  </data>
+  <data name="ByeDpi_State" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="ByeDpi_Stopped" xml:space="preserve">
+    <value>Stopped</value>
+  </data>
+  <data name="ByeDpi_Starting" xml:space="preserve">
+    <value>Starting…</value>
+  </data>
+  <data name="ByeDpi_Running" xml:space="preserve">
+    <value>Running on 127.0.0.1:{0}</value>
+  </data>
+  <data name="ByeDpi_Crashed" xml:space="preserve">
+    <value>Stopped unexpectedly (exit code {0})</value>
+  </data>
+  <data name="ByeDpi_Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="ByeDpi_Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="ByeDpi_AddYoutube" xml:space="preserve">
+    <value>Route YouTube through ByeDPI</value>
+  </data>
+  <data name="ByeDpi_AddYoutubeHint" xml:space="preserve">
+    <value>Adds the rule geosite youtube → via ByeDPI to the current routing profile</value>
+  </data>
+  <data name="ByeDpi_RuleAdded" xml:space="preserve">
+    <value>Rule added: geosite youtube → via ByeDPI</value>
+  </data>
+  <data name="ByeDpi_RuleAddedDisabled" xml:space="preserve">
+    <value>Rule added, but ByeDPI is off: for now it goes through the regular proxy</value>
+  </data>
+  <data name="ByeDpi_PickExe" xml:space="preserve">
+    <value>Select ciadpi.exe</value>
+  </data>
+  <data name="ByeDpi_ExeFilter" xml:space="preserve">
+    <value>ByeDPI (*.exe)|*.exe|All files (*.*)|*.*</value>
+  </data>
+  <data name="ByeDpi_NoExe" xml:space="preserve">
+    <value>ciadpi.exe not found: check the path on the ByeDPI page</value>
+  </data>
+  <data name="ByeDpi_StartFailed" xml:space="preserve">
+    <value>Could not start ciadpi: {0}</value>
+  </data>
+  <data name="ByeDpi_ArgIgnored" xml:space="preserve">
+    <value>argument ignored, the app sets the address and port itself: {0}</value>
+  </data>
+  <data name="ByeDpi_NotListening" xml:space="preserve">
+    <value>ciadpi did not start listening. Its output: {0}</value>
+  </data>
+  <data name="ByeDpi_NotListeningNoOutput" xml:space="preserve">
+    <value>ciadpi did not start listening on port {0} and printed nothing</value>
+  </data>
+  <data name="ByeDpi_TunTitle" xml:space="preserve">
+    <value>Please note: TUN mode</value>
+  </data>
+  <data name="ByeDpi_TunNote" xml:space="preserve">
+    <value>Everything above is about TUN mode: ciadpi is bound to your real adapter so its traffic bypasses the tunnel. This relies on how Windows routes sockets bound to an address and has not been verified on every system. To check: connect, open a YouTube video, then look at the Connections page. If you see connections from ciadpi.exe there, the bypass did not work; --tlsrec will still help, but --split, --disorder, --oob and --fake probably will not. In that case use the system proxy mode.</value>
+  </data>
+  <data name="ByeDpi_PortInUse" xml:space="preserve">
+    <value>Port {0} is already in use. If it is a leftover ciadpi from a crashed session, end it in Task Manager or choose another port.</value>
+  </data>
+  <data name="ByeDpi_BypassTun" xml:space="preserve">
+    <value>Bypass TUN for ciadpi</value>
+  </data>
+  <data name="ByeDpi_BypassTunHint" xml:space="preserve">
+    <value>In TUN mode, binds ciadpi to your real network adapter so its traffic goes straight out, not through the tunnel. Needed for --split, --disorder and the like.</value>
+  </data>
+  <data name="ByeDpi_BlockQuic" xml:space="preserve">
+    <value>Block QUIC for these sites</value>
+  </data>
+  <data name="ByeDpi_BlockQuicHint" xml:space="preserve">
+    <value>Browsers prefer QUIC (UDP), where ByeDPI does little. Blocking it makes them fall back to regular TCP.</value>
+  </data>
+  <data name="ByeDpi_NoAdapter" xml:space="preserve">
+    <value>could not find a real network adapter; ciadpi is not bound and its traffic may enter the tunnel</value>
+  </data>
+  <data name="ByeDpi_BoundTo" xml:space="preserve">
+    <value>outgoing connections are bound to {0} (bypassing the tunnel)</value>
+  </data>
+  <data name="Editor_Fingerprint" xml:space="preserve">
+    <value>TLS fingerprint · fp</value>
+  </data>
+  <data name="Editor_FingerprintHint" xml:space="preserve">
+    <value>How the connection looks to an observer. Taken from the link if it has fp=. If the server stops connecting with one fingerprint, try another.</value>
+  </data>
+  <data name="Editor_FingerprintDefault" xml:space="preserve">
+    <value>default ({0})</value>
+  </data>
+  <data name="Editor_FingerprintNone" xml:space="preserve">
+    <value>default (no uTLS)</value>
+  </data>
+  <data name="Settings_StrictRoute" xml:space="preserve">
+    <value>Strict routing (TUN)</value>
+  </data>
+  <data name="Settings_StrictRouteHint" xml:space="preserve">
+    <value>Blocks traffic that tries to go around the tunnel. If local apps (for example a dev server on localhost) do not open while connected, try turning this off and reconnect.</value>
+  </data>
+  <data name="Settings_TunIpv6" xml:space="preserve">
+    <value>IPv6 on the TUN adapter</value>
+  </data>
+  <data name="Settings_TunIpv6Hint" xml:space="preserve">
+    <value>Keeps localhost apps that listen on IPv6 (::1), such as Angular and Vite dev servers, reachable while connected. Internet traffic still goes over IPv4.</value>
+  </data>
+</root>

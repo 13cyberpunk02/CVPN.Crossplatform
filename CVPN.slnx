@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="CVPN.Shared/CVPN.Shared.csproj" />
+    <Project Path="CVPN.Core/CVPN.Core.csproj" />
+    <Project Path="CVPN/CVPN.csproj" />
+    <Project Path="CVPN.Desktop/CVPN.Desktop.csproj" />
+    <Project Path="CVPN.Android/CVPN.Android.csproj">
+      <Deploy />
+    </Project>
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="CVPN.Tests/CVPN.Tests.csproj" />
+  </Folder>
+</Solution>
