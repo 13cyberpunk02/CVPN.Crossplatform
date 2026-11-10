@@ -1074,4 +1074,19 @@
   <data name="Linux_AuthCancelled" xml:space="preserve">
     <value>авторизация отменена</value>
   </data>
+  <data name="Android_VpnNotPrepared" xml:space="preserve">
+    <value>Android не выдал VPN: откройте CVPN и разрешите запрос на подключение</value>
+  </data>
+  <data name="Android_VpnDenied" xml:space="preserve">
+    <value>Запрос на VPN отклонён</value>
+  </data>
+  <data name="Android_VpnRevoked" xml:space="preserve">
+    <value>VPN выключен системой или другим VPN-приложением</value>
+  </data>
+  <data name="Android_TunnelFailed" xml:space="preserve">
+    <value>передача трафика в ядро остановилась (код {0})</value>
+  </data>
+  <data name="Android_CoreNotListening" xml:space="preserve">
+    <value>ядро не открыло порт {0}</value>
+  </data>
 </root>

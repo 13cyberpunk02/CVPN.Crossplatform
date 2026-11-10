@@ -10,6 +10,8 @@
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
     <AndroidPackageFormat>apk</AndroidPackageFormat>
     <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+    <!-- Только ABI, под которые есть ядро и tun2socks (natives/): телефоны arm64 и эмулятор x86_64 -->
+    <RuntimeIdentifiers>android-arm64;android-x64</RuntimeIdentifiers>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +19,17 @@
       <Link>Resources\drawable\Icon.png</Link>
     </AndroidResource>
   </ItemGroup>
+
+  <!--
+    Ядро sing-box (libsingbox.so) и tun2socks (libhev-socks5-tunnel.so) лежат в
+    natives/<abi>/ - их скачивает packaging/android/fetch-natives.ps1. Отдельный
+    AndroidNativeLibrary не нужен: SDK сам берёт *.so из проекта, ABI - по имени папки.
+  -->
+
+  <Target Name="CheckNatives" BeforeTargets="Build">
+    <Warning Condition="!Exists('natives\arm64-v8a\libsingbox.so')"
+             Text="Нет нативных библиотек: VPN в APK работать не будет. Запустите packaging/android/fetch-natives.ps1" />
+  </Target>
 
   <ItemGroup>
     <PackageReference Include="Avalonia.Android" />

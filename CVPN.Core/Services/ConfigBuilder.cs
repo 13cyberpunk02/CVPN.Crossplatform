@@ -154,7 +154,57 @@ public static class ConfigBuilder
             }
         };
 
+        if (OperatingSystem.IsAndroid()) AdaptForAndroid(root, AndroidSystemDns);
+
         return root.ToJsonString(Pretty);
+    }
+
+    /// <summary>
+    /// DNS-сервер сети, к которой подключён телефон. Задаёт голова Android перед
+    /// сборкой конфига (из LinkProperties активной сети); пусто - запасной 1.1.1.1.
+    /// </summary>
+    public static string AndroidSystemDns { get; set; } = "";
+
+    /// <summary>
+    /// Конфиг для Android. TUN там держит VpnService, а ядро - обычный процесс
+    /// приложения без прав и без платформенного интерфейса libbox, поэтому:
+    ///   - входа tun нет: трафик приходит из tun2socks на mixed-порт;
+    ///   - auto_detect_interface выключен: netlink приложениям закрыт, а петли
+    ///     и так нет - приложение исключено из собственного VPN;
+    ///   - поиска процессов нет: чужие процессы Android приложению не показывает;
+    ///   - локальный резолвер - UDP на DNS сети: у Go-сборки нет /etc/resolv.conf.
+    /// Отдельный проход по готовому JSON - чтобы проверять тестами на любой ОС.
+    /// </summary>
+    internal static void AdaptForAndroid(JsonObject root, string systemDns)
+    {
+        if (root["inbounds"] is JsonArray inbounds)
+        {
+            foreach (var tun in inbounds.OfType<JsonObject>()
+                         .Where(i => i["type"]?.GetValue<string>() == "tun").ToList())
+                inbounds.Remove(tun);
+        }
+
+        if (root["route"] is JsonObject route)
+        {
+            route.Remove("auto_detect_interface");
+            route.Remove("find_process");
+
+            if (route["rules"] is JsonArray rules)
+            {
+                foreach (var rule in rules.OfType<JsonObject>().Where(r => r.ContainsKey("process_name")).ToList())
+                    rules.Remove(rule);
+            }
+        }
+
+        if (root["dns"]?["servers"] is JsonArray servers)
+        {
+            foreach (var server in servers.OfType<JsonObject>()
+                         .Where(s => s["type"]?.GetValue<string>() == "local"))
+            {
+                server["type"] = "udp";
+                server["server"] = string.IsNullOrWhiteSpace(systemDns) ? "1.1.1.1" : systemDns;
+            }
+        }
     }
 
     public static string Write(

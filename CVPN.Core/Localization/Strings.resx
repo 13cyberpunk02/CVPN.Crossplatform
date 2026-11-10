@@ -1074,4 +1074,19 @@ Restart CVPN now?</value>
   <data name="Linux_AuthCancelled" xml:space="preserve">
     <value>authorisation cancelled</value>
   </data>
+  <data name="Android_VpnNotPrepared" xml:space="preserve">
+    <value>Android did not grant the VPN: open CVPN and allow the connection request</value>
+  </data>
+  <data name="Android_VpnDenied" xml:space="preserve">
+    <value>VPN request declined</value>
+  </data>
+  <data name="Android_VpnRevoked" xml:space="preserve">
+    <value>VPN was turned off by the system or another VPN app</value>
+  </data>
+  <data name="Android_TunnelFailed" xml:space="preserve">
+    <value>traffic forwarding stopped (code {0})</value>
+  </data>
+  <data name="Android_CoreNotListening" xml:space="preserve">
+    <value>the core did not open port {0}</value>
+  </data>
 </root>

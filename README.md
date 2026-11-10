@@ -61,3 +61,32 @@ packaging/linux/build.sh 1.2.3                 # dist/CVPN-1.2.3-linux-x64.tar.g
 ```
 
 Релиз в GitHub собирается по тегу `v*` (`.github/workflows/release.yml`).
+
+## Android
+
+Режим TUN на Android - это VPN:
+
+```
+приложения ─► TUN (VpnService) ─► hev-socks5-tunnel ─► SOCKS5 127.0.0.1:mixed ─► sing-box ─► сервер
+```
+
+- sing-box - обычный процесс приложения (`libsingbox.so` в nativeLibraryDir: запускать можно
+  только оттуда). Само приложение исключено из своего VPN, поэтому соединения ядра не
+  зацикливаются.
+- tun2socks - [hev-socks5-tunnel](https://github.com/heiher/hev-socks5-tunnel), его C-API
+  вызывается напрямую (P/Invoke), без Java-обёрток.
+- Конфиг для Android правит `ConfigBuilder.AdaptForAndroid`: без входа tun, без привязки к
+  интерфейсу и поиска процессов, локальный DNS - DNS текущей сети.
+- Kill switch - системный: «Настройки → Сеть → VPN → CVPN → Постоянная VPN» и
+  «Блокировать соединения без VPN».
+
+Нативные библиотеки (ARM64 и x86_64) не хранятся в git:
+
+```
+pwsh packaging/android/fetch-natives.ps1
+dotnet build CVPN.Android -c Release
+```
+
+Если Release падает на «Precompiling failed» и в пути профиля Windows есть кириллица -
+это AOT-компилятор Mono: задайте латинский временный каталог, например
+`$env:TEMP = $env:TMP = "C:\tmp"`.

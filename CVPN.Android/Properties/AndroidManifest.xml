@@ -1,5 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto">
 	<uses-permission android:name="android.permission.INTERNET" />
-	<application android:label="CVPN" android:icon="@drawable/Icon" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<!-- VPN держится foreground-службой с уведомлением -->
+	<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+	<uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+	<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+	<!--
+		extractNativeLibs: ядро sing-box упаковано как libsingbox.so и запускается
+		процессом - для этого файл должен лежать распакованным в nativeLibraryDir.
+	-->
+	<application android:label="CVPN" android:icon="@drawable/Icon" android:extractNativeLibs="true">
+		<!--
+			Служба VPN. Объявлена здесь, а не атрибутом [Service]: foreground-службе
+			типа specialUse нужен вложенный property с назначением (Android 14+).
+		-->
+		<service
+			android:name="com.cyberpunk.cvpn.CvpnVpnService"
+			android:permission="android.permission.BIND_VPN_SERVICE"
+			android:foregroundServiceType="specialUse"
+			android:exported="false">
+			<intent-filter>
+				<action android:name="android.net.VpnService" />
+			</intent-filter>
+			<property
+				android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+				android:value="vpn" />
+		</service>
+	</application>
 </manifest>
