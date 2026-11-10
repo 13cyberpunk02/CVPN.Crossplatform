@@ -1169,4 +1169,49 @@
   <data name="Connections_ViaProxy" xml:space="preserve">
     <value>Через прокси</value>
   </data>
+  <data name="Logs_Empty" xml:space="preserve">
+    <value>Здесь появится вывод ядра, когда начнётся подключение</value>
+  </data>
+  <data name="Logs_CopyHint" xml:space="preserve">
+    <value>Копирует строки, которые сейчас на экране. Отдельные строки: выделите щелчком (Ctrl или Shift - несколько) и нажмите Ctrl+C или правую кнопку мыши</value>
+  </data>
+  <data name="Logs_Pending" xml:space="preserve">
+    <value>Новых строк: {0}</value>
+  </data>
+  <data name="Logs_ToBottom" xml:space="preserve">
+    <value>К последним</value>
+  </data>
+  <data name="Logs_CopySelected" xml:space="preserve">
+    <value>Копировать выделенное</value>
+  </data>
+  <data name="Logs_PauseHint" xml:space="preserve">
+    <value>Остановить прокрутку: новые строки копятся и появятся после «Продолжить»</value>
+  </data>
+  <data name="Logs_Errors" xml:space="preserve">
+    <value>Ошибки</value>
+  </data>
+  <data name="Logs_Warnings" xml:space="preserve">
+    <value>Предупреждения</value>
+  </data>
+  <data name="Logs_All" xml:space="preserve">
+    <value>Все</value>
+  </data>
+  <data name="Logs_Search" xml:space="preserve">
+    <value>Поиск по логу</value>
+  </data>
+  <data name="Logs_Pause" xml:space="preserve">
+    <value>Пауза</value>
+  </data>
+  <data name="Logs_CopyAll" xml:space="preserve">
+    <value>Копировать всё</value>
+  </data>
+  <data name="Logs_Resume" xml:space="preserve">
+    <value>Продолжить</value>
+  </data>
+  <data name="Logs_Shown" xml:space="preserve">
+    <value>Показано {0} из {1}</value>
+  </data>
+  <data name="Logs_NothingFound" xml:space="preserve">
+    <value>Ничего не найдено</value>
+  </data>
 </root>

@@ -1169,4 +1169,49 @@ Restart CVPN now?</value>
   <data name="Connections_ViaProxy" xml:space="preserve">
     <value>Via proxy</value>
   </data>
+  <data name="Logs_Empty" xml:space="preserve">
+    <value>Core output appears here once you connect</value>
+  </data>
+  <data name="Logs_CopyHint" xml:space="preserve">
+    <value>Copies the lines on screen. To copy specific lines, click to select them (Ctrl or Shift for several), then press Ctrl+C or right-click</value>
+  </data>
+  <data name="Logs_Pending" xml:space="preserve">
+    <value>New lines: {0}</value>
+  </data>
+  <data name="Logs_ToBottom" xml:space="preserve">
+    <value>Jump to latest</value>
+  </data>
+  <data name="Logs_CopySelected" xml:space="preserve">
+    <value>Copy selected</value>
+  </data>
+  <data name="Logs_PauseHint" xml:space="preserve">
+    <value>Stop scrolling: new lines are held until you resume</value>
+  </data>
+  <data name="Logs_Errors" xml:space="preserve">
+    <value>Errors</value>
+  </data>
+  <data name="Logs_Warnings" xml:space="preserve">
+    <value>Warnings</value>
+  </data>
+  <data name="Logs_All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="Logs_Search" xml:space="preserve">
+    <value>Search the log</value>
+  </data>
+  <data name="Logs_Pause" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="Logs_CopyAll" xml:space="preserve">
+    <value>Copy all</value>
+  </data>
+  <data name="Logs_Resume" xml:space="preserve">
+    <value>Resume</value>
+  </data>
+  <data name="Logs_Shown" xml:space="preserve">
+    <value>Showing {0} of {1}</value>
+  </data>
+  <data name="Logs_NothingFound" xml:space="preserve">
+    <value>Nothing found</value>
+  </data>
 </root>

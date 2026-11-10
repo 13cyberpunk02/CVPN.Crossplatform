@@ -52,6 +52,13 @@
     <StreamGeometry x:Key="Icon.X">M 7 7 L 17 17 M 17 7 L 7 17</StreamGeometry>
     <StreamGeometry x:Key="Icon.Rules">M 9 6 L 20 6 M 9 12 L 20 12 M 9 18 L 20 18 M 4 6 L 4.01 6 M 4 12 L 4.01 12 M 4 18 L 4.01 18</StreamGeometry>
 
+    <!-- ===== логи ===== -->
+    <StreamGeometry x:Key="Icon.Pause">M 8 5 L 8 19 M 16 5 L 16 19</StreamGeometry>
+    <StreamGeometry x:Key="Icon.Play">M 7 4.5 L 19 12 L 7 19.5 Z</StreamGeometry>
+    <StreamGeometry x:Key="Icon.Copy">M 9 9 L 20 9 L 20 20 L 9 20 Z M 5 15 L 4 15 L 4 4 L 15 4 L 15 5</StreamGeometry>
+    <StreamGeometry x:Key="Icon.Folder">M 3 6 Q 3 5 4 5 L 9 5 L 11 7.5 L 20 7.5 Q 21 7.5 21 8.5 L 21 18 Q 21 19 20 19 L 4 19 Q 3 19 3 18 Z</StreamGeometry>
+    <StreamGeometry x:Key="Icon.ToBottom">M 12 4 L 12 16 M 6 10 L 12 16 L 18 10 M 5 20 L 19 20</StreamGeometry>
+
     <!-- ===== статистика ===== -->
     <StreamGeometry x:Key="Icon.Clock">M 12 3 A 9 9 0 1 1 11.99 3 Z M 12 7 L 12 12 L 15.5 14</StreamGeometry>
     <!-- Пик: спидометр -->

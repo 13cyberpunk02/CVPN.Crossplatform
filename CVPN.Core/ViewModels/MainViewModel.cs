@@ -152,7 +152,7 @@ public sealed class MainViewModel : ObservableObject
         }
     }
 
-    public ObservableCollection<string> Log { get; } = [];
+    public ObservableCollection<LogEntry> Log { get; } = [];
 
     /// <summary>Итоги текущей сессии: сколько прошло трафика и за какое время.</summary>
     public SessionStats Session { get; } = new();
@@ -897,7 +897,7 @@ public sealed class MainViewModel : ObservableObject
         // В файл пишем всё; на экране остаются последние строки
         FileLog.Current.Write(line);
 
-        Log.Add(line);
+        Log.Add(LogEntry.Parse(line, DateTime.Now));
         while (Log.Count > MaxLogLines) Log.RemoveAt(0);
     }
 

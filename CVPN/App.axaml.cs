@@ -187,6 +187,25 @@ public partial class App : Application
             shell.Traffic.Push(up, down);
         }
 
+        foreach (var line in (string[])
+        [
+            "[cvpn] building configuration",
+            "[cvpn] connecting to Amsterdam - Reality (vless · reality)",
+            "+0300 2026-11-10 14:02:11 INFO network: updated default interface Ethernet, index 12",
+            "+0300 2026-11-10 14:02:11 INFO inbound/tun[tun-in]: started at tun0",
+            "+0300 2026-11-10 14:02:11 INFO sing-box started (0.41s)",
+            "+0300 2026-11-10 14:02:12 INFO [3527064221 0ms] inbound/tun[tun-in]: inbound connection to www.youtube.com:443",
+            "+0300 2026-11-10 14:02:12 INFO [3527064221 12ms] outbound/vless[proxy]: outbound connection to www.youtube.com:443",
+            "+0300 2026-11-10 14:02:13 DEBUG dns: exchanged api.telegram.org A 149.154.167.220 300",
+            "+0300 2026-11-10 14:02:14 WARN [1873009917 5.01s] outbound/direct[direct]: dial tcp 10.0.0.15:445: i/o timeout",
+            "+0300 2026-11-10 14:02:15 INFO [2208815310 0ms] inbound/tun[tun-in]: inbound connection to steamcdn-a.akamaihd.net:443",
+            "+0300 2026-11-10 14:02:16 ERROR [998120454 30.2s] outbound/vless[proxy]: read tcp 192.168.1.20:51432->203.0.113.7:443: connection reset by peer",
+            "+0300 2026-11-10 14:02:17 INFO [3014456627 0ms] inbound/tun[tun-in]: inbound packet connection to 1.1.1.1:53",
+            "[cvpn] latency: 84 ms",
+            "+0300 2026-11-10 14:02:19 INFO [1220993844 0ms] outbound/direct[direct]: outbound connection to gosuslugi.ru:443"
+        ])
+            shell.Append(line);
+
         var now = DateTimeOffset.Now;
         Models.ConnectionInfo Make(string host, int port, string outbound, string rule, string process, string net,
             long down, long up, int seconds) => new()

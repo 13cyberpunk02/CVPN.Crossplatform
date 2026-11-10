@@ -1,42 +1,287 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:CVPN.ViewModels"
+             xmlns:models="using:CVPN.Models"
              xmlns:loc="using:CVPN.Localization"
              x:Class="CVPN.Views.LogsView"
              x:DataType="vm:LogsViewModel">
 
-    <Grid Classes="page" RowDefinitions="Auto,Auto,*">
+    <UserControl.Styles>
+        <!-- Переключатель уровня: три кнопки в одной рамке, выбранная подсвечена -->
+        <Style Selector="Border.segments">
+            <Setter Property="Background" Value="{DynamicResource Surface}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource LineStrong}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="{StaticResource Radius}" />
+            <Setter Property="Padding" Value="3" />
+        </Style>
+        <Style Selector="Border.segments Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="MinHeight" Value="28" />
+            <Setter Property="Padding" Value="10,4" />
+            <Setter Property="FontSize" Value="{StaticResource Size.Small}" />
+            <Setter Property="CornerRadius" Value="{StaticResource RadiusSmall}" />
+        </Style>
+        <Style Selector="Border.segments Button.on">
+            <Setter Property="Background" Value="{DynamicResource Tint.Accent}" />
+            <Setter Property="Foreground" Value="{DynamicResource Accent}" />
+        </Style>
+        <!-- Счётчик в кнопке фильтра -->
+        <Style Selector="Border.count">
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="6,0" />
+            <Setter Property="MinWidth" Value="20" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Background" Value="{DynamicResource SurfaceHover}" />
+        </Style>
+        <Style Selector="Border.count TextBlock">
+            <Setter Property="FontFamily" Value="{StaticResource Font.Mono}" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+        </Style>
+        <Style Selector="Border.count.warn">
+            <Setter Property="Background" Value="{DynamicResource Tint.Warning}" />
+        </Style>
+        <Style Selector="Border.count.warn TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource Warning}" />
+        </Style>
+        <Style Selector="Border.count.error">
+            <Setter Property="Background" Value="{DynamicResource Tint.Danger}" />
+        </Style>
+        <Style Selector="Border.count.error TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource Danger}" />
+        </Style>
+
+        <!-- Пауза включена - кнопка заметная, чтобы не забыть её снять -->
+        <Style Selector="Button.pause.on">
+            <Setter Property="Background" Value="{DynamicResource Tint.Warning}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource Warning}" />
+            <Setter Property="Foreground" Value="{DynamicResource Warning}" />
+        </Style>
+
+        <!-- ===== строка лога ===== -->
+        <Style Selector="ListBox.log ListBoxItem">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="MinHeight" Value="0" />
+        </Style>
+        <Style Selector="Border.line">
+            <Setter Property="Padding" Value="10,4" />
+            <Setter Property="BorderThickness" Value="2,0,0,0" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="CornerRadius" Value="2" />
+        </Style>
+        <Style Selector="Border.line.error">
+            <Setter Property="Background" Value="{DynamicResource Tint.Danger}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource Danger}" />
+        </Style>
+        <Style Selector="Border.line.warn">
+            <Setter Property="BorderBrush" Value="{DynamicResource Warning}" />
+        </Style>
+        <Style Selector="TextBlock.time">
+            <Setter Property="FontFamily" Value="{StaticResource Font.Mono}" />
+            <Setter Property="FontSize" Value="11.5" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFaint}" />
+            <Setter Property="Margin" Value="0,1,10,0" />
+        </Style>
+        <Style Selector="Border.level">
+            <Setter Property="CornerRadius" Value="3" />
+            <Setter Property="Padding" Value="5,0" />
+            <Setter Property="Margin" Value="0,1,10,0" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+            <Setter Property="Background" Value="{DynamicResource Tint.Accent}" />
+        </Style>
+        <Style Selector="Border.level TextBlock">
+            <Setter Property="FontFamily" Value="{StaticResource Font.Mono}" />
+            <Setter Property="FontSize" Value="10.5" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="{DynamicResource Accent}" />
+        </Style>
+        <Style Selector="Border.level.warn">
+            <Setter Property="Background" Value="{DynamicResource Tint.Warning}" />
+        </Style>
+        <Style Selector="Border.level.warn TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource Warning}" />
+        </Style>
+        <Style Selector="Border.level.error">
+            <Setter Property="Background" Value="{DynamicResource Danger}" />
+        </Style>
+        <Style Selector="Border.level.error TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource OnAccent}" />
+        </Style>
+        <Style Selector="Border.level.quiet">
+            <Setter Property="Background" Value="{DynamicResource SurfaceHover}" />
+        </Style>
+        <Style Selector="Border.level.quiet TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource TextFaint}" />
+        </Style>
+        <Style Selector="TextBlock.message">
+            <Setter Property="FontFamily" Value="{StaticResource Font.Mono}" />
+            <Setter Property="FontSize" Value="12.5" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+        </Style>
+        <Style Selector="Border.line.error TextBlock.message">
+            <Setter Property="Foreground" Value="{DynamicResource Text}" />
+        </Style>
+        <Style Selector="Border.line.quiet TextBlock.message">
+            <Setter Property="Foreground" Value="{DynamicResource TextMuted}" />
+        </Style>
+        <!-- На телефоне время прячется: ширины мало, а порядок строк и так виден -->
+        <Style Selector=".narrow TextBlock.time">
+            <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <Style Selector=".narrow TextBlock.message">
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid Classes="page" RowDefinitions="Auto,Auto,Auto,*">
         <StackPanel Grid.Row="0">
             <TextBlock Classes="title" Text="{loc:T Logs_Title}" />
             <TextBlock Classes="secondary" Text="{loc:T Logs_Subtitle}" Margin="0,4,0,0" TextWrapping="Wrap" />
             <TextBlock Classes="status" Text="{Binding Status}" Margin="0,6,0,0" />
         </StackPanel>
 
-        <WrapPanel Grid.Row="1" Margin="0,12,0,0">
-            <Button Content="{loc:T Common_Copy}" Command="{Binding Copy}" Margin="0,0,8,0" />
-            <Button Content="{loc:T Common_Clear}" Command="{Binding Clear}" Margin="0,0,8,0" />
-            <Button Content="{loc:T Logs_OpenFolder}" ToolTip.Tip="{loc:T Logs_OpenFolderHint}"
-                    Command="{Binding OpenFolder}" IsVisible="{Binding CanOpenFolder}" />
+        <!-- Поиск и пауза -->
+        <Grid Grid.Row="1" ColumnDefinitions="*,Auto" Margin="0,14,0,0">
+            <TextBox Text="{Binding Search}" PlaceholderText="{loc:T Logs_Search}">
+                <TextBox.InnerLeftContent>
+                    <Path Classes="icon" Data="{StaticResource Icon.Search}" Width="14" Height="14"
+                          Stroke="{DynamicResource TextFaint}" Margin="12,0,0,0" />
+                </TextBox.InnerLeftContent>
+            </TextBox>
+            <Button Grid.Column="1" Classes="pause" Classes.on="{Binding IsPaused}" Margin="8,0,0,0" MinHeight="38"
+                    ToolTip.Tip="{loc:T Logs_PauseHint}" Command="{Binding TogglePause}">
+                <StackPanel Orientation="Horizontal" Spacing="7">
+                    <Panel VerticalAlignment="Center">
+                        <Path Classes="icon" Data="{StaticResource Icon.Pause}" IsVisible="{Binding !IsPaused}" />
+                        <Path Classes="icon" Data="{StaticResource Icon.Play}" IsVisible="{Binding IsPaused}" />
+                    </Panel>
+                    <TextBlock Text="{Binding PauseLabel}" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <!-- Уровень и действия -->
+        <WrapPanel Grid.Row="2" Margin="0,10,0,0">
+            <Border Classes="segments" Margin="0,0,10,8">
+                <StackPanel Orientation="Horizontal" Spacing="2">
+                    <Button Content="{loc:T Logs_All}" Command="{Binding SetFilter}" CommandParameter="All"
+                            Classes.on="{Binding Level, Converter={StaticResource Eq}, ConverterParameter=All}" />
+                    <Button Command="{Binding SetFilter}" CommandParameter="Warnings"
+                            Classes.on="{Binding Level, Converter={StaticResource Eq}, ConverterParameter=Warnings}">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <TextBlock Text="{loc:T Logs_Warnings}" VerticalAlignment="Center" />
+                            <Border Classes="count warn">
+                                <TextBlock Text="{Binding WarnCount}" />
+                            </Border>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding SetFilter}" CommandParameter="Errors"
+                            Classes.on="{Binding Level, Converter={StaticResource Eq}, ConverterParameter=Errors}">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <TextBlock Text="{loc:T Logs_Errors}" VerticalAlignment="Center" />
+                            <Border Classes="count error">
+                                <TextBlock Text="{Binding ErrorCount}" />
+                            </Border>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Border>
+
+            <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,0,0,8">
+                <Button Classes="small" Command="{Binding Copy}" ToolTip.Tip="{loc:T Logs_CopyHint}" MinHeight="36">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <Path Classes="icon" Data="{StaticResource Icon.Copy}" />
+                        <TextBlock Text="{loc:T Common_Copy}" />
+                    </StackPanel>
+                </Button>
+                <Button Classes="small" Command="{Binding Clear}" MinHeight="36">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <Path Classes="icon" Data="{StaticResource Icon.Trash}" />
+                        <TextBlock Text="{loc:T Common_Clear}" />
+                    </StackPanel>
+                </Button>
+                <Button Classes="small" ToolTip.Tip="{loc:T Logs_OpenFolderHint}" MinHeight="36"
+                        Command="{Binding OpenFolder}" IsVisible="{Binding CanOpenFolder}">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <Path Classes="icon" Data="{StaticResource Icon.Folder}" />
+                        <TextBlock Text="{loc:T Logs_OpenFolder}" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
         </WrapPanel>
 
-        <Border Grid.Row="2" Background="{DynamicResource Console}" CornerRadius="{StaticResource RadiusCard}"
-                BorderBrush="{DynamicResource Line}" BorderThickness="1" Margin="0,14,0,0" Padding="14,12">
-            <!-- Виртуализация: в логе до 500 строк, а на телефоне это заметно -->
-            <ListBox x:Name="LogList" Classes="plain" ItemsSource="{Binding Log}">
-                <ListBox.Styles>
-                    <Style Selector="ListBoxItem">
-                        <Setter Property="Margin" Value="0,0,0,3" />
-                    </Style>
-                </ListBox.Styles>
-                <ListBox.ItemTemplate>
-                    <DataTemplate x:DataType="x:String">
-                        <SelectableTextBlock Classes="mono" FontFamily="{StaticResource Font.Mono}"
-                                             Foreground="{DynamicResource TextSecondary}"
-                                             FontSize="{StaticResource Size.Small}"
-                                             Text="{Binding}" TextWrapping="Wrap" />
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+        <!-- Консоль -->
+        <Border Grid.Row="3" Background="{DynamicResource Console}" CornerRadius="{StaticResource RadiusCard}"
+                BorderBrush="{DynamicResource Line}" BorderThickness="1" Margin="0,4,0,0" ClipToBounds="True">
+            <Grid RowDefinitions="*,Auto">
+                <!-- Виртуализация: в логе до 500 строк, а на телефоне это заметно.
+                     Multiple - выделение щелчком, с Ctrl и Shift - нескольких строк -->
+                <ListBox x:Name="LogList" Classes="plain log" Padding="4,6" SelectionMode="Multiple"
+                         ItemsSource="{Binding Visible}" KeyDown="OnListKeyDown">
+                    <ListBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="{loc:T Logs_CopySelected}" Click="OnCopySelected" />
+                            <MenuItem Header="{loc:T Logs_CopyAll}" Command="{Binding Copy}" />
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="models:LogEntry">
+                            <Border Classes="line" Classes.error="{Binding IsError}" Classes.warn="{Binding IsWarn}"
+                                    Classes.quiet="{Binding IsQuiet}">
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Left" Classes="time" Text="{Binding Time}" />
+                                    <Border DockPanel.Dock="Left" Classes="level" Classes.error="{Binding IsError}"
+                                            Classes.warn="{Binding IsWarn}" Classes.quiet="{Binding IsQuiet}">
+                                        <TextBlock Text="{Binding LevelLabel}" />
+                                    </Border>
+                                    <TextBlock Classes="message">
+                                        <!-- Run в одну строку: перевод строки между ними стал бы лишним пробелом -->
+                                        <Run Text="{Binding SourcePrefix}" Foreground="{DynamicResource AccentSoft}" /><Run Text="{Binding Message}" />
+                                    </TextBlock>
+                                </DockPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <!-- Пусто: ещё не подключались или поиск ничего не нашёл -->
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="12" Margin="20"
+                            IsVisible="{Binding IsEmpty}">
+                    <Path Classes="icon large" Data="{StaticResource Icon.logs}" Stroke="{DynamicResource TextFaint}"
+                          HorizontalAlignment="Center" />
+                    <TextBlock Classes="secondary" TextWrapping="Wrap" TextAlignment="Center" MaxWidth="320"
+                               Text="{loc:T Logs_Empty}" IsVisible="{Binding !NothingFound}" />
+                    <TextBlock Classes="secondary" TextAlignment="Center" Text="{loc:T Logs_NothingFound}"
+                               IsVisible="{Binding NothingFound}" />
+                </StackPanel>
+
+                <!-- «К последним»: появляется, когда пролистали вверх и автопрокрутка встала -->
+                <Button x:Name="ToBottom" Classes="small" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                        Margin="0,0,20,12" IsVisible="False" Click="OnToBottom">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <Path Classes="icon" Data="{StaticResource Icon.ToBottom}" />
+                        <TextBlock Text="{loc:T Logs_ToBottom}" />
+                    </StackPanel>
+                </Button>
+
+                <!-- Строка состояния консоли -->
+                <Border Grid.Row="1" BorderBrush="{DynamicResource Line}" BorderThickness="0,1,0,0" Padding="14,7">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <TextBlock Classes="caption" FontFamily="{StaticResource Font.Mono}" Text="{Binding ShownLabel}"
+                                   VerticalAlignment="Center" />
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6" IsVisible="{Binding IsPaused}">
+                            <Path Classes="icon" Data="{StaticResource Icon.Pause}" Width="11" Height="11"
+                                  Stroke="{DynamicResource Warning}" VerticalAlignment="Center" />
+                            <TextBlock Classes="caption warning" Text="{Binding PendingLabel}" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
         </Border>
     </Grid>
 </UserControl>
