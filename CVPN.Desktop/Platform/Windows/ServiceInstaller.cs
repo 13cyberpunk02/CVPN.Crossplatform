@@ -20,6 +20,28 @@ public static class ServiceInstaller
 
     public static bool IsInstalledOnDisk => File.Exists(ExecutablePath);
 
+    /// <summary>
+    /// Служба зарегистрирована в системе. Читаем раздел реестра служб:
+    /// это не требует прав администратора, в отличие от открытия службы
+    /// через диспетчер, и не зависит от того, запущена ли она.
+    /// </summary>
+    public static bool IsRegistered
+    {
+        get
+        {
+            try
+            {
+                using var key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
+                    $@"SYSTEM\CurrentControlSet\Services\{IpcContract.ServiceName}");
+                return key is not null;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+    }
+
     public static bool Install(out string error)
     {
         if (!IsInstalledOnDisk)

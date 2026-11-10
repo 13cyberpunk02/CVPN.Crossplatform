@@ -40,14 +40,21 @@ public sealed class WindowsServiceManager : ITunnelServiceManager
 {
     public bool IsSupported => true;
 
+    public bool IsInstalled => ServiceInstaller.IsRegistered;
+
     public Task<bool> IsAvailableAsync() => ServiceClient.IsAvailableAsync();
 
-    public async Task<string> DescribeAsync() =>
-        await ServiceClient.IsAvailableAsync()
-            ? Loc.T("Settings_ServiceOk")
-            : ServiceInstaller.IsInstalledOnDisk
-                ? Loc.T("Settings_ServiceMissing")
-                : Loc.T("Settings_ServiceFilesMissing", ServiceInstaller.ExecutablePath);
+    public async Task<string> DescribeAsync()
+    {
+        if (await ServiceClient.IsAvailableAsync()) return Loc.T("Settings_ServiceOk");
+
+        // Зарегистрирована, но не отвечает: остановлена или упала при запуске
+        if (ServiceInstaller.IsRegistered) return Loc.T("Settings_ServiceNotRunning");
+
+        return ServiceInstaller.IsInstalledOnDisk
+            ? Loc.T("Settings_ServiceMissing")
+            : Loc.T("Settings_ServiceFilesMissing", ServiceInstaller.ExecutablePath);
+    }
 
     public bool Install(out string error) => ServiceInstaller.Install(out error);
     public bool Uninstall(out string error) => ServiceInstaller.Uninstall(out error);

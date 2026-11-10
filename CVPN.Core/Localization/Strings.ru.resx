@@ -1056,4 +1056,10 @@
   <data name="TitleBar_Theme" xml:space="preserve">
     <value>Сменить тему</value>
   </data>
+  <data name="Settings_ServiceNotRunning" xml:space="preserve">
+    <value>служба установлена, но не отвечает - запустите её в services.msc или переустановите</value>
+  </data>
+  <data name="Settings_RecreateTask" xml:space="preserve">
+    <value>Пересоздать задачу</value>
+  </data>
 </root>

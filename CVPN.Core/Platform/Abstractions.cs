@@ -147,6 +147,12 @@ public interface ITunnelServiceManager
 {
     bool IsSupported { get; }
 
+    /// <summary>
+    /// Служба зарегистрирована в системе - независимо от того, запущена ли она.
+    /// По этому признаку страница решает, предлагать установку или удаление.
+    /// </summary>
+    bool IsInstalled { get; }
+
     /// <summary>Готова ли служба принять команду прямо сейчас.</summary>
     Task<bool> IsAvailableAsync();
 

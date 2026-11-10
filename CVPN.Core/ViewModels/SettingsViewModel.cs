@@ -24,10 +24,16 @@ public sealed class SettingsViewModel : PageViewModel
         CheckUpdate = new RelayCommand(async () => await CheckUpdateAsync(manual: true));
         OpenRelease = new RelayCommand(async () => await OpenReleasePageAsync(), () => Update is not null);
 
-        InstallService = new RelayCommand(InstallTunnelService);
-        UninstallService = new RelayCommand(UninstallTunnelService);
-        InstallTask = new RelayCommand(InstallElevatedTask);
-        UninstallTask = new RelayCommand(UninstallElevatedTask);
+        // Кнопки отражают состояние системы: установить можно только то, чего нет
+        InstallService = new RelayCommand(InstallTunnelService, () => CanInstallService);
+        UninstallService = new RelayCommand(UninstallTunnelService, () => ServiceInstalled);
+        InstallTask = new RelayCommand(InstallElevatedTask, () => CanInstallTask);
+        UninstallTask = new RelayCommand(UninstallElevatedTask, () => TaskExists);
+
+        // Состояние читаем сразу, а не при первом открытии страницы: иначе
+        // кнопки успевают показаться в неверном виде
+        if (ShowService) ServiceInstalled = Platform.Service.IsInstalled;
+        if (ShowElevatedTask) _ = Task.Run(RefreshTaskStatusInBackground);
 
         _startupLanguage = Settings.Language;
 
@@ -223,8 +229,25 @@ public sealed class SettingsViewModel : PageViewModel
 
     private async Task RefreshServiceStatusAsync()
     {
+        ServiceInstalled = Platform.Service.IsInstalled;
         ServiceStatus = await Platform.Service.DescribeAsync();
     }
+
+    /// <summary>
+    /// Служба зарегистрирована в системе. Пока она есть, предлагаем только
+    /// удаление: повторная установка закончилась бы ошибкой sc.exe.
+    /// </summary>
+    public bool ServiceInstalled
+    {
+        get;
+        private set
+        {
+            Set(ref field, value);
+            Raise(nameof(CanInstallService));
+        }
+    }
+
+    public bool CanInstallService => !ServiceInstalled;
 
     private void InstallTunnelService()
     {
@@ -246,20 +269,63 @@ public sealed class SettingsViewModel : PageViewModel
 
     // ===================== задача планировщика =====================
 
-    private void RefreshTaskStatus()
+    private void RefreshTaskStatus() => ApplyTaskState(QueryTask());
+
+    /// <summary>
+    /// schtasks запускается процессом - на старте не держим из-за него поток UI.
+    /// Результат применяется уже на нём.
+    /// </summary>
+    private void RefreshTaskStatusInBackground()
+    {
+        var state = QueryTask();
+        Shell.Dispatch(() => ApplyTaskState(state));
+    }
+
+    private (bool Exists, bool Stale) QueryTask()
     {
         var launcher = Platform.ElevatedLauncher;
-
-        if (!launcher.Exists)
-        {
-            TaskStatus = Loc.T("Settings_TaskMissing");
-            return;
-        }
-
-        TaskStatus = launcher.PathMatchesCurrent()
-            ? Loc.T("Settings_TaskOk")
-            : Loc.T("Settings_TaskStale");
+        var exists = launcher.Exists;
+        return (exists, exists && !launcher.PathMatchesCurrent());
     }
+
+    private void ApplyTaskState((bool Exists, bool Stale) state)
+    {
+        TaskExists = state.Exists;
+        TaskStale = state.Stale;
+        TaskStatus = !state.Exists
+            ? Loc.T("Settings_TaskMissing")
+            : state.Stale
+                ? Loc.T("Settings_TaskStale")
+                : Loc.T("Settings_TaskOk");
+    }
+
+    /// <summary>Задача есть в планировщике.</summary>
+    public bool TaskExists
+    {
+        get;
+        private set
+        {
+            Set(ref field, value);
+            Raise(nameof(CanInstallTask));
+        }
+    }
+
+    /// <summary>Задача запускает другой файл - её надо пересоздать.</summary>
+    public bool TaskStale
+    {
+        get;
+        private set
+        {
+            Set(ref field, value);
+            Raise(nameof(CanInstallTask));
+            Raise(nameof(InstallTaskLabel));
+        }
+    }
+
+    /// <summary>Создавать нечего, если рабочая задача уже есть; устаревшую - можно пересоздать.</summary>
+    public bool CanInstallTask => !TaskExists || TaskStale;
+
+    public string InstallTaskLabel => TaskStale ? Loc.T("Settings_RecreateTask") : Loc.T("Settings_CreateTask");
 
     private void InstallElevatedTask()
     {

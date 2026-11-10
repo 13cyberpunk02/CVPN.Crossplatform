@@ -125,21 +125,28 @@ public partial class App : Application
             .FirstOrDefault(a => a.StartsWith("--snapshot=", StringComparison.Ordinal));
         if (arg is null || _topLevel is not Window window) return;
 
-        var spec = arg["--snapshot=".Length..];
-        var width = 980;
-        var sep = spec.LastIndexOf('|');
-        if (sep > 0 && int.TryParse(spec[(sep + 1)..], out var w))
-        {
-            width = w;
-            spec = spec[..sep];
-        }
+        // Формат: путь.png[|ширина[|высота]]
+        var parts = arg["--snapshot=".Length..].Split('|');
+        var spec = parts[0];
+        var width = parts.Length > 1 && int.TryParse(parts[1], out var w) ? w : 980;
+        var height = parts.Length > 2 && int.TryParse(parts[2], out var h) ? h : width < 720 ? 820 : 660;
 
         window.Width = width;
-        window.Height = width < 720 ? 820 : 660;
+        window.Height = height;
+
+        var scrollEnd = Environment.GetCommandLineArgs().Contains("--scroll-end");
 
         window.Opened += async (_, _) =>
         {
-            await Task.Delay(1500);
+            await Task.Delay(1200);
+
+            // --scroll-end: показать низ длинной страницы - окно не бывает выше экрана
+            if (scrollEnd)
+            {
+                foreach (var scroll in Avalonia.VisualTree.VisualExtensions.GetVisualDescendants(window).OfType<ScrollViewer>())
+                    scroll.ScrollToEnd();
+                await Task.Delay(500);
+            }
 
             var size = new PixelSize((int)window.Bounds.Width, (int)window.Bounds.Height);
             using var bitmap = new Avalonia.Media.Imaging.RenderTargetBitmap(size);

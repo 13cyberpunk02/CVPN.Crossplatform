@@ -68,6 +68,7 @@ public sealed class Unsupported :
     }
 
     // ITunnelServiceManager
+    public bool IsInstalled => false;
     public Task<bool> IsAvailableAsync() => Task.FromResult(false);
     public Task<string> DescribeAsync() => Task.FromResult("");
 

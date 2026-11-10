@@ -1056,4 +1056,10 @@ Restart CVPN now?</value>
   <data name="TitleBar_Theme" xml:space="preserve">
     <value>Switch theme</value>
   </data>
+  <data name="Settings_ServiceNotRunning" xml:space="preserve">
+    <value>the service is installed but not answering - start it in services.msc or reinstall it</value>
+  </data>
+  <data name="Settings_RecreateTask" xml:space="preserve">
+    <value>Recreate task</value>
+  </data>
 </root>
