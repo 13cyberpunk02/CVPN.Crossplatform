@@ -24,7 +24,16 @@
     Ядро sing-box (libsingbox.so) и tun2socks (libhev-socks5-tunnel.so) лежат в
     natives/<abi>/ - их скачивает packaging/android/fetch-natives.ps1. Отдельный
     AndroidNativeLibrary не нужен: SDK сам берёт *.so из проекта, ABI - по имени папки.
+
+    hev-socks5-tunnel.jar - Java-класс hev.htproxy.TProxyService из AAR. JNI_OnLoad
+    библиотеки ищет его при любой загрузке через System.loadLibrary; без класса
+    приложение падает на старте (видно в отлаживаемой сборке с CheckJNI).
+    Bind=false: C#-обёртка не нужна, библиотеку мы вызываем через P/Invoke.
   -->
+  <ItemGroup Condition="Exists('natives\hev-socks5-tunnel.jar')">
+    <AndroidJavaLibrary Include="natives\hev-socks5-tunnel.jar" Bind="false" />
+    <ProguardConfiguration Include="hev-proguard.cfg" />
+  </ItemGroup>
 
   <Target Name="CheckNatives" BeforeTargets="Build">
     <Warning Condition="!Exists('natives\arm64-v8a\libsingbox.so')"

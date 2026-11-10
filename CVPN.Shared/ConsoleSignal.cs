@@ -39,7 +39,7 @@ public static class ConsoleSignal
 
     /// <summary>
     /// Просит процесс завершиться и ждёт указанное время. Возвращает false,
-    /// если он не отреагировал — тогда вызывающему коду остаётся Kill.
+    /// если он не отреагировал - тогда вызывающему коду остаётся Kill.
     /// </summary>
     public static bool TryGracefulStop(Process process, TimeSpan timeout)
     {

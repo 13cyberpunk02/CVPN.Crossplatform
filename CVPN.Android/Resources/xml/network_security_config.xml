@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Android 9+ запрещает незашифрованный HTTP. Clash API ядра - http://127.0.0.1:<порт>:
+    без этого исключения не работают скорость, соединения, выбор сервера и замер задержки.
+    Разрешение - только для петли; всё остальное по-прежнему только по HTTPS.
+-->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">127.0.0.1</domain>
+        <domain includeSubdomains="false">localhost</domain>
+    </domain-config>
+</network-security-config>

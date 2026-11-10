@@ -45,6 +45,11 @@ foreach ($abi in $abis.Keys) {
     Copy-Item (Join-Path $work "hev\jni\$abi\libhev-socks5-tunnel.so") (Join-Path $natives $abi) -Force
 }
 
+# Java-класс hev.htproxy.TProxyService. Сами мы его не вызываем, но JNI_OnLoad
+# библиотеки регистрирует на нём методы: без класса загрузка библиотеки через
+# System.loadLibrary (так делает .NET Android в отлаживаемой сборке) падает.
+Copy-Item (Join-Path $work "hev\classes.jar") (Join-Path $natives "hev-socks5-tunnel.jar") -Force
+
 # Лицензии едут вместе с бинарниками: sing-box - GPL-3.0, hev-socks5-tunnel - MIT
 Copy-Item (Join-Path $work "sing-box-$SingBoxVersion-android-arm64\LICENSE") (Join-Path $natives "LICENSE.sing-box.txt") -Force
 Invoke-WebRequest "https://raw.githubusercontent.com/heiher/hev-socks5-tunnel/$HevVersion/LICENSE" -OutFile (Join-Path $natives "LICENSE.hev-socks5-tunnel.txt")

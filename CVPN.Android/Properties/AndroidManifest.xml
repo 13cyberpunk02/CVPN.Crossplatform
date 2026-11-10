@@ -11,7 +11,8 @@
 		extractNativeLibs: ядро sing-box упаковано как libsingbox.so и запускается
 		процессом - для этого файл должен лежать распакованным в nativeLibraryDir.
 	-->
-	<application android:label="CVPN" android:icon="@drawable/Icon" android:extractNativeLibs="true">
+	<application android:label="CVPN" android:icon="@drawable/Icon" android:extractNativeLibs="true"
+		android:networkSecurityConfig="@xml/network_security_config">
 		<!--
 			Служба VPN. Объявлена здесь, а не атрибутом [Service]: foreground-службе
 			типа specialUse нужен вложенный property с назначением (Android 14+).

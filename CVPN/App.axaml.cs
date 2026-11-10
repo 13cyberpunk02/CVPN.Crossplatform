@@ -179,9 +179,20 @@ public partial class App : Application
     {
         var view = new MainView { DataContext = Shell };
         _dialogs?.Attach(view.Overlay);
-        view.AttachedToVisualTree += (_, _) => _topLevel = TopLevel.GetTopLevel(view);
+        view.AttachedToVisualTree += async (_, _) =>
+        {
+            _topLevel = TopLevel.GetTopLevel(view);
+
+            // Автоподключение - один раз за процесс: Android пересоздаёт разметку
+            // при повороте экрана и возврате из фона
+            if (_startupDone || Shell is null) return;
+            _startupDone = true;
+            await Shell.StartupAsync();
+        };
         return view;
     }
+
+    private bool _startupDone;
 
     /// <summary>
     /// Перед выходом надо вернуть системный прокси и снять kill switch, иначе

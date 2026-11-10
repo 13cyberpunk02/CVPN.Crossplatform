@@ -107,6 +107,7 @@ public sealed class CoreRunner : IDisposable
     {
         if (string.IsNullOrWhiteSpace(line)) return;
 
+        line = Ansi.Strip(line);
         _log.Enqueue(line);
 
         // В файл пишем всегда: очередь заберёт приложение, если оно запущено,

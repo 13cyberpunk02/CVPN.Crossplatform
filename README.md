@@ -1,6 +1,6 @@
 # CVPN (Avalonia)
 
-Кроссплатформенная версия [CVPN](https://github.com/13CyberPunk02/CVPN) — клиента sing-box —
+Кроссплатформенная версия [CVPN](https://github.com/13CyberPunk02/CVPN) - клиента sing-box -
 на Avalonia: Windows, Linux, Android.
 
 ## Структура

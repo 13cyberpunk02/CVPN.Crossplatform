@@ -161,7 +161,7 @@ public sealed class SingBoxService(string corePath) : IAsyncDisposable
 
     private void Forward(string? line)
     {
-        if (!string.IsNullOrWhiteSpace(line)) LineReceived?.Invoke(line);
+        if (!string.IsNullOrWhiteSpace(line)) LineReceived?.Invoke(Ansi.Strip(line));
     }
 
     public async Task StopAsync()
