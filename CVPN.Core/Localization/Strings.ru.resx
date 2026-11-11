@@ -514,7 +514,7 @@
     <value>Из подписки загружено серверов: {0}</value>
   </data>
   <data name="Profiles_Subtitle" xml:space="preserve">
-    <value>Вставьте ссылку или импортируйте конфигурацию sing-box</value>
+    <value>Серверы, через которые идёт подключение</value>
   </data>
   <data name="Profiles_UpdateSubscription" xml:space="preserve">
     <value>Обновить подписку</value>
@@ -1426,5 +1426,53 @@
   </data>
   <data name="Update_Title" xml:space="preserve">
     <value>Доступна версия {0}</value>
+  </data>
+  <data name="Profiles_FromFile" xml:space="preserve">
+    <value>Из файла</value>
+  </data>
+  <data name="Profiles_EmptyText" xml:space="preserve">
+    <value>Скопируйте ссылку на сервер или подписку от вашего провайдера и нажмите «Вставить из буфера». Или вставьте её в поле выше.</value>
+  </data>
+  <data name="Profiles_EmptyTitle" xml:space="preserve">
+    <value>Добавьте первый сервер</value>
+  </data>
+  <data name="Profiles_SubscriptionNever" xml:space="preserve">
+    <value>ещё не загружалась</value>
+  </data>
+  <data name="Profiles_AddPlaceholder" xml:space="preserve">
+    <value>Ссылка на сервер или подписку</value>
+  </data>
+  <data name="Profiles_Count" xml:space="preserve">
+    <value>Серверов: {0}</value>
+  </data>
+  <data name="Profiles_Manual" xml:space="preserve">
+    <value>Вручную</value>
+  </data>
+  <data name="Profiles_SubscriptionUpdatedAt" xml:space="preserve">
+    <value>обновлена {0}</value>
+  </data>
+  <data name="Profiles_NothingFound" xml:space="preserve">
+    <value>Ничего не найдено</value>
+  </data>
+  <data name="Profiles_EnterLink" xml:space="preserve">
+    <value>Вставьте ссылку на сервер или подписку</value>
+  </data>
+  <data name="Profiles_Search" xml:space="preserve">
+    <value>Поиск по имени или адресу</value>
+  </data>
+  <data name="Profiles_SortFastest" xml:space="preserve">
+    <value>Сначала быстрые</value>
+  </data>
+  <data name="Profiles_AddTitle" xml:space="preserve">
+    <value>Добавить сервер</value>
+  </data>
+  <data name="Profiles_AddHint" xml:space="preserve">
+    <value>vless://, anytls://, naive+https:// или ссылка подписки https://. Можно вставить несколько ссылок, по одной в строке.</value>
+  </data>
+  <data name="Profiles_SelectHint" xml:space="preserve">
+    <value>Нажмите на карточку, чтобы подключаться через этот сервер</value>
+  </data>
+  <data name="Profiles_Subscription" xml:space="preserve">
+    <value>Подписка</value>
   </data>
 </root>

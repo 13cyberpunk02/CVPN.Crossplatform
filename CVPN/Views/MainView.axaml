@@ -58,21 +58,22 @@
                     BorderBrush="{DynamicResource Line}" BorderThickness="0,0,1,0">
                 <Grid RowDefinitions="Auto,*,Auto">
                     <!-- Логотип - в шапке окна; на телефоне шапки нет, и он там не нужен -->
-                    <ListBox Grid.Row="0" Classes="nav" Margin="0,12,0,0"
-                             ItemsSource="{Binding NavItems}" SelectedItem="{Binding SelectedNav}">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate x:DataType="vm:NavItem">
-                                <Panel>
-                                    <Border Classes="marker" />
-                                    <StackPanel Orientation="Horizontal" Spacing="12" Margin="14,0,0,0"
+                    <!-- Пункты лежат в утопленном лотке; клавиши и плашка - см. Controls.axaml -->
+                    <Border Grid.Row="0" Classes="tray" Margin="10,12,10,0">
+                        <ListBox Classes="nav" ItemsSource="{Binding NavItems}" SelectedItem="{Binding SelectedNav}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate x:DataType="vm:NavItem">
+                                    <StackPanel Orientation="Horizontal" Spacing="11" Margin="7,0,0,0"
                                                 VerticalAlignment="Center">
-                                        <Path Classes="icon" Data="{Binding Key, Converter={StaticResource Icon}}" />
+                                        <Border Classes="key">
+                                            <Path Classes="icon" Data="{Binding Key, Converter={StaticResource Icon}}" />
+                                        </Border>
                                         <TextBlock Text="{Binding Title}" VerticalAlignment="Center" />
                                     </StackPanel>
-                                </Panel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Border>
 
                     <!-- Режим: что перехватывает трафик в этой сессии -->
                     <Border Grid.Row="2" BorderBrush="{DynamicResource Line}" BorderThickness="0,1,0,0" Padding="18,12">
@@ -109,25 +110,29 @@
             <!-- ===== нижнее меню (узкий экран) ===== -->
             <Border x:Name="BottomBar" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" IsVisible="False"
                     Background="{DynamicResource Chrome}" BorderBrush="{DynamicResource Line}" BorderThickness="0,1,0,0">
-                <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled">
-                    <ListBox Classes="nav bottomnav" Margin="4,4"
-                             ItemsSource="{Binding NavItems}" SelectedItem="{Binding SelectedNav}">
-                        <ListBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal" />
-                            </ItemsPanelTemplate>
-                        </ListBox.ItemsPanel>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate x:DataType="vm:NavItem">
-                                <StackPanel Spacing="3" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <Path Classes="icon large" HorizontalAlignment="Center"
-                                          Data="{Binding Key, Converter={StaticResource Icon}}" />
-                                    <TextBlock Text="{Binding Title}" HorizontalAlignment="Center" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </ScrollViewer>
+                <Border Classes="tray" Margin="6" Padding="0,4">
+                    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled">
+                        <ListBox Classes="nav bottomnav"
+                                 ItemsSource="{Binding NavItems}" SelectedItem="{Binding SelectedNav}">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate x:DataType="vm:NavItem">
+                                    <StackPanel Spacing="4" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                Margin="4,0">
+                                        <Border Classes="key" HorizontalAlignment="Center">
+                                            <Path Classes="icon" Data="{Binding Key, Converter={StaticResource Icon}}" />
+                                        </Border>
+                                        <TextBlock Text="{Binding Title}" HorizontalAlignment="Center" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                </Border>
             </Border>
         </Grid>
 

@@ -43,9 +43,114 @@ public sealed class ProfilesViewModel : PageViewModel
         ExportAll = new RelayCommand(async () => await ShowExportAllAsync(), () => Profiles.Count > 0);
         PingAll = new RelayCommand(async () => await PingAsync(), () => !IsBusy);
         UpdateSubscription = new RelayCommand(async () => await UpdateSubscriptionAsync(), () => !IsBusy);
+        AddFromText = new RelayCommand(async () => await AddFromFieldAsync(), () => !IsBusy);
+        ToggleSort = new RelayCommand(() => SortFastest = !SortFastest);
+
+        Profiles.CollectionChanged += (_, _) => Refresh();
+        Settings.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName is nameof(AppSettings.SubscriptionUrl) or nameof(AppSettings.SubscriptionUpdated))
+                RaiseSubscription();
+        };
+        shell.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(MainViewModel.Active)) Raise(nameof(Selected));
+        };
+
+        Refresh();
     }
 
     public ObservableCollection<ServerProfile> Profiles => Shell.Profiles;
+
+    // ===================== список на экране =====================
+
+    /// <summary>Профили после поиска и сортировки - то, что видно в списке.</summary>
+    public ObservableCollection<ServerProfile> Visible { get; } = [];
+
+    /// <summary>Поиск по имени, адресу и протоколу.</summary>
+    public string Search
+    {
+        get;
+        set
+        {
+            if (Set(ref field, value ?? "")) Refresh();
+        }
+    } = "";
+
+    /// <summary>Сначала быстрые: по задержке, не ответившие - в конце.</summary>
+    public bool SortFastest
+    {
+        get;
+        set
+        {
+            if (Set(ref field, value)) Refresh();
+        }
+    }
+
+    public ICommand ToggleSort { get; }
+
+    public int ProfileCount => Profiles.Count;
+    public bool HasProfiles => Profiles.Count > 0;
+
+    /// <summary>Профили есть, но поиск их все отсеял.</summary>
+    public bool NothingFound => Profiles.Count > 0 && Visible.Count == 0;
+
+    /// <summary>
+    /// Выбор сервера щелчком по карточке - так же, как кнопка «Выбрать».
+    /// Пустой выбор (список перестроился) игнорируем: сервер от этого не меняется.
+    /// </summary>
+    public ServerProfile? Selected
+    {
+        get => Shell.Active;
+        set
+        {
+            if (value is null || ReferenceEquals(value, Shell.Active)) return;
+            _ = Shell.SelectServerAsync(value);
+        }
+    }
+
+    private void Refresh()
+    {
+        var query = Search.Trim();
+
+        IEnumerable<ServerProfile> items = Profiles.Where(p => Matches(p, query));
+
+        if (SortFastest)
+            items = items.OrderBy(p => p.LatencyMs < 0 ? int.MaxValue : p.LatencyMs);
+
+        Visible.Clear();
+        foreach (var profile in items) Visible.Add(profile);
+
+        Raise(nameof(ProfileCount));
+        Raise(nameof(HasProfiles));
+        Raise(nameof(NothingFound));
+        Raise(nameof(Selected));
+    }
+
+    internal static bool Matches(ServerProfile profile, string query) =>
+        query.Length == 0
+        || profile.Name.Contains(query, StringComparison.OrdinalIgnoreCase)
+        || profile.Endpoint.Contains(query, StringComparison.OrdinalIgnoreCase)
+        || profile.ProtocolLabel.Contains(query, StringComparison.OrdinalIgnoreCase);
+
+    // ===================== подписка =====================
+
+    public bool HasSubscription => !string.IsNullOrWhiteSpace(Settings.SubscriptionUrl);
+
+    /// <summary>Адрес подписки без схемы и хвоста - целиком он длинный и ничего не говорит.</summary>
+    public string SubscriptionLabel =>
+        Uri.TryCreate(Settings.SubscriptionUrl, UriKind.Absolute, out var uri) ? uri.Host : Settings.SubscriptionUrl;
+
+    public string SubscriptionUpdatedLabel => Settings.SubscriptionUpdated is { } at
+        ? Loc.T("Profiles_SubscriptionUpdatedAt", at.ToLocalTime().ToString("g", Loc.Culture))
+        : Loc.T("Profiles_SubscriptionNever");
+
+    private void RaiseSubscription()
+    {
+        Raise(nameof(HasSubscription));
+        Raise(nameof(SubscriptionLabel));
+        Raise(nameof(SubscriptionUpdatedLabel));
+    }
 
     public AppSettings Settings => Shell.Settings;
 
@@ -74,6 +179,9 @@ public sealed class ProfilesViewModel : PageViewModel
     public ICommand ExportAll { get; }
     public ICommand PingAll { get; }
     public ICommand UpdateSubscription { get; }
+
+    /// <summary>Единое поле «ссылка на сервер или подписку» - кнопка «Добавить».</summary>
+    public ICommand AddFromText { get; }
 
     /// <summary>
     /// Обновление подписки при запуске - не чаще раза в сутки. Вызывается
@@ -134,20 +242,36 @@ public sealed class ProfilesViewModel : PageViewModel
             text = null;
         }
 
-        var lines = (text ?? "").Split(['\r', '\n'],
+        await AddTextAsync(text ?? "", Loc.T("Profiles_ClipboardEmpty"));
+    }
+
+    /// <summary>Кнопка «Добавить» у поля: поле очищается, только если что-то добавилось.</summary>
+    private async Task AddFromFieldAsync()
+    {
+        if (await AddTextAsync(LinkText, Loc.T("Profiles_EnterLink"))) LinkText = "";
+    }
+
+    /// <summary>
+    /// Общий разбор вставленного текста - для буфера и для поля. Одиночный
+    /// http(s)-адрес - ссылка подписки, иначе ссылки на серверы по одной в строке.
+    /// Возвращает true, если что-то добавилось.
+    /// </summary>
+    private async Task<bool> AddTextAsync(string text, string emptyMessage)
+    {
+        var lines = text.Split(['\r', '\n'],
             StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
         if (lines.Length == 0)
         {
-            Shell.Notify(Loc.T("Profiles_ClipboardEmpty"));
-            return;
+            Shell.Notify(emptyMessage);
+            return false;
         }
 
         if (lines.Length == 1 && IsSubscriptionUrl(lines[0]))
         {
             Settings.SubscriptionUrl = lines[0];
             await UpdateSubscriptionAsync();
-            return;
+            return true;
         }
 
         var added = new List<ServerProfile>();
@@ -161,8 +285,8 @@ public sealed class ProfilesViewModel : PageViewModel
 
         if (added.Count == 0)
         {
-            Shell.Notify(lastError.Length > 0 ? lastError : Loc.T("Profiles_ClipboardEmpty"));
-            return;
+            Shell.Notify(lastError.Length > 0 ? lastError : emptyMessage);
+            return false;
         }
 
         foreach (var profile in added) Profiles.Add(profile);
@@ -172,6 +296,10 @@ public sealed class ProfilesViewModel : PageViewModel
         Shell.Notify(added.Count == 1
             ? Loc.T("Profiles_Added", added[0].Name)
             : Loc.T("Profiles_AddedMany", added.Count));
+
+        // Сразу меряем задержку новых: прочерк вместо числа выглядит как поломка
+        _ = EnsureLatencyAsync();
+        return true;
     }
 
     internal static bool IsSubscriptionUrl(string text) =>
@@ -317,6 +445,9 @@ public sealed class ProfilesViewModel : PageViewModel
         finally
         {
             IsBusy = false;
+
+            // Новые замеры меняют порядок «сначала быстрые»
+            if (SortFastest) Shell.Dispatch(Refresh);
         }
     }
 

@@ -303,27 +303,48 @@
         <Setter Property="Margin" Value="0,0,0,6" />
     </Style>
 
-    <!-- ===================== Меню ===================== -->
+    <!-- ===================== Меню =====================
+         Объёмное, как кнопка подключения: пункты лежат в утопленном лотке (Border.tray),
+         у каждого - выпуклая клавиша с иконкой, выбранный пункт - приподнятая стеклянная
+         плашка, а его клавиша горит лазурью. -->
+    <Style Selector="Border.tray">
+        <Setter Property="Background" Value="{DynamicResource NavTray}" />
+        <Setter Property="BoxShadow" Value="{DynamicResource NavTrayShadow}" />
+        <Setter Property="CornerRadius" Value="14" />
+        <Setter Property="Padding" Value="0,6" />
+    </Style>
+
     <Style Selector="ListBox.nav">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Padding" Value="0" />
     </Style>
     <Style Selector="ListBox.nav ListBoxItem">
         <Setter Property="Foreground" Value="{DynamicResource TextMuted}" />
-        <Setter Property="CornerRadius" Value="{StaticResource Radius}" />
-        <Setter Property="Margin" Value="10,2" />
+        <Setter Property="CornerRadius" Value="11" />
+        <Setter Property="Margin" Value="6,2" />
         <Setter Property="Padding" Value="0" />
-        <Setter Property="MinHeight" Value="40" />
+        <Setter Property="MinHeight" Value="44" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="RenderTransform" Value="none" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.12" Easing="CubicEaseOut" />
+            </Transitions>
+        </Setter>
+    </Style>
+    <Style Selector="ListBox.nav ListBoxItem:pressed">
+        <Setter Property="RenderTransform" Value="scale(0.97)" />
     </Style>
     <Style Selector="ListBox.nav ListBoxItem /template/ ContentPresenter#PART_ContentPresenter">
         <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Transitions">
             <Transitions>
-                <BrushTransition Property="Background" Duration="0:0:0.2" />
                 <BrushTransition Property="Foreground" Duration="0:0:0.2" />
+                <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.25" />
             </Transitions>
         </Setter>
     </Style>
@@ -331,54 +352,59 @@
         <Setter Property="Background" Value="{DynamicResource SurfaceHover}" />
         <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
     </Style>
-    <Style Selector="ListBox.nav ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
-        <Setter Property="Background" Value="{DynamicResource Tint.Accent}" />
-        <Setter Property="Foreground" Value="{DynamicResource Text}" />
-    </Style>
-    <Style Selector="ListBox.nav ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-        <Setter Property="Background" Value="{DynamicResource Tint.Accent}" />
+    <!-- Выбранный пункт приподнят над лотком -->
+    <Style Selector="ListBox.nav ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter,
+                     ListBox.nav ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource PillFace}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource PillRim}" />
+        <Setter Property="BoxShadow" Value="{DynamicResource PillShadow}" />
         <Setter Property="Foreground" Value="{DynamicResource Text}" />
     </Style>
 
-    <!-- Маркер выбранного пункта: вырастает из середины -->
-    <Style Selector="ListBox.nav Border.marker">
-        <Setter Property="Width" Value="3" />
-        <Setter Property="Height" Value="18" />
-        <Setter Property="CornerRadius" Value="2" />
-        <Setter Property="Background" Value="{DynamicResource AccentGradient}" />
-        <Setter Property="HorizontalAlignment" Value="Left" />
+    <!-- Клавиша иконки: выпуклая, при выборе загорается -->
+    <Style Selector="ListBox.nav Border.key">
+        <Setter Property="Width" Value="30" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="CornerRadius" Value="9" />
         <Setter Property="VerticalAlignment" Value="Center" />
-        <!-- Невыбранный: прозрачный и сжатый по высоте. Opacity страхует,
-             если платформа не применит трансформацию -->
-        <Setter Property="Opacity" Value="0" />
-        <Setter Property="RenderTransform" Value="scale(1, 0.2)" />
+        <Setter Property="Background" Value="{DynamicResource KeyFace}" />
+        <Setter Property="BoxShadow" Value="{DynamicResource KeyShadow}" />
         <Setter Property="Transitions">
             <Transitions>
-                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.28" Easing="BackEaseOut" />
-                <DoubleTransition Property="Opacity" Duration="0:0:0.18" />
+                <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.25" />
             </Transitions>
         </Setter>
     </Style>
-    <Style Selector="ListBox.nav ListBoxItem:selected Border.marker">
-        <Setter Property="Opacity" Value="1" />
-        <Setter Property="RenderTransform" Value="scale(1, 1)" />
+    <Style Selector="ListBox.nav Border.key Path.icon">
+        <Setter Property="Width" Value="15" />
+        <Setter Property="Height" Value="15" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Stroke" Value="{DynamicResource TextSecondary}" />
     </Style>
-    <Style Selector="ListBox.nav ListBoxItem:selected Path.icon">
-        <Setter Property="Stroke" Value="{DynamicResource Accent}" />
+    <Style Selector="ListBox.nav ListBoxItem:selected Border.key">
+        <Setter Property="Background" Value="{DynamicResource KeyFaceActive}" />
+        <Setter Property="BoxShadow" Value="{DynamicResource KeyShadowActive}" />
+    </Style>
+    <Style Selector="ListBox.nav ListBoxItem:selected Border.key Path.icon">
+        <Setter Property="Stroke" Value="{DynamicResource OnAccent}" />
+        <Setter Property="StrokeThickness" Value="2" />
+    </Style>
+    <Style Selector="ListBox.nav ListBoxItem:selected TextBlock">
+        <Setter Property="FontWeight" Value="SemiBold" />
     </Style>
 
-    <!-- Нижнее меню (телефон): иконка над подписью, маркер не нужен -->
+    <!-- Нижнее меню (телефон): клавиша над подписью -->
     <Style Selector="ListBox.bottomnav ListBoxItem">
         <Setter Property="Margin" Value="2,0" />
-        <Setter Property="MinHeight" Value="54" />
-        <Setter Property="MinWidth" Value="72" />
+        <Setter Property="MinHeight" Value="58" />
+        <Setter Property="MinWidth" Value="70" />
         <Setter Property="FontSize" Value="{StaticResource Size.Caption}" />
     </Style>
-    <Style Selector="ListBox.bottomnav ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
-        <Setter Property="Foreground" Value="{DynamicResource Accent}" />
-    </Style>
-    <Style Selector="ListBox.bottomnav ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-        <Setter Property="Foreground" Value="{DynamicResource Accent}" />
+    <Style Selector="ListBox.bottomnav Border.key">
+        <Setter Property="Width" Value="34" />
+        <Setter Property="Height" Value="26" />
+        <Setter Property="CornerRadius" Value="13" />
     </Style>
 
     <!-- ===================== Точка состояния ===================== -->

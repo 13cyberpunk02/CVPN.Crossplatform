@@ -514,7 +514,7 @@ If you decline, you can turn TUN off in settings - traffic will then go through 
     <value>Servers loaded from the subscription: {0}</value>
   </data>
   <data name="Profiles_Subtitle" xml:space="preserve">
-    <value>Paste a link or import a sing-box configuration</value>
+    <value>The servers you connect through</value>
   </data>
   <data name="Profiles_UpdateSubscription" xml:space="preserve">
     <value>Update subscription</value>
@@ -1426,5 +1426,53 @@ Restart CVPN now?</value>
   </data>
   <data name="Update_Title" xml:space="preserve">
     <value>Version {0} is available</value>
+  </data>
+  <data name="Profiles_FromFile" xml:space="preserve">
+    <value>From file</value>
+  </data>
+  <data name="Profiles_EmptyText" xml:space="preserve">
+    <value>Copy a server link or the subscription URL from your provider and press "Paste from clipboard". Or paste it into the field above.</value>
+  </data>
+  <data name="Profiles_EmptyTitle" xml:space="preserve">
+    <value>Add your first server</value>
+  </data>
+  <data name="Profiles_SubscriptionNever" xml:space="preserve">
+    <value>not loaded yet</value>
+  </data>
+  <data name="Profiles_AddPlaceholder" xml:space="preserve">
+    <value>Server link or subscription URL</value>
+  </data>
+  <data name="Profiles_Count" xml:space="preserve">
+    <value>Servers: {0}</value>
+  </data>
+  <data name="Profiles_Manual" xml:space="preserve">
+    <value>Manually</value>
+  </data>
+  <data name="Profiles_SubscriptionUpdatedAt" xml:space="preserve">
+    <value>updated {0}</value>
+  </data>
+  <data name="Profiles_NothingFound" xml:space="preserve">
+    <value>Nothing found</value>
+  </data>
+  <data name="Profiles_EnterLink" xml:space="preserve">
+    <value>Paste a server link or subscription URL</value>
+  </data>
+  <data name="Profiles_Search" xml:space="preserve">
+    <value>Search by name or address</value>
+  </data>
+  <data name="Profiles_SortFastest" xml:space="preserve">
+    <value>Fastest first</value>
+  </data>
+  <data name="Profiles_AddTitle" xml:space="preserve">
+    <value>Add a server</value>
+  </data>
+  <data name="Profiles_AddHint" xml:space="preserve">
+    <value>vless://, anytls://, naive+https:// or a subscription URL https://. You can paste several links, one per line.</value>
+  </data>
+  <data name="Profiles_SelectHint" xml:space="preserve">
+    <value>Click a card to connect through this server</value>
+  </data>
+  <data name="Profiles_Subscription" xml:space="preserve">
+    <value>Subscription</value>
   </data>
 </root>

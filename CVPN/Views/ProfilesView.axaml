@@ -7,129 +7,337 @@
              x:DataType="vm:ProfilesViewModel"
              x:Name="Root">
 
-    <Grid Classes="page" RowDefinitions="Auto,Auto,Auto,Auto,*">
-        <StackPanel Grid.Row="0">
-            <TextBlock Classes="title" Text="{loc:T Nav_Profiles}" />
-            <TextBlock Classes="secondary" Text="{loc:T Profiles_Subtitle}" Margin="0,4,0,0" TextWrapping="Wrap" />
-            <TextBlock Classes="status" Text="{Binding Status}" Margin="0,6,0,0" />
-        </StackPanel>
+    <UserControl.Styles>
+        <!-- Объёмная клавиша - как в меню: под флагом страны и под иконками разделов -->
+        <Style Selector="Border.key">
+            <Setter Property="Background" Value="{DynamicResource KeyFace}" />
+            <Setter Property="BoxShadow" Value="{DynamicResource KeyShadow}" />
+            <Setter Property="CornerRadius" Value="11" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Border.key.big">
+            <Setter Property="Width" Value="42" />
+            <Setter Property="Height" Value="42" />
+        </Style>
+        <Style Selector="Border.key.small">
+            <Setter Property="Width" Value="32" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="CornerRadius" Value="9" />
+        </Style>
+        <Style Selector="Border.key Path.icon">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Stroke" Value="{DynamicResource Accent}" />
+        </Style>
+        <!-- Активный сервер: клавиша горит лазурью -->
+        <Style Selector="Border.item.active Border.key">
+            <Setter Property="Background" Value="{DynamicResource KeyFaceActive}" />
+            <Setter Property="BoxShadow" Value="{DynamicResource KeyShadowActive}" />
+        </Style>
+        <Style Selector="Border.item.active Border.key Path.icon">
+            <Setter Property="Stroke" Value="{DynamicResource OnAccent}" />
+        </Style>
 
-        <!-- Действия: в ряд на десктопе, переносятся на телефоне.
-             Главное - вставка из буфера: так ссылки добавляются чаще всего, особенно на телефоне -->
-        <WrapPanel Grid.Row="1" Margin="0,12,0,0">
-            <Button Classes="primary" Command="{Binding PasteLink}" ToolTip.Tip="{loc:T Profiles_PasteHint}" Margin="0,0,8,8">
-                <StackPanel Orientation="Horizontal" Spacing="8">
-                    <Path Classes="icon" Data="{StaticResource Icon.Clipboard}" Width="14" Height="14" />
-                    <TextBlock Text="{loc:T Profiles_Paste}" />
+        <!-- Карточка сервера целиком выбирает его - курсор подсказывает -->
+        <Style Selector="ListBox.servers ListBoxItem">
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style Selector="Border.item.active">
+            <Setter Property="BoxShadow" Value="0 0 0 1 #332EA8F0, 0 8 22 0 #33000000" />
+        </Style>
+
+        <!-- Задержка: цветная плашка с полосками сигнала -->
+        <Style Selector="Border.ping">
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="8,3" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Background" Value="{DynamicResource SurfaceHover}" />
+        </Style>
+        <Style Selector="Border.ping.good">
+            <Setter Property="Background" Value="{DynamicResource Tint.Connected}" />
+        </Style>
+        <Style Selector="Border.ping.fair">
+            <Setter Property="Background" Value="{DynamicResource Tint.Warning}" />
+        </Style>
+        <Style Selector="Border.ping.poor, Border.ping.dead">
+            <Setter Property="Background" Value="{DynamicResource Tint.Danger}" />
+        </Style>
+        <Style Selector="Border.ping Path.icon">
+            <Setter Property="Width" Value="12" />
+            <Setter Property="Height" Value="12" />
+            <Setter Property="StrokeThickness" Value="2.2" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Stroke" Value="{DynamicResource TextMuted}" />
+        </Style>
+        <Style Selector="Border.ping.good Path.icon">
+            <Setter Property="Stroke" Value="{DynamicResource Connected}" />
+        </Style>
+        <Style Selector="Border.ping.fair Path.icon">
+            <Setter Property="Stroke" Value="{DynamicResource Warning}" />
+        </Style>
+        <Style Selector="Border.ping.poor Path.icon, Border.ping.dead Path.icon">
+            <Setter Property="Stroke" Value="{DynamicResource Danger}" />
+        </Style>
+
+        <!-- Включённая сортировка - кнопка подсвечена -->
+        <Style Selector="Button.toggle.on">
+            <Setter Property="Background" Value="{DynamicResource Tint.Accent}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource Accent}" />
+            <Setter Property="Foreground" Value="{DynamicResource Accent}" />
+        </Style>
+
+        <!-- Действия строки: справа на десктопе, второй строкой на телефоне -->
+        <Style Selector="StackPanel.actions">
+            <Setter Property="Grid.Row" Value="0" />
+            <Setter Property="Grid.Column" Value="3" />
+            <Setter Property="Margin" Value="10,0,0,0" />
+        </Style>
+        <Style Selector=".narrow StackPanel.actions">
+            <Setter Property="Grid.Row" Value="1" />
+            <Setter Property="Grid.Column" Value="0" />
+            <Setter Property="Grid.ColumnSpan" Value="4" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="Margin" Value="0,8,0,0" />
+        </Style>
+        <!-- На телефоне поле поиска - отдельной строкой над кнопками -->
+        <Style Selector=".narrow Grid.toolbar > TextBox">
+            <Setter Property="Grid.ColumnSpan" Value="2" />
+        </Style>
+        <Style Selector=".narrow Grid.toolbar > StackPanel">
+            <Setter Property="Grid.Row" Value="1" />
+            <Setter Property="Grid.Column" Value="0" />
+            <Setter Property="Grid.ColumnSpan" Value="2" />
+            <Setter Property="Margin" Value="0,8,0,0" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Classes="page" Spacing="14">
+
+            <!-- Заголовок и счётчик -->
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel>
+                    <TextBlock Classes="title" Text="{loc:T Nav_Profiles}" />
+                    <TextBlock Classes="secondary" Text="{loc:T Profiles_Subtitle}" Margin="0,4,0,0" TextWrapping="Wrap" />
+                    <TextBlock Classes="status" Text="{Binding Status}" Margin="0,6,0,0" />
                 </StackPanel>
-            </Button>
-            <Button Command="{Binding Create}" Margin="0,0,8,8">
-                <StackPanel Orientation="Horizontal" Spacing="8">
-                    <Path Classes="icon" Data="{StaticResource Icon.Plus}" Width="14" Height="14" />
-                    <TextBlock Text="{loc:T Profiles_Create}" />
+                <Border Grid.Column="1" Classes="tag neutral" VerticalAlignment="Top" Margin="10,6,0,0"
+                        IsVisible="{Binding HasProfiles}">
+                    <TextBlock Text="{Binding ProfileCount, StringFormat={}{0}}" FontFamily="{StaticResource Font.Mono}" />
+                </Border>
+            </Grid>
+
+            <!-- ===== Добавить сервер: одно поле и три быстрых способа ===== -->
+            <Border Classes="card" Padding="16,14">
+                <StackPanel Spacing="10">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Path Classes="icon" Data="{StaticResource Icon.Plus}" Stroke="{DynamicResource Accent}" />
+                        <TextBlock Classes="field" Text="{loc:T Profiles_AddTitle}" VerticalAlignment="Center" />
+                    </StackPanel>
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <TextBox Text="{Binding LinkText}" PlaceholderText="{loc:T Profiles_AddPlaceholder}"
+                                 AcceptsReturn="False" />
+                        <Button Grid.Column="1" Classes="primary" Margin="8,0,0,0" Command="{Binding AddFromText}">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <Path Classes="icon" Data="{StaticResource Icon.Plus}" Width="14" Height="14" />
+                                <TextBlock Text="{loc:T Common_Add}" />
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                    <TextBlock Classes="caption" Foreground="{DynamicResource TextFaint}" TextWrapping="Wrap"
+                               Text="{loc:T Profiles_AddHint}" />
+
+                    <WrapPanel>
+                        <Button Classes="small" Command="{Binding PasteLink}" ToolTip.Tip="{loc:T Profiles_PasteHint}"
+                                Margin="0,0,6,6">
+                            <StackPanel Orientation="Horizontal" Spacing="7">
+                                <Path Classes="icon" Data="{StaticResource Icon.Clipboard}" />
+                                <TextBlock Text="{loc:T Profiles_Paste}" />
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="small" Command="{Binding Create}" Margin="0,0,6,6">
+                            <StackPanel Orientation="Horizontal" Spacing="7">
+                                <Path Classes="icon" Data="{StaticResource Icon.Edit}" />
+                                <TextBlock Text="{loc:T Profiles_Manual}" />
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="small" Command="{Binding ImportFile}" Margin="0,0,6,6">
+                            <StackPanel Orientation="Horizontal" Spacing="7">
+                                <Path Classes="icon" Data="{StaticResource Icon.Folder}" />
+                                <TextBlock Text="{loc:T Profiles_FromFile}" />
+                            </StackPanel>
+                        </Button>
+                    </WrapPanel>
                 </StackPanel>
-            </Button>
-            <Button Content="{loc:T Profiles_ImportFile}" Command="{Binding ImportFile}" Margin="0,0,8,8" />
-            <Button Content="{loc:T Profiles_CheckAll}" Command="{Binding PingAll}" Margin="0,0,8,8" />
-            <Button Content="{loc:T Profiles_ExportAll}" Command="{Binding ExportAll}" Margin="0,0,8,8" />
-        </WrapPanel>
+            </Border>
 
-        <!-- Импорт по ссылке: самый частый способ завести профиль, поэтому он вверху -->
-        <Grid Grid.Row="2" ColumnDefinitions="*,Auto" Margin="0,4,0,0">
-            <TextBox Text="{Binding LinkText}" PlaceholderText="vless://…  ·  anytls://…  ·  naive+https://…" />
-            <Button Grid.Column="1" Content="{loc:T Profiles_ParseLink}" Command="{Binding ImportLink}"
-                    Margin="8,0,0,0" />
-        </Grid>
-
-        <Grid Grid.Row="3" ColumnDefinitions="*,Auto" Margin="0,8,0,0">
-            <TextBox Text="{Binding Settings.SubscriptionUrl}" PlaceholderText="{loc:T Profiles_SubscriptionHint}" />
-            <Button Grid.Column="1" Content="{loc:T Profiles_UpdateSubscription}"
-                    Command="{Binding UpdateSubscription}" Margin="8,0,0,0" />
-        </Grid>
-
-        <ListBox Grid.Row="4" Classes="plain" Margin="0,18,0,0" ItemsSource="{Binding Profiles}">
-            <ListBox.Styles>
-                <!-- На широком экране действия справа в той же строке, на телефоне - второй строкой -->
-                <Style Selector="StackPanel.actions">
-                    <Setter Property="Grid.Row" Value="0" />
-                    <Setter Property="Grid.Column" Value="2" />
-                    <Setter Property="Margin" Value="10,0,0,0" />
-                </Style>
-                <Style Selector=".narrow StackPanel.actions">
-                    <Setter Property="Grid.Row" Value="1" />
-                    <Setter Property="Grid.Column" Value="0" />
-                    <Setter Property="Grid.ColumnSpan" Value="3" />
-                    <Setter Property="HorizontalAlignment" Value="Right" />
-                    <Setter Property="Margin" Value="0,8,0,0" />
-                </Style>
-            </ListBox.Styles>
-            <ListBox.ItemTemplate>
-                <DataTemplate x:DataType="models:ServerProfile">
-                    <Border Classes="item" Classes.active="{Binding IsActive}">
-                        <Grid ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto,Auto">
-                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                                <DockPanel LastChildFill="False">
-                                    <Image DockPanel.Dock="Left" Width="18" Height="12" VerticalAlignment="Center" Margin="0,0,9,0"
-                                           Source="{Binding CountryCode, Converter={StaticResource Flag}}" />
-                                    <TextBlock DockPanel.Dock="Left" Classes="heading" Text="{Binding Name}"
-                                               TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
-                                    <Border DockPanel.Dock="Left" Classes="tag" Margin="9,0,0,0" VerticalAlignment="Center">
-                                        <TextBlock FontFamily="{StaticResource Font.Mono}" Text="{Binding ProtocolLabel}" />
-                                    </Border>
-                                </DockPanel>
-                                <WrapPanel Margin="0,5,0,0">
-                                    <TextBlock Classes="mono" FontSize="{StaticResource Size.Small}"
-                                               Text="{Binding Endpoint}" Margin="0,0,10,0" />
-                                    <TextBlock Classes="caption" Foreground="{DynamicResource TextFaint}"
-                                               Text="{loc:T Profiles_FromSubscription}"
-                                               IsVisible="{Binding Subscription, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
-                                </WrapPanel>
-                            </StackPanel>
-
-                            <TextBlock Grid.Column="1" Classes="latency" Text="{Binding LatencyLabel}" IsVisible="{Binding HasLatency}"
-                                       VerticalAlignment="Center" Margin="14,0,4,0"
-                                       Classes.good="{Binding LatencyGrade, Converter={StaticResource Eq}, ConverterParameter=good}"
-                                       Classes.fair="{Binding LatencyGrade, Converter={StaticResource Eq}, ConverterParameter=fair}"
-                                       Classes.poor="{Binding LatencyGrade, Converter={StaticResource Eq}, ConverterParameter=poor}"
-                                       Classes.dead="{Binding LatencyGrade, Converter={StaticResource Eq}, ConverterParameter=dead}" />
-
-                            <!-- Внутри шаблона контекст - профиль, команды страницы берём у Root -->
-                            <StackPanel Classes="actions" Orientation="Horizontal" Spacing="2" VerticalAlignment="Center">
-                                <Button Classes="ghost icon" ToolTip.Tip="{loc:T Profiles_Share}"
-                                        Command="{Binding #Root.((vm:ProfilesViewModel)DataContext).ExportProfile}"
-                                        CommandParameter="{Binding}">
-                                    <Path Classes="icon" Data="{StaticResource Icon.Share}" />
-                                </Button>
-                                <Button Classes="ghost icon" ToolTip.Tip="{loc:T Common_Edit}"
-                                        Command="{Binding #Root.((vm:ProfilesViewModel)DataContext).EditProfileCommand}"
-                                        CommandParameter="{Binding}">
-                                    <Path Classes="icon" Data="{StaticResource Icon.Edit}" />
-                                </Button>
-                                <Button Classes="ghost icon remove" ToolTip.Tip="{loc:T Common_Delete}"
-                                        Command="{Binding #Root.((vm:ProfilesViewModel)DataContext).RemoveProfile}"
-                                        CommandParameter="{Binding}">
-                                    <Path Classes="icon" Data="{StaticResource Icon.Trash}" />
-                                </Button>
-                                <!-- Активному профилю выбирать нечего: вместо кнопки - отметка -->
-                                <Panel Width="96" Margin="8,0,0,0">
-                                    <Button Classes="small" Content="{loc:T Common_Select}" HorizontalAlignment="Stretch"
-                                            HorizontalContentAlignment="Center"
-                                            IsVisible="{Binding !IsActive}"
-                                            Command="{Binding #Root.((vm:ProfilesViewModel)DataContext).SelectProfile}"
-                                            CommandParameter="{Binding}" />
-                                    <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center"
-                                                VerticalAlignment="Center" IsVisible="{Binding IsActive}">
-                                        <Path Classes="icon" Data="{StaticResource Icon.Check}" Width="12" Height="12"
-                                              Stroke="{DynamicResource Accent}" StrokeThickness="2.2" />
-                                        <TextBlock Classes="accent" FontSize="{StaticResource Size.Small}" FontWeight="SemiBold"
-                                                   Text="{loc:T Profiles_Active}" />
-                                    </StackPanel>
-                                </Panel>
-                            </StackPanel>
-                        </Grid>
+            <!-- ===== Подписка ===== -->
+            <Border Classes="card" Padding="14,12" IsVisible="{Binding HasSubscription}">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Border Classes="key small">
+                        <Path Classes="icon" Data="{StaticResource Icon.Link}" Width="15" Height="15" />
                     </Border>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-    </Grid>
+                    <StackPanel Grid.Column="1" Margin="12,0,10,0" VerticalAlignment="Center">
+                        <TextBlock FontWeight="SemiBold" TextTrimming="CharacterEllipsis">
+                            <Run Text="{loc:T Profiles_Subscription}" />
+                            <Run Text=" · " Foreground="{DynamicResource TextFaint}" />
+                            <Run Text="{Binding SubscriptionLabel}" FontFamily="{StaticResource Font.Mono}"
+                                 FontWeight="Normal" Foreground="{DynamicResource TextSecondary}" />
+                        </TextBlock>
+                        <TextBlock Classes="caption" Text="{Binding SubscriptionUpdatedLabel}" />
+                    </StackPanel>
+                    <Button Grid.Column="2" Classes="small" Command="{Binding UpdateSubscription}">
+                        <StackPanel Orientation="Horizontal" Spacing="7">
+                            <Path Classes="icon" Data="{StaticResource Icon.Down}" />
+                            <TextBlock Text="{loc:T Profiles_UpdateSubscription}" />
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Border>
+
+            <!-- ===== Пусто: первый шаг крупно ===== -->
+            <Border Classes="card" Padding="24,28" IsVisible="{Binding !HasProfiles}">
+                <StackPanel HorizontalAlignment="Center" Spacing="12" MaxWidth="420">
+                    <Border Classes="key big" HorizontalAlignment="Center">
+                        <Path Classes="icon" Data="{StaticResource Icon.profiles}" Width="20" Height="20" />
+                    </Border>
+                    <TextBlock Classes="heading" Text="{loc:T Profiles_EmptyTitle}" HorizontalAlignment="Center" />
+                    <TextBlock Classes="secondary" Text="{loc:T Profiles_EmptyText}" TextWrapping="Wrap"
+                               TextAlignment="Center" />
+                    <Button Classes="primary" HorizontalAlignment="Center" Command="{Binding PasteLink}" Margin="0,4,0,0">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Path Classes="icon" Data="{StaticResource Icon.Clipboard}" Width="14" Height="14" />
+                            <TextBlock Text="{loc:T Profiles_Paste}" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Border>
+
+            <!-- ===== Список ===== -->
+            <StackPanel Spacing="10" IsVisible="{Binding HasProfiles}">
+                <Grid Classes="toolbar" ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                    <TextBox Text="{Binding Search}" PlaceholderText="{loc:T Profiles_Search}">
+                        <TextBox.InnerLeftContent>
+                            <Path Classes="icon" Data="{StaticResource Icon.Search}" Width="14" Height="14"
+                                  Stroke="{DynamicResource TextFaint}" Margin="12,0,0,0" />
+                        </TextBox.InnerLeftContent>
+                    </TextBox>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6" Margin="8,0,0,0">
+                        <Button Command="{Binding PingAll}" MinHeight="38">
+                            <StackPanel Orientation="Horizontal" Spacing="7">
+                                <Path Classes="icon" Data="{StaticResource Icon.Signal}" />
+                                <TextBlock Text="{loc:T Profiles_CheckAll}" />
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="toggle" Classes.on="{Binding SortFastest}" Command="{Binding ToggleSort}"
+                                MinHeight="38">
+                            <StackPanel Orientation="Horizontal" Spacing="7">
+                                <Path Classes="icon" Data="{StaticResource Icon.Sort}" />
+                                <TextBlock Text="{loc:T Profiles_SortFastest}" />
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="icon" Width="38" Height="38" ToolTip.Tip="{loc:T Profiles_ExportAll}"
+                                Command="{Binding ExportAll}">
+                            <Path Classes="icon" Data="{StaticResource Icon.Share}" />
+                        </Button>
+                    </StackPanel>
+                </Grid>
+
+                <TextBlock Classes="caption" Foreground="{DynamicResource TextFaint}" Text="{loc:T Profiles_SelectHint}" />
+
+                <StackPanel HorizontalAlignment="Center" Spacing="10" Margin="0,16" IsVisible="{Binding NothingFound}">
+                    <Path Classes="icon large" Data="{StaticResource Icon.Search}" Stroke="{DynamicResource TextFaint}"
+                          HorizontalAlignment="Center" />
+                    <TextBlock Classes="secondary" Text="{loc:T Profiles_NothingFound}" HorizontalAlignment="Center" />
+                </StackPanel>
+
+                <!-- Щелчок по карточке выбирает сервер (SelectedItem → Selected) -->
+                <ListBox Classes="plain servers" ItemsSource="{Binding Visible}" SelectedItem="{Binding Selected}"
+                         ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="models:ServerProfile">
+                            <Border Classes="item" Classes.active="{Binding IsActive}">
+                                <Grid ColumnDefinitions="Auto,*,Auto,Auto" RowDefinitions="Auto,Auto">
+                                    <!-- Флаг на объёмной клавише; нет флага - глобус -->
+                                    <Border Classes="key big">
+                                        <Panel>
+                                            <Image x:Name="Flag" Width="22" Height="15"
+                                                   Source="{Binding CountryCode, Converter={StaticResource Flag}}" />
+                                            <Path Classes="icon" Data="{StaticResource Icon.Globe}" Width="18" Height="18"
+                                                  IsVisible="{Binding #Flag.Source, Converter={x:Static ObjectConverters.IsNull}}" />
+                                        </Panel>
+                                    </Border>
+
+                                    <StackPanel Grid.Column="1" Margin="14,0,0,0" VerticalAlignment="Center">
+                                        <DockPanel LastChildFill="False">
+                                            <TextBlock DockPanel.Dock="Left" Classes="heading" Text="{Binding Name}"
+                                                       TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                                            <Border DockPanel.Dock="Left" Classes="tag" Margin="9,0,0,0" VerticalAlignment="Center"
+                                                    IsVisible="{Binding IsActive}">
+                                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                                    <Path Classes="icon" Data="{StaticResource Icon.Check}" Width="10" Height="10"
+                                                          Stroke="{DynamicResource Accent}" StrokeThickness="2.4" />
+                                                    <TextBlock Text="{loc:T Profiles_Active}" />
+                                                </StackPanel>
+                                            </Border>
+                                        </DockPanel>
+                                        <WrapPanel Margin="0,5,0,0">
+                                            <Border Classes="tag neutral" Margin="0,0,8,2">
+                                                <TextBlock FontFamily="{StaticResource Font.Mono}" Text="{Binding ProtocolLabel}" />
+                                            </Border>
+                                            <TextBlock Classes="mono" FontSize="{StaticResource Size.Small}" VerticalAlignment="Center"
+                                                       Text="{Binding Endpoint}" Margin="0,0,8,2" />
+                                            <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center" Margin="0,0,0,2"
+                                                        IsVisible="{Binding Subscription, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                                                <Path Classes="icon" Data="{StaticResource Icon.Link}" Width="11" Height="11"
+                                                      Stroke="{DynamicResource TextFaint}" />
+                                                <TextBlock Classes="caption" Foreground="{DynamicResource TextFaint}"
+                                                           Text="{loc:T Profiles_FromSubscription}" />
+                                            </StackPanel>
+                                        </WrapPanel>
+                                    </StackPanel>
+
+                                    <!-- Задержка: цвет и полоски сигнала -->
+                                    <Border Grid.Column="2" Classes="ping" Margin="12,0,0,0" IsVisible="{Binding HasLatency}"
+                                            Classes.good="{Binding LatencyGrade, Converter={StaticResource Eq}, ConverterParameter=good}"
+                                            Classes.fair="{Binding LatencyGrade, Converter={StaticResource Eq}, ConverterParameter=fair}"
+                                            Classes.poor="{Binding LatencyGrade, Converter={StaticResource Eq}, ConverterParameter=poor}"
+                                            Classes.dead="{Binding LatencyGrade, Converter={StaticResource Eq}, ConverterParameter=dead}">
+                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                            <Path Classes="icon" Data="{StaticResource Icon.Signal}" />
+                                            <TextBlock Classes="latency" Text="{Binding LatencyLabel}"
+                                                       Classes.good="{Binding LatencyGrade, Converter={StaticResource Eq}, ConverterParameter=good}"
+                                                       Classes.fair="{Binding LatencyGrade, Converter={StaticResource Eq}, ConverterParameter=fair}"
+                                                       Classes.poor="{Binding LatencyGrade, Converter={StaticResource Eq}, ConverterParameter=poor}"
+                                                       Classes.dead="{Binding LatencyGrade, Converter={StaticResource Eq}, ConverterParameter=dead}" />
+                                        </StackPanel>
+                                    </Border>
+
+                                    <!-- Внутри шаблона контекст - профиль, команды страницы берём у Root -->
+                                    <StackPanel Classes="actions" Orientation="Horizontal" Spacing="2" VerticalAlignment="Center">
+                                        <Button Classes="ghost icon" ToolTip.Tip="{loc:T Profiles_Share}"
+                                                Command="{Binding #Root.((vm:ProfilesViewModel)DataContext).ExportProfile}"
+                                                CommandParameter="{Binding}">
+                                            <Path Classes="icon" Data="{StaticResource Icon.Share}" />
+                                        </Button>
+                                        <Button Classes="ghost icon" ToolTip.Tip="{loc:T Common_Edit}"
+                                                Command="{Binding #Root.((vm:ProfilesViewModel)DataContext).EditProfileCommand}"
+                                                CommandParameter="{Binding}">
+                                            <Path Classes="icon" Data="{StaticResource Icon.Edit}" />
+                                        </Button>
+                                        <Button Classes="ghost icon remove" ToolTip.Tip="{loc:T Common_Delete}"
+                                                Command="{Binding #Root.((vm:ProfilesViewModel)DataContext).RemoveProfile}"
+                                                CommandParameter="{Binding}">
+                                            <Path Classes="icon" Data="{StaticResource Icon.Trash}" />
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>
