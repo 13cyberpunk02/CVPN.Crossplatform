@@ -228,15 +228,15 @@
         </Canvas>
 
         <!-- Свечение -->
-        <Ellipse x:Name="Halo" Width="230" Height="230" StrokeThickness="16"
+        <Ellipse x:Name="Halo" Width="244" Height="244" StrokeThickness="14"
                  Classes.connected="{Binding IsConnected}"
                  Classes.connecting="{Binding IsConnecting}" />
 
-        <!-- Дорожка -->
-        <Ellipse Width="216" Height="216" Stroke="{DynamicResource LineStrong}" StrokeThickness="6" />
+        <!-- Дорожка: снаружи желобка -->
+        <Ellipse Width="238" Height="238" Stroke="{DynamicResource LineStrong}" StrokeThickness="6" />
 
         <!-- Дуга состояния -->
-        <Arc x:Name="StateArc" Width="216" Height="216" StrokeThickness="6" StrokeLineCap="Round"
+        <Arc x:Name="StateArc" Width="238" Height="238" StrokeThickness="6" StrokeLineCap="Round"
              StartAngle="-90"
              Classes.connected="{Binding IsConnected}"
              Classes.connecting="{Binding IsConnecting}"
@@ -247,32 +247,35 @@
         </Arc>
 
         <!-- Дорожка и дуга - тоже трубка: неподвижный свет сверху, тень снизу -->
-        <Ellipse Width="216" Height="216" StrokeThickness="6" Stroke="{DynamicResource RingShade}"
+        <Ellipse Width="238" Height="238" StrokeThickness="6" Stroke="{DynamicResource RingShade}"
                  IsHitTestVisible="False" />
 
-        <!-- Градиентное кольцо вокруг кнопки: вращается всегда, цвет и скорость - по состоянию.
-             Под ним размытая копия - мягкое свечение того же цвета -->
-        <Panel x:Name="Sweep" Width="198" Height="198" IsHitTestVisible="False"
+        <!-- ===== утопленный желобок вокруг кнопки =====
+             Канал от края кнопки (r 93) до r 113 - 20 px, середина на диаметре 206.
+             Глубину дают не цвета, а тени: свет сверху, поэтому верхняя стенка
+             бросает тень на дно у внешнего края вверху, а внизу дно затеняет кнопка.
+             Слои: дно → полоса → дыхание → тени стенок → кромки → кнопка -->
+        <Ellipse Width="206" Height="206" StrokeThickness="20" Stroke="{DynamicResource GrooveBase}"
+                 IsHitTestVisible="False" />
+
+        <!-- Полоса по середине дна: вращается всегда, цвет и скорость - по состоянию.
+             Тонкая, чтобы по бокам оставалось видно стенки канала -->
+        <Panel x:Name="Sweep" Width="206" Height="206" IsHitTestVisible="False"
                Classes.connected="{Binding IsConnected}"
                Classes.connecting="{Binding IsConnecting}"
                Classes.failing="{Binding IsFailing}">
             <Panel.RenderTransform>
                 <RotateTransform />
             </Panel.RenderTransform>
-            <Ellipse x:Name="SweepGlow" StrokeThickness="8">
+            <Ellipse x:Name="SweepGlow" StrokeThickness="9">
                 <Ellipse.Effect>
-                    <BlurEffect Radius="12" />
+                    <BlurEffect Radius="5" />
                 </Ellipse.Effect>
             </Ellipse>
-            <Ellipse x:Name="SweepRing" StrokeThickness="5" Margin="2" />
+            <Ellipse x:Name="SweepRing" StrokeThickness="3" />
         </Panel>
 
-        <!-- Объём кольца: свет не вращается вместе с ним, поэтому кольцо читается как
-             трубка, которая крутится под неподвижной лампой -->
-        <Ellipse Width="194" Height="194" StrokeThickness="5" Stroke="{DynamicResource RingShade}"
-                 IsHitTestVisible="False" />
-
-        <!-- Дышащая обводка цвета состояния - ровно поверх градиентного кольца (194 px).
+        <!-- Дышащая обводка цвета состояния - по середине желобка (206 px).
              Три слоя: широкий мягкий ореол, плотное свечение и сама линия. На пике весь
              круг горит целиком, на спаде гаснет полностью. Лежит под кнопкой: внутренняя
              половина ореола скрыта, наружу идёт сияние.
@@ -284,28 +287,55 @@
                Classes.failing="{Binding IsFailing}">
             <!-- Внешнее сияние вокруг всего круга: именно оно делает «вдох» заметным -->
             <Panel Width="274" Height="274">
-                <Ellipse Width="228" Height="228" StrokeThickness="22" Opacity="0.7">
+                <Ellipse Width="246" Height="246" StrokeThickness="22" Opacity="0.7">
                     <Ellipse.Effect>
                         <BlurEffect Radius="18" />
                     </Ellipse.Effect>
                 </Ellipse>
             </Panel>
             <Panel Width="274" Height="274">
-                <Ellipse Width="194" Height="194" StrokeThickness="30" Opacity="0.8">
+                <Ellipse Width="206" Height="206" StrokeThickness="26" Opacity="0.75">
                     <Ellipse.Effect>
-                        <BlurEffect Radius="26" />
+                        <BlurEffect Radius="20" />
                     </Ellipse.Effect>
                 </Ellipse>
             </Panel>
             <Panel Width="274" Height="274">
-                <Ellipse Width="194" Height="194" StrokeThickness="10">
+                <Ellipse Width="206" Height="206" StrokeThickness="9">
                     <Ellipse.Effect>
-                        <BlurEffect Radius="8" />
+                        <BlurEffect Radius="6" />
                     </Ellipse.Effect>
                 </Ellipse>
             </Panel>
-            <Ellipse Width="194" Height="194" StrokeThickness="3.5" />
+            <Ellipse Width="206" Height="206" StrokeThickness="3" />
         </Panel>
+
+        <!-- Тени стенок поверх полосы и свечения - благодаря им полоса уходит вглубь,
+             а не лежит сверху. Свет неподвижный: тени не крутятся вместе с полосой.
+             Размытые слои - в панелях с запасом, иначе размытие обрежется -->
+        <Ellipse Width="206" Height="206" StrokeThickness="20" Stroke="{DynamicResource GrooveShade}"
+                 IsHitTestVisible="False" />
+        <!-- Тень от верхней (внешней) стенки - на дне у внешнего края, сильнее вверху -->
+        <Panel Width="274" Height="274" IsHitTestVisible="False">
+            <Ellipse Width="221" Height="221" StrokeThickness="9" Stroke="{DynamicResource GrooveWallTop}">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="5" />
+                </Ellipse.Effect>
+            </Ellipse>
+        </Panel>
+        <!-- Тень от кнопки - на дне у внутреннего края, сильнее внизу -->
+        <Panel Width="274" Height="274" IsHitTestVisible="False">
+            <Ellipse Width="192" Height="192" StrokeThickness="9" Stroke="{DynamicResource GrooveWallBottom}">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="5" />
+                </Ellipse.Effect>
+            </Ellipse>
+        </Panel>
+        <!-- Кромки канала: внешняя (r 113) и внутренняя у кнопки -->
+        <Ellipse Width="227" Height="227" StrokeThickness="2" Stroke="{DynamicResource GrooveLip}"
+                 IsHitTestVisible="False" />
+        <Ellipse Width="187" Height="187" StrokeThickness="1.5" Stroke="{DynamicResource GrooveLip}"
+                 IsHitTestVisible="False" />
 
         <!-- Кнопка в слое с 3D-поворотом: при наведении наклоняется вслед за курсором
              (см. ConnectDial.axaml.cs). Блик стекла наклоняется вместе с ней -->

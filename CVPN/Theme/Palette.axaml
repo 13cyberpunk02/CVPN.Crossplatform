@@ -146,6 +146,34 @@
             </LinearGradientBrush>
             <BoxShadows x:Key="DialShadow">0 18 36 0 #80000000, inset 0 -10 20 0 #66000000, inset 0 3 8 0 #1FFFFFFF</BoxShadows>
 
+            <!-- Утопленный желобок вокруг кнопки, в котором бежит полоса -->
+            <SolidColorBrush x:Key="GrooveBase" Color="#FF03070B" />
+            <!-- Тень от внешней стенки: густая вверху, к низу сходит на нет -->
+            <LinearGradientBrush x:Key="GrooveWallTop" StartPoint="50%,0%" EndPoint="50%,100%">
+                <GradientStop Offset="0" Color="#F2000000" />
+                <GradientStop Offset="0.5" Color="#59000000" />
+                <GradientStop Offset="1" Color="#00000000" />
+            </LinearGradientBrush>
+            <!-- Тень от кнопки на дне: густая внизу -->
+            <LinearGradientBrush x:Key="GrooveWallBottom" StartPoint="50%,0%" EndPoint="50%,100%">
+                <GradientStop Offset="0" Color="#33000000" />
+                <GradientStop Offset="0.5" Color="#80000000" />
+                <GradientStop Offset="1" Color="#F2000000" />
+            </LinearGradientBrush>
+            <!-- Затенение стенок: свет сверху, поэтому верхняя стенка в тени, нижняя ловит свет -->
+            <LinearGradientBrush x:Key="GrooveShade" StartPoint="50%,0%" EndPoint="50%,100%">
+                <GradientStop Offset="0" Color="#B3000000" />
+                <GradientStop Offset="0.45" Color="#26000000" />
+                <GradientStop Offset="0.7" Color="#00000000" />
+                <GradientStop Offset="1" Color="#1FFFFFFF" />
+            </LinearGradientBrush>
+            <!-- Кромка желобка: тёмная сверху, светлая снизу - край, за который заходит тень -->
+            <LinearGradientBrush x:Key="GrooveLip" StartPoint="50%,0%" EndPoint="50%,100%">
+                <GradientStop Offset="0" Color="#80000000" />
+                <GradientStop Offset="0.5" Color="#14FFFFFF" />
+                <GradientStop Offset="1" Color="#47FFFFFF" />
+            </LinearGradientBrush>
+
             <!-- Акцент Fluent - для контролов, которые мы не перерисовываем -->
             <Color x:Key="SystemAccentColor">#FF2EA8F0</Color>
             <Color x:Key="SystemAccentColorLight1">#FF55BAF4</Color>
@@ -353,6 +381,29 @@
                 <GradientStop Offset="1" Color="#4D002040" />
             </LinearGradientBrush>
             <BoxShadows x:Key="DialShadow">0 16 32 0 #330A3550, inset 0 -10 18 0 #1F0A3550, inset 0 3 6 0 #FFFFFFFF</BoxShadows>
+
+            <SolidColorBrush x:Key="GrooveBase" Color="#FFB4C3D1" />
+            <LinearGradientBrush x:Key="GrooveWallTop" StartPoint="50%,0%" EndPoint="50%,100%">
+                <GradientStop Offset="0" Color="#B30A2540" />
+                <GradientStop Offset="0.5" Color="#400A2540" />
+                <GradientStop Offset="1" Color="#000A2540" />
+            </LinearGradientBrush>
+            <LinearGradientBrush x:Key="GrooveWallBottom" StartPoint="50%,0%" EndPoint="50%,100%">
+                <GradientStop Offset="0" Color="#1A0A2540" />
+                <GradientStop Offset="0.5" Color="#4D0A2540" />
+                <GradientStop Offset="1" Color="#A60A2540" />
+            </LinearGradientBrush>
+            <LinearGradientBrush x:Key="GrooveShade" StartPoint="50%,0%" EndPoint="50%,100%">
+                <GradientStop Offset="0" Color="#660A2540" />
+                <GradientStop Offset="0.45" Color="#140A2540" />
+                <GradientStop Offset="0.7" Color="#000A2540" />
+                <GradientStop Offset="1" Color="#99FFFFFF" />
+            </LinearGradientBrush>
+            <LinearGradientBrush x:Key="GrooveLip" StartPoint="50%,0%" EndPoint="50%,100%">
+                <GradientStop Offset="0" Color="#4D0A2540" />
+                <GradientStop Offset="0.5" Color="#40FFFFFF" />
+                <GradientStop Offset="1" Color="#FFFFFFFF" />
+            </LinearGradientBrush>
 
             <!-- Акцент Fluent - для контролов, которые мы не перерисовываем -->
             <Color x:Key="SystemAccentColor">#FF0A84D6</Color>
