@@ -101,7 +101,14 @@ public partial class App : Application
             desktop.MainWindow = window;
             ScheduleSnapshot();
 
-            window.Opened += async (_, _) => await Shell.StartupAsync();
+            // Opened приходит при каждом показе окна, в том числе из трея. Автоподключение -
+            // только при первом: иначе каждое «Открыть» запускало ядро заново
+            window.Opened += async (_, _) =>
+            {
+                if (_startupDone) return;
+                _startupDone = true;
+                await Shell.StartupAsync();
+            };
             desktop.ShutdownRequested += OnShutdownRequested;
             desktop.Exit += (_, e) =>
             {
@@ -297,8 +304,17 @@ public partial class App : Application
         };
 
         // Автозапуск: окно не показываем, приложение живёт в трее
+        // Прячем один раз: Opened приходит и при открытии из трея, и окно тут же исчезало бы снова
         if (Environment.GetCommandLineArgs().Contains("--minimized"))
-            window.Opened += (_, _) => window.Hide();
+        {
+            void HideOnce(object? sender, EventArgs e)
+            {
+                window.Opened -= HideOnce;
+                window.Hide();
+            }
+
+            window.Opened += HideOnce;
+        }
     }
 
     private async void OnShutdownRequested(object? sender, ShutdownRequestedEventArgs e)

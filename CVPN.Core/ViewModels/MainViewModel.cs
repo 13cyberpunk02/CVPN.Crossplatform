@@ -370,6 +370,17 @@ public sealed class MainViewModel : ObservableObject
 
     private async Task ConnectAsync()
     {
+        // Второй запуск поверх живого туннеля затирал ссылку на первое ядро:
+        // процесс sing-box оставался без хозяина - ни отключить, ни снять при выходе
+        if (State is TunnelState.Connected or TunnelState.Connecting)
+        {
+            Append("[cvpn] already connected, skipping a second start");
+            return;
+        }
+
+        // Остатки прошлой попытки (ядро упало, а объект ещё жив) - снимаем до нового запуска
+        if (_backend is not null) await TeardownAsync();
+
         if (Active is null)
         {
             // Раньше кнопка в этом случае просто не нажималась, и причина была не видна
