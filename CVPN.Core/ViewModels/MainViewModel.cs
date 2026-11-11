@@ -368,11 +368,16 @@ public sealed class MainViewModel : ObservableObject
         await ConnectAsync();
     }
 
-    private async Task ConnectAsync()
+    /// <param name="retry">
+    /// Повторная попытка после падения ядра: состояние уже «подключается», и
+    /// защита от двойного запуска не должна её отбросить. Старое ядро к этому
+    /// моменту снято (TeardownAsync), так что второго процесса не будет.
+    /// </param>
+    private async Task ConnectAsync(bool retry = false)
     {
         // Второй запуск поверх живого туннеля затирал ссылку на первое ядро:
         // процесс sing-box оставался без хозяина - ни отключить, ни снять при выходе
-        if (State is TunnelState.Connected or TunnelState.Connecting)
+        if (!retry && State is TunnelState.Connected or TunnelState.Connecting)
         {
             Append("[cvpn] already connected, skipping a second start");
             return;
@@ -684,7 +689,7 @@ public sealed class MainViewModel : ObservableObject
 
             await TeardownAsync();
             await Task.Delay(TimeSpan.FromSeconds(3));
-            await ConnectAsync();
+            await ConnectAsync(retry: true);
 
             return;
         }
