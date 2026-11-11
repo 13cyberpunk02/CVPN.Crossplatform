@@ -36,8 +36,14 @@ version are read as is.
 ## Features
 
 - **Protocols:** VLESS (Reality, WebSocket, XHTTP), AnyTLS, NaiveProxy (not on Android).
-- **Profiles:** `vless://`, `anytls://`, `naive+https://` links, subscriptions, importing a
-  sing-box configuration from a file, export and sharing, latency check for all servers.
+- **Profiles:** `vless://`, `anytls://`, `naive+https://` links, importing a sing-box
+  configuration from a file, a QR code scanner on Android, export and sharing, latency
+  check for all servers.
+- **Subscriptions:** as many as you like; each card shows the traffic left and the expiry
+  date reported by the panel (3x-ui, Marzban, Remnawave and others), with a warning when
+  a subscription is running out.
+- **Connection watchdog:** if the server stops responding, the app switches to the fastest
+  of the others; a crashed core is restarted.
 - **Routing:** rules by geosite, geoip, domain, suffix, keyword, process and your own `.srs`
   rule sets. Actions: via proxy, direct, via ByeDPI, block. One-tap quick rules (ads,
   Russian sites, YouTube, Telegram), several rule sets and a "where will this site go" check.
@@ -123,6 +129,8 @@ TUN needs administrator rights. Three options:
 </p>
 
 - On the first connection the system asks for VPN permission.
+- **Quick Settings tile:** add CVPN next to Wi-Fi and Bluetooth to turn the VPN on and off
+  without opening the app.
 - **Kill switch** is enabled in Android settings: "Network → VPN → CVPN → Always-on VPN"
   and "Block connections without VPN".
 - ByeDPI and the core are built in; no paths to set.
