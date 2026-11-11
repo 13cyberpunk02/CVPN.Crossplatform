@@ -1475,4 +1475,19 @@ Restart CVPN now?</value>
   <data name="Profiles_Subscription" xml:space="preserve">
     <value>Subscription</value>
   </data>
+  <data name="Profiles_ScanQr" xml:space="preserve">
+    <value>Scan QR</value>
+  </data>
+  <data name="Profiles_QrEmpty" xml:space="preserve">
+    <value>The QR code has no server link or subscription</value>
+  </data>
+  <data name="Profiles_QrNoServices" xml:space="preserve">
+    <value>The scanner needs Google Play services. Copy the link as text and press "Paste from clipboard".</value>
+  </data>
+  <data name="Profiles_ScanQrHint" xml:space="preserve">
+    <value>Point the camera at a QR code with a server link or subscription</value>
+  </data>
+  <data name="Profiles_QrFailed" xml:space="preserve">
+    <value>Could not open the scanner: {0}</value>
+  </data>
 </root>

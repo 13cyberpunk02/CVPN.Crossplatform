@@ -27,6 +27,7 @@ internal static class AndroidPlatform
         Tunnel = new VpnTunnelProvider(),
         TunPrivileges = new VpnConsent(),
         Updater = new AndroidUpdater(),
+        QrScanner = new AndroidQrScanner(),
 
         // Ядро и ciadpi - только из поставки: запускать можно лишь то, что лежит в nativeLibraryDir
         CanPickBinaries = false,

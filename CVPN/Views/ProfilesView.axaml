@@ -99,15 +99,21 @@
             <Setter Property="HorizontalAlignment" Value="Right" />
             <Setter Property="Margin" Value="0,8,0,0" />
         </Style>
-        <!-- На телефоне поле поиска - отдельной строкой над кнопками -->
+        <!-- Кнопки списка: справа от поиска на десктопе, отдельной строкой под ним на телефоне.
+             Колонка и отступ - только в стилях: значение прямо в разметке сильнее стиля,
+             и на телефоне кнопки прилипали к полю поиска -->
+        <Style Selector="Grid.toolbar > StackPanel.tools">
+            <Setter Property="Grid.Column" Value="1" />
+            <Setter Property="Margin" Value="8,0,0,0" />
+        </Style>
         <Style Selector=".narrow Grid.toolbar > TextBox">
             <Setter Property="Grid.ColumnSpan" Value="2" />
         </Style>
-        <Style Selector=".narrow Grid.toolbar > StackPanel">
+        <Style Selector=".narrow Grid.toolbar > StackPanel.tools">
             <Setter Property="Grid.Row" Value="1" />
             <Setter Property="Grid.Column" Value="0" />
             <Setter Property="Grid.ColumnSpan" Value="2" />
-            <Setter Property="Margin" Value="0,8,0,0" />
+            <Setter Property="Margin" Value="0,10,0,0" />
         </Style>
     </UserControl.Styles>
 
@@ -154,6 +160,14 @@
                             <StackPanel Orientation="Horizontal" Spacing="7">
                                 <Path Classes="icon" Data="{StaticResource Icon.Clipboard}" />
                                 <TextBlock Text="{loc:T Profiles_Paste}" />
+                            </StackPanel>
+                        </Button>
+                        <!-- Камера - только на телефоне: ссылки часто показывают QR-кодом -->
+                        <Button Classes="small" Command="{Binding ScanQr}" ToolTip.Tip="{loc:T Profiles_ScanQrHint}"
+                                Margin="0,0,6,6" IsVisible="{Binding CanScanQr}">
+                            <StackPanel Orientation="Horizontal" Spacing="7">
+                                <Path Classes="icon" Data="{StaticResource Icon.Qr}" />
+                                <TextBlock Text="{loc:T Profiles_ScanQr}" />
                             </StackPanel>
                         </Button>
                         <Button Classes="small" Command="{Binding Create}" Margin="0,0,6,6">
@@ -211,6 +225,12 @@
                             <TextBlock Text="{loc:T Profiles_Paste}" />
                         </StackPanel>
                     </Button>
+                    <Button HorizontalAlignment="Center" Command="{Binding ScanQr}" IsVisible="{Binding CanScanQr}">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Path Classes="icon" Data="{StaticResource Icon.Qr}" Width="14" Height="14" />
+                            <TextBlock Text="{loc:T Profiles_ScanQr}" />
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
             </Border>
 
@@ -223,7 +243,7 @@
                                   Stroke="{DynamicResource TextFaint}" Margin="12,0,0,0" />
                         </TextBox.InnerLeftContent>
                     </TextBox>
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6" Margin="8,0,0,0">
+                    <StackPanel Classes="tools" Orientation="Horizontal" Spacing="6">
                         <Button Command="{Binding PingAll}" MinHeight="38">
                             <StackPanel Orientation="Horizontal" Spacing="7">
                                 <Path Classes="icon" Data="{StaticResource Icon.Signal}" />

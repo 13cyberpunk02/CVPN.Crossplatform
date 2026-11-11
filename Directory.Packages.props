@@ -20,6 +20,8 @@
         <PackageVersion Include="System.Security.Cryptography.ProtectedData" Version="10.0.0" />
 
         <PackageVersion Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.15" />
+        <!-- Сканер QR-кода из сервисов Google Play: своё окно камеры, разрешение на камеру не нужно -->
+        <PackageVersion Include="Xamarin.GooglePlayServices.Code.Scanner" Version="116.1.0.17" />
 
         <!-- Тесты -->
         <PackageVersion Include="coverlet.collector" Version="10.0.1" />

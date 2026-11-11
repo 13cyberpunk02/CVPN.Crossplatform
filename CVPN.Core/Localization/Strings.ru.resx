@@ -1475,4 +1475,19 @@
   <data name="Profiles_Subscription" xml:space="preserve">
     <value>Подписка</value>
   </data>
+  <data name="Profiles_ScanQr" xml:space="preserve">
+    <value>Сканировать QR</value>
+  </data>
+  <data name="Profiles_QrEmpty" xml:space="preserve">
+    <value>В QR-коде нет ссылки на сервер или подписку</value>
+  </data>
+  <data name="Profiles_QrNoServices" xml:space="preserve">
+    <value>Для сканера нужны сервисы Google Play. Скопируйте ссылку текстом и нажмите «Вставить из буфера».</value>
+  </data>
+  <data name="Profiles_ScanQrHint" xml:space="preserve">
+    <value>Навести камеру на QR-код со ссылкой на сервер или подписку</value>
+  </data>
+  <data name="Profiles_QrFailed" xml:space="preserve">
+    <value>Не удалось открыть сканер: {0}</value>
+  </data>
 </root>

@@ -44,6 +44,7 @@ public sealed class ProfilesViewModel : PageViewModel
         PingAll = new RelayCommand(async () => await PingAsync(), () => !IsBusy);
         UpdateSubscription = new RelayCommand(async () => await UpdateSubscriptionAsync(), () => !IsBusy);
         AddFromText = new RelayCommand(async () => await AddFromFieldAsync(), () => !IsBusy);
+        ScanQr = new RelayCommand(async () => await ScanQrAsync(), () => !IsBusy && CanScanQr);
         ToggleSort = new RelayCommand(() => SortFastest = !SortFastest);
 
         Profiles.CollectionChanged += (_, _) => Refresh();
@@ -183,6 +184,11 @@ public sealed class ProfilesViewModel : PageViewModel
     /// <summary>Единое поле «ссылка на сервер или подписку» - кнопка «Добавить».</summary>
     public ICommand AddFromText { get; }
 
+    /// <summary>Сканировать QR-код камерой - на телефоне.</summary>
+    public ICommand ScanQr { get; }
+
+    public bool CanScanQr => Shell.Platform.QrScanner.IsSupported;
+
     /// <summary>
     /// Обновление подписки при запуске - не чаще раза в сутки. Вызывается
     /// оболочкой: страница может не открыться ни разу за сеанс, а список
@@ -246,6 +252,29 @@ public sealed class ProfilesViewModel : PageViewModel
     }
 
     /// <summary>Кнопка «Добавить» у поля: поле очищается, только если что-то добавилось.</summary>
+    /// <summary>
+    /// В QR-коде то же, что вставляют текстом: ссылка на сервер, несколько ссылок
+    /// или ссылка подписки - разбор общий с буфером обмена.
+    /// </summary>
+    private async Task ScanQrAsync()
+    {
+        string? text;
+        try
+        {
+            text = await Shell.Platform.QrScanner.ScanAsync();
+        }
+        catch (Exception ex)
+        {
+            Shell.Notify(Loc.T("Profiles_QrFailed", ex.Message));
+            return;
+        }
+
+        // Сканер закрыли - ничего не добавляем и не ругаемся
+        if (text is null) return;
+
+        await AddTextAsync(text, Loc.T("Profiles_QrEmpty"));
+    }
+
     private async Task AddFromFieldAsync()
     {
         if (await AddTextAsync(LinkText, Loc.T("Profiles_EnterLink"))) LinkText = "";
