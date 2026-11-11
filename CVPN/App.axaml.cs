@@ -182,6 +182,12 @@ public partial class App : Application
     {
         var random = new Random(7);
 
+        shell.SettingsPage.ShowDemoUpdate(new Services.ReleaseInfo("1.2.0", "https://github.com", "",
+        [
+            new Services.ReleaseAsset("CVPN-1.2.0-setup.exe", "https://github.com", 30_477_072, null),
+            new Services.ReleaseAsset("CVPN-1.2.0-portable.zip", "https://github.com", 88_953_583, null)
+        ]));
+
         shell.Session.Begin("Amsterdam - Reality");
         for (var i = 0; i < 60; i++)
         {

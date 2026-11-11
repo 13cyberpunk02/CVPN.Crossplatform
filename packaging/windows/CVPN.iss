@@ -68,7 +68,9 @@ Filename: "{sys}\sc.exe"; Parameters: "create CVPNTunnel binPath= ""{app}\servic
     Flags: runhidden; Components: service
 Filename: "{sys}\sc.exe"; Parameters: "description CVPNTunnel ""Туннель CVPN: запускает sing-box и поднимает TUN"""; \
     Flags: runhidden; Components: service
-Filename: "{sys}\sc.exe"; Parameters: "start CVPNTunnel"; Flags: runhidden; Components: service
+; Служба запускается и при обновлении поверх, даже если её ставили из настроек приложения:
+; перед копированием файлов её останавливает PrepareToInstall. Службы нет - sc вернёт ошибку
+Filename: "{sys}\sc.exe"; Parameters: "start CVPNTunnel"; Flags: runhidden
 
 Filename: "{app}\{#AppExe}"; Description: "Запустить {#AppName}"; Flags: nowait postinstall skipifsilent
 
@@ -163,6 +165,17 @@ begin
     end;
   end;
 #endif
+end;
+
+// Обновление поверх: служба держит свои файлы и может держать запущенное ядро.
+// Без остановки установщик упёрся бы в занятые файлы. Службы нет - sc просто вернёт ошибку.
+function PrepareToInstall(var NeedsRestart: Boolean): String;
+var
+  Code: Integer;
+begin
+  Result := '';
+  if Exec(ExpandConstant('{sys}\sc.exe'), 'stop CVPNTunnel', '', SW_HIDE, ewWaitUntilTerminated, Code) and (Code = 0) then
+    Sleep(2000);
 end;
 
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);

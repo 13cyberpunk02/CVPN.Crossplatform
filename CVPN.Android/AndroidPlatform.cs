@@ -26,6 +26,7 @@ internal static class AndroidPlatform
         Lifetime = new AndroidLifetime(),
         Tunnel = new VpnTunnelProvider(),
         TunPrivileges = new VpnConsent(),
+        Updater = new AndroidUpdater(),
 
         // Ядро и ciadpi - только из поставки: запускать можно лишь то, что лежит в nativeLibraryDir
         CanPickBinaries = false,

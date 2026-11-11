@@ -6,6 +6,8 @@
 	<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 	<uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
 	<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+	<!-- Самообновление: скачанный APK отдаётся системному установщику -->
+	<uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
 	<!--
 		extractNativeLibs: ядро sing-box упаковано как libsingbox.so и запускается
@@ -29,5 +31,15 @@
 				android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
 				android:value="vpn" />
 		</service>
+		<!-- Доступ установщика к скачанному APK: только папка обновлений в кэше -->
+		<provider
+			android:name="androidx.core.content.FileProvider"
+			android:authorities="com.cyberpunk.cvpn.updates"
+			android:exported="false"
+			android:grantUriPermissions="true">
+			<meta-data
+				android:name="android.support.FILE_PROVIDER_PATHS"
+				android:resource="@xml/update_paths" />
+		</provider>
 	</application>
 </manifest>

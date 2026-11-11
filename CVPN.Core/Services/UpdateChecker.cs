@@ -4,14 +4,19 @@ using System.Text.Json;
 
 namespace CVPN.Services;
 
-public sealed record ReleaseInfo(string Version, string Url, string Notes);
+/// <summary>Файл релиза. Sha256 - контрольная сумма из GitHub (поле digest), если она есть.</summary>
+public sealed record ReleaseAsset(string Name, string Url, long Size, string? Sha256);
+
+public sealed record ReleaseInfo(string Version, string Url, string Notes, IReadOnlyList<ReleaseAsset> Assets)
+{
+    /// <summary>Файл релиза по окончанию имени: «-setup.exe», «.AppImage», «.apk».</summary>
+    public ReleaseAsset? FindAsset(string suffix) =>
+        Assets.FirstOrDefault(a => a.Name.EndsWith(suffix, StringComparison.OrdinalIgnoreCase));
+}
 
 /// <summary>
-/// Проверка обновлений через GitHub Releases. Ничего не скачивает и не ставит:
-/// только сообщает о новой версии и открывает страницу релиза.
-///
-/// Самообновление для приложения, которое ставит службу и правит брандмауэр,
-/// требует отдельной осторожности - пока это делает установщик.
+/// Проверка обновлений через GitHub Releases: есть ли версия новее и какие
+/// у неё файлы. Скачивает и ставит их UpdateDownloader и IAppUpdater платформы.
 /// </summary>
 public static class UpdateChecker
 {
@@ -78,13 +83,40 @@ public static class UpdateChecker
             return new ReleaseInfo(
                 tag.TrimStart('v', 'V'),
                 Text(root, "html_url"),
-                Text(root, "body"));
+                Text(root, "body"),
+                ParseAssets(root));
         }
         catch (Exception)
         {
             // Нет сети, лимит запросов, репозиторий приватный - молча пропускаем
             return null;
         }
+    }
+
+    /// <summary>
+    /// Файлы релиза. digest («sha256:...») GitHub считает сам при загрузке файла -
+    /// по нему скачанное сверяется до установки.
+    /// </summary>
+    internal static IReadOnlyList<ReleaseAsset> ParseAssets(JsonElement release)
+    {
+        if (!release.TryGetProperty("assets", out var assets) || assets.ValueKind != JsonValueKind.Array) return [];
+
+        var list = new List<ReleaseAsset>();
+
+        foreach (var asset in assets.EnumerateArray())
+        {
+            var name = Text(asset, "name");
+            var url = Text(asset, "browser_download_url");
+            if (name.Length == 0 || url.Length == 0) continue;
+
+            var size = asset.TryGetProperty("size", out var s) && s.TryGetInt64(out var bytes) ? bytes : 0;
+            var digest = Text(asset, "digest");
+            var sha = digest.StartsWith("sha256:", StringComparison.OrdinalIgnoreCase) ? digest[7..].ToLowerInvariant() : null;
+
+            list.Add(new ReleaseAsset(name, url, size, sha));
+        }
+
+        return list;
     }
 
     private static string Text(JsonElement element, string name) =>

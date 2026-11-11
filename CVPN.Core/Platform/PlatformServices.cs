@@ -24,6 +24,9 @@ public sealed class PlatformServices
     public ITunnelServiceManager Service { get; init; } = Unsupported.Instance;
     public IElevatedLauncher ElevatedLauncher { get; init; } = Unsupported.Instance;
 
+    /// <summary>Самообновление. Нет - кнопка «Обновить» ведёт на страницу релиза.</summary>
+    public IAppUpdater Updater { get; init; } = Unsupported.Instance;
+
     /// <summary>Можно ли выбрать свой файл ядра и ciadpi (на Android бинарники только из поставки).</summary>
     public bool CanPickBinaries { get; init; } = true;
 
@@ -33,7 +36,7 @@ public sealed class PlatformServices
 
 /// <summary>Заглушка для того, чего на платформе нет.</summary>
 public sealed class Unsupported :
-    ISystemProxy, IKillSwitch, IAutoStart, ITunnelServiceManager, IElevatedLauncher
+    ISystemProxy, IKillSwitch, IAutoStart, ITunnelServiceManager, IElevatedLauncher, IAppUpdater
 {
     public static Unsupported Instance { get; } = new();
 
@@ -42,6 +45,11 @@ public sealed class Unsupported :
     }
 
     public bool IsSupported => false;
+
+    // IAppUpdater
+    public CVPN.Services.ReleaseAsset? PickAsset(CVPN.Services.ReleaseInfo release) => null;
+    public string DownloadDirectory => Path.Combine(Path.GetTempPath(), "cvpn-update");
+    public Task<string> InstallAsync(string file) => Task.FromResult("not supported on this platform");
 
     // ISystemProxy
     public void Enable(int port)

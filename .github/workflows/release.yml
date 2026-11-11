@@ -151,6 +151,11 @@ jobs:
           path: dist
           merge-multiple: true
 
+      # Суммы файлов: по ним приложение проверяет скачанное обновление,
+      # если GitHub не отдал свою (поле digest)
+      - name: Контрольные суммы
+        run: cd dist && sha256sum -- * > SHA256SUMS.txt && cat SHA256SUMS.txt
+
       - name: Публикация релиза
         uses: softprops/action-gh-release@v2
         with:

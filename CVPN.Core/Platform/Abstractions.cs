@@ -97,6 +97,28 @@ public interface ILauncher
     Task<bool> OpenUrlAsync(string url);
 }
 
+/// <summary>
+/// Самообновление: какой файл релиза нужен именно этой установке и как его
+/// поставить. Установщик для Windows, AppImage или .deb для Linux, APK для Android.
+/// </summary>
+public interface IAppUpdater
+{
+    /// <summary>
+    /// Файл релиза для этой установки. null - сама обновиться не может
+    /// (например, распакованный tar.gz): тогда ведём на страницу релиза.
+    /// </summary>
+    CVPN.Services.ReleaseAsset? PickAsset(CVPN.Services.ReleaseInfo release);
+
+    /// <summary>Куда скачивать файлы обновления.</summary>
+    string DownloadDirectory { get; }
+
+    /// <summary>
+    /// Ставит скачанный файл. Пустая строка - установка пошла, приложение
+    /// закроется или перезапустится само. Иначе - текст ошибки для пользователя.
+    /// </summary>
+    Task<string> InstallAsync(string file);
+}
+
 /// <summary>Жизненный цикл приложения.</summary>
 public interface IAppLifetime
 {

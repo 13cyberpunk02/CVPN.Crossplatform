@@ -57,7 +57,8 @@ internal sealed class Program
                 KillSwitch = new WindowsKillSwitch(),
                 AutoStart = new WindowsAutoStart(),
                 Service = service,
-                ElevatedLauncher = new WindowsElevatedLauncher()
+                ElevatedLauncher = new WindowsElevatedLauncher(),
+                Updater = new WindowsUpdater(lifetime)
             };
         }
 
@@ -80,7 +81,8 @@ internal sealed class Program
                 SystemProxy = new GnomeSystemProxy(),
                 KillSwitch = new LinuxKillSwitch(Log),
                 AutoStart = new LinuxAutoStart(),
-                Service = service
+                Service = service,
+                Updater = new LinuxUpdater(lifetime)
             };
         }
 

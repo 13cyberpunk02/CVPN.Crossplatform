@@ -23,6 +23,8 @@ public sealed class SettingsViewModel : PageViewModel
 
         CheckUpdate = new RelayCommand(async () => await CheckUpdateAsync(manual: true));
         OpenRelease = new RelayCommand(async () => await OpenReleasePageAsync(), () => Update is not null);
+        InstallUpdate = new RelayCommand(async () => await InstallUpdateAsync(), () => Update is not null && !IsUpdating);
+        CancelUpdate = new RelayCommand(() => _updateCts?.Cancel(), () => IsUpdating);
 
         // Кнопки отражают состояние системы: установить можно только то, чего нет
         InstallService = new RelayCommand(InstallTunnelService, () => CanInstallService);
@@ -88,6 +90,8 @@ public sealed class SettingsViewModel : PageViewModel
     public ICommand RestoreNetwork { get; }
     public ICommand CheckUpdate { get; }
     public ICommand OpenRelease { get; }
+    public ICommand InstallUpdate { get; }
+    public ICommand CancelUpdate { get; }
     public ICommand InstallService { get; }
     public ICommand UninstallService { get; }
     public ICommand InstallTask { get; }
@@ -116,10 +120,14 @@ public sealed class SettingsViewModel : PageViewModel
             Set(ref field, value);
             Raise(nameof(HasUpdate));
             Raise(nameof(UpdateLabel));
+            Raise(nameof(CanSelfUpdate));
+            Raise(nameof(UpdateTitle));
         }
     }
 
     public bool HasUpdate => Update is not null;
+
+    public string UpdateTitle => Update is null ? "" : Loc.T("Update_Title", Update.Version);
 
     public string UpdateLabel => Update is null
         ? Loc.T("Settings_VersionInstalled", UpdateChecker.CurrentVersion.ToString(3))
@@ -216,6 +224,117 @@ public sealed class SettingsViewModel : PageViewModel
             else if (manual) Shell.Notify(Loc.T("Settings_UpToDate"));
         });
     }
+
+    // ===================== самообновление =====================
+
+    private CancellationTokenSource? _updateCts;
+
+    /// <summary>Эта установка умеет обновиться сама: нашёлся подходящий файл релиза.</summary>
+    public bool CanSelfUpdate => Update is not null && Platform.Updater.PickAsset(Update) is not null;
+
+    /// <summary>Идёт скачивание или запуск установки.</summary>
+    public bool IsUpdating
+    {
+        get;
+        private set
+        {
+            if (!Set(ref field, value)) return;
+
+            CommandRequery.Suggest();
+        }
+    }
+
+    /// <summary>Скачано, 0..100.</summary>
+    public double UpdateProgress
+    {
+        get;
+        private set => Set(ref field, value);
+    }
+
+    /// <summary>«12,3 МБ из 40 МБ».</summary>
+    public string UpdateProgressLabel
+    {
+        get;
+        private set => Set(ref field, value);
+    } = "";
+
+    /// <summary>
+    /// Скачать, сверить сумму, отключить туннель и поставить. Туннель снимается
+    /// только после удачного скачивания: если сеть оборвётся на середине,
+    /// пользователь не останется без VPN зря.
+    /// </summary>
+    private async Task InstallUpdateAsync()
+    {
+        var release = Update;
+        if (release is null || IsUpdating) return;
+
+        var asset = Platform.Updater.PickAsset(release);
+        if (asset is null)
+        {
+            // Эта установка обновляться сама не умеет - ведём на страницу релиза
+            await OpenReleasePageAsync();
+            return;
+        }
+
+        var question = Shell.IsConnected
+            ? Loc.T("Update_ConfirmConnected", release.Version, ByteFormat.Size(asset.Size))
+            : Loc.T("Update_Confirm", release.Version, ByteFormat.Size(asset.Size));
+
+        if (!await Platform.Dialogs.ConfirmAsync(question)) return;
+
+        IsUpdating = true;
+        UpdateProgress = 0;
+        UpdateProgressLabel = Loc.T("Update_Starting");
+        _updateCts = new CancellationTokenSource();
+
+        var progress = new Progress<(long Done, long Total)>(p =>
+        {
+            UpdateProgress = p.Total > 0 ? p.Done * 100.0 / p.Total : 0;
+            UpdateProgressLabel = p.Total > 0
+                ? Loc.T("Update_Progress", ByteFormat.Size(p.Done), ByteFormat.Size(p.Total))
+                : ByteFormat.Size(p.Done);
+        });
+
+        try
+        {
+            Shell.Append($"[cvpn] downloading update {release.Version}: {asset.Name}");
+
+            var file = await UpdateDownloader.DownloadAsync(
+                release, asset, Platform.Updater.DownloadDirectory, progress, _updateCts.Token);
+
+            Shell.Append("[cvpn] update downloaded, checksum verified");
+            UpdateProgressLabel = Loc.T("Update_Installing");
+
+            await Shell.StopForUpdateAsync();
+
+            var problem = await Platform.Updater.InstallAsync(file);
+            if (problem.Length > 0)
+            {
+                Shell.Append($"[cvpn] update: {problem}");
+                Shell.Notify(problem);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            Shell.Notify(Loc.T("Update_Cancelled"));
+        }
+        catch (UpdateException ex)
+        {
+            Shell.Append($"[cvpn] update: {ex.Message}");
+            Shell.Notify(ex.Message);
+        }
+        finally
+        {
+            _updateCts?.Dispose();
+            _updateCts = null;
+            IsUpdating = false;
+        }
+    }
+
+#if DEBUG
+    /// <summary>Отладочный снимок: показать найденное обновление без запроса к GitHub.</summary>
+    public void ShowDemoUpdate(ReleaseInfo release) => Update = release;
+#endif
 
     private async Task OpenReleasePageAsync()
     {

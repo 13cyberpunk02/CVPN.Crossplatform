@@ -497,6 +497,19 @@ public sealed class MainViewModel : ObservableObject
         });
     }
 
+    /// <summary>
+    /// Перед установкой обновления: туннель снимается штатно - с возвратом прокси
+    /// и kill switch, - а настройки сохраняются. Иначе установщик застал бы
+    /// запущенное ядро и занятые файлы.
+    /// </summary>
+    public async Task StopForUpdateAsync()
+    {
+        if (State is TunnelState.Connected or TunnelState.Connecting or TunnelState.Failing)
+            await DisconnectAsync();
+
+        Persist();
+    }
+
     private async Task DisconnectAsync()
     {
         _adapterRetryUsed = false;

@@ -780,7 +780,7 @@ Restart CVPN now?</value>
     <value>You have the latest version</value>
   </data>
   <data name="Settings_UpdateFound" xml:space="preserve">
-    <value>Version {0} is available - open the release page</value>
+    <value>Version {0} is available. You can update in Settings.</value>
   </data>
   <data name="Settings_UseService" xml:space="preserve">
     <value>Use the service</value>
@@ -1363,5 +1363,68 @@ Restart CVPN now?</value>
   </data>
   <data name="Routing_ApplyAfterReconnect" xml:space="preserve">
     <value>They apply after reconnecting.</value>
+  </data>
+  <data name="Update_Stalled" xml:space="preserve">
+    <value>the download stalled, check your connection</value>
+  </data>
+  <data name="Update_InstallFailed" xml:space="preserve">
+    <value>Could not install the update: {0}</value>
+  </data>
+  <data name="Update_ManualHint" xml:space="preserve">
+    <value>This installation cannot update itself: download the new version from the release page</value>
+  </data>
+  <data name="Update_Confirm" xml:space="preserve">
+    <value>Download and install CVPN {0} ({1})? Once downloaded, the app closes, updates and opens again.</value>
+  </data>
+  <data name="Update_Progress" xml:space="preserve">
+    <value>{0} of {1}</value>
+  </data>
+  <data name="Update_NoChecksum" xml:space="preserve">
+    <value>The update file has no checksum, so it is not safe to install. Download it from the release page.</value>
+  </data>
+  <data name="Settings_WhatsNew" xml:space="preserve">
+    <value>What's new</value>
+  </data>
+  <data name="Update_DownloadFailed" xml:space="preserve">
+    <value>Could not download the update: {0}</value>
+  </data>
+  <data name="Settings_UpdateNow" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="Update_Starting" xml:space="preserve">
+    <value>Preparing</value>
+  </data>
+  <data name="Update_PackageFailed" xml:space="preserve">
+    <value>The package did not install: {0}. The file is here: {1}</value>
+  </data>
+  <data name="Update_Installing" xml:space="preserve">
+    <value>Starting the installer</value>
+  </data>
+  <data name="Update_SelfHint" xml:space="preserve">
+    <value>The update downloads and installs right from the app</value>
+  </data>
+  <data name="Update_Cancelled" xml:space="preserve">
+    <value>Update download cancelled</value>
+  </data>
+  <data name="Update_ChecksumMismatch" xml:space="preserve">
+    <value>The update file is damaged or tampered with: the checksum does not match. Try again.</value>
+  </data>
+  <data name="Update_AllowInstall" xml:space="preserve">
+    <value>Allow CVPN to install apps in the settings that opened, then tap Update again.</value>
+  </data>
+  <data name="Update_ConfirmConnected" xml:space="preserve">
+    <value>Download and install CVPN {0} ({1})? Once downloaded, the tunnel disconnects and the app closes, updates and opens again.</value>
+  </data>
+  <data name="Update_NotWritable" xml:space="preserve">
+    <value>No permission to write to the AppImage folder: {0}</value>
+  </data>
+  <data name="Update_RestartManually" xml:space="preserve">
+    <value>The update is installed. Restart CVPN to open the new version.</value>
+  </data>
+  <data name="Update_Declined" xml:space="preserve">
+    <value>Installation cancelled: administrator rights were not granted</value>
+  </data>
+  <data name="Update_Title" xml:space="preserve">
+    <value>Version {0} is available</value>
   </data>
 </root>

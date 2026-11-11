@@ -780,7 +780,7 @@
     <value>Установлена последняя версия</value>
   </data>
   <data name="Settings_UpdateFound" xml:space="preserve">
-    <value>Доступна версия {0} - откройте страницу релиза</value>
+    <value>Доступна версия {0}. Обновить можно в «Настройках».</value>
   </data>
   <data name="Settings_UseService" xml:space="preserve">
     <value>Использовать службу</value>
@@ -1363,5 +1363,68 @@
   </data>
   <data name="Routing_ApplyAfterReconnect" xml:space="preserve">
     <value>Применятся после переподключения.</value>
+  </data>
+  <data name="Update_Stalled" xml:space="preserve">
+    <value>загрузка остановилась, проверьте соединение</value>
+  </data>
+  <data name="Update_InstallFailed" xml:space="preserve">
+    <value>Не удалось установить обновление: {0}</value>
+  </data>
+  <data name="Update_ManualHint" xml:space="preserve">
+    <value>Эта установка сама не обновляется: скачайте новую версию со страницы релиза</value>
+  </data>
+  <data name="Update_Confirm" xml:space="preserve">
+    <value>Скачать и установить CVPN {0} ({1})? После загрузки приложение закроется, обновится и откроется снова.</value>
+  </data>
+  <data name="Update_Progress" xml:space="preserve">
+    <value>{0} из {1}</value>
+  </data>
+  <data name="Update_NoChecksum" xml:space="preserve">
+    <value>У файла обновления нет контрольной суммы, ставить его небезопасно. Скачайте версию со страницы релиза.</value>
+  </data>
+  <data name="Settings_WhatsNew" xml:space="preserve">
+    <value>Что нового</value>
+  </data>
+  <data name="Update_DownloadFailed" xml:space="preserve">
+    <value>Не удалось скачать обновление: {0}</value>
+  </data>
+  <data name="Settings_UpdateNow" xml:space="preserve">
+    <value>Обновить</value>
+  </data>
+  <data name="Update_Starting" xml:space="preserve">
+    <value>Подготовка</value>
+  </data>
+  <data name="Update_PackageFailed" xml:space="preserve">
+    <value>Пакет не установился: {0}. Файл лежит здесь: {1}</value>
+  </data>
+  <data name="Update_Installing" xml:space="preserve">
+    <value>Запуск установки</value>
+  </data>
+  <data name="Update_SelfHint" xml:space="preserve">
+    <value>Обновление скачивается и ставится прямо из приложения</value>
+  </data>
+  <data name="Update_Cancelled" xml:space="preserve">
+    <value>Загрузка обновления отменена</value>
+  </data>
+  <data name="Update_ChecksumMismatch" xml:space="preserve">
+    <value>Файл обновления повреждён или подменён: контрольная сумма не совпала. Попробуйте ещё раз.</value>
+  </data>
+  <data name="Update_AllowInstall" xml:space="preserve">
+    <value>Разрешите CVPN устанавливать приложения в открывшихся настройках, затем нажмите «Обновить» ещё раз.</value>
+  </data>
+  <data name="Update_ConfirmConnected" xml:space="preserve">
+    <value>Скачать и установить CVPN {0} ({1})? После загрузки туннель отключится, а приложение закроется, обновится и откроется снова.</value>
+  </data>
+  <data name="Update_NotWritable" xml:space="preserve">
+    <value>Нет прав на запись в папку с AppImage: {0}</value>
+  </data>
+  <data name="Update_RestartManually" xml:space="preserve">
+    <value>Обновление установлено. Перезапустите CVPN, чтобы открыть новую версию.</value>
+  </data>
+  <data name="Update_Declined" xml:space="preserve">
+    <value>Установка отменена: права администратора не выданы</value>
+  </data>
+  <data name="Update_Title" xml:space="preserve">
+    <value>Доступна версия {0}</value>
   </data>
 </root>
