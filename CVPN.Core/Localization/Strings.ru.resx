@@ -1490,4 +1490,49 @@
   <data name="Profiles_QrFailed" xml:space="preserve">
     <value>Не удалось открыть сканер: {0}</value>
   </data>
+  <data name="Sub_Removed" xml:space="preserve">
+    <value>Подписка «{0}» удалена</value>
+  </data>
+  <data name="Sub_WarnExpired" xml:space="preserve">
+    <value>Подписка «{0}» закончилась: продлите её у провайдера</value>
+  </data>
+  <data name="Sub_WarnExpiring" xml:space="preserve">
+    <value>Подписка «{0}» скоро закончится, осталось дней: {1}</value>
+  </data>
+  <data name="Profiles_Subscriptions" xml:space="preserve">
+    <value>Подписки</value>
+  </data>
+  <data name="Sub_WarnQuota" xml:space="preserve">
+    <value>В подписке «{0}» почти кончился трафик: {1}</value>
+  </data>
+  <data name="Profiles_UpdateOne" xml:space="preserve">
+    <value>Обновить подписку</value>
+  </data>
+  <data name="Sub_RemoveConfirm" xml:space="preserve">
+    <value>Удалить подписку «{0}» и её серверы ({1})?</value>
+  </data>
+  <data name="Profiles_UpdateAll" xml:space="preserve">
+    <value>Обновить все</value>
+  </data>
+  <data name="Sub_ExpiresToday" xml:space="preserve">
+    <value>до {0} · последний день</value>
+  </data>
+  <data name="Sub_Quota" xml:space="preserve">
+    <value>{0} из {1}</value>
+  </data>
+  <data name="Sub_ExpiresIn" xml:space="preserve">
+    <value>до {0} · осталось дней: {1}</value>
+  </data>
+  <data name="Profiles_RemoveSubscription" xml:space="preserve">
+    <value>Удалить подписку и её серверы</value>
+  </data>
+  <data name="Sub_Expired" xml:space="preserve">
+    <value>закончилась {0}</value>
+  </data>
+  <data name="Sub_QuotaUnlimited" xml:space="preserve">
+    <value>{0} · без лимита</value>
+  </data>
+  <data name="Sub_QuotaLeft" xml:space="preserve">
+    <value>осталось {0}</value>
+  </data>
 </root>

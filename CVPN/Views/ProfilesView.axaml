@@ -99,6 +99,26 @@
             <Setter Property="HorizontalAlignment" Value="Right" />
             <Setter Property="Margin" Value="0,8,0,0" />
         </Style>
+        <!-- Тариф подписки: полоса израсходованного трафика -->
+        <Style Selector="ProgressBar.quota">
+            <Setter Property="Height" Value="6" />
+            <Setter Property="MinHeight" Value="6" />
+            <Setter Property="MinWidth" Value="0" />
+            <Setter Property="CornerRadius" Value="3" />
+            <Setter Property="Minimum" Value="0" />
+            <Setter Property="Maximum" Value="1" />
+            <Setter Property="Background" Value="{DynamicResource Line}" />
+            <Setter Property="Foreground" Value="{DynamicResource AccentGradient}" />
+        </Style>
+        <Style Selector="ProgressBar.quota.low">
+            <Setter Property="Foreground" Value="{DynamicResource Warning}" />
+        </Style>
+        <!-- Подписка на исходе - жёлтая полоса слева, как у примечаний -->
+        <Style Selector="Border.card.sub.attention">
+            <Setter Property="BorderBrush" Value="{DynamicResource Warning}" />
+            <Setter Property="BorderThickness" Value="3,1,1,1" />
+        </Style>
+
         <!-- Кнопки списка: справа от поиска на десктопе, отдельной строкой под ним на телефоне.
              Колонка и отступ - только в стилях: значение прямо в разметке сильнее стиля,
              и на телефоне кнопки прилипали к полю поиска -->
@@ -186,29 +206,76 @@
                 </StackPanel>
             </Border>
 
-            <!-- ===== Подписка ===== -->
-            <Border Classes="card" Padding="14,12" IsVisible="{Binding HasSubscription}">
-                <Grid ColumnDefinitions="Auto,*,Auto">
-                    <Border Classes="key small">
-                        <Path Classes="icon" Data="{StaticResource Icon.Link}" Width="15" Height="15" />
-                    </Border>
-                    <StackPanel Grid.Column="1" Margin="12,0,10,0" VerticalAlignment="Center">
-                        <TextBlock FontWeight="SemiBold" TextTrimming="CharacterEllipsis">
-                            <Run Text="{loc:T Profiles_Subscription}" />
-                            <Run Text=" · " Foreground="{DynamicResource TextFaint}" />
-                            <Run Text="{Binding SubscriptionLabel}" FontFamily="{StaticResource Font.Mono}"
-                                 FontWeight="Normal" Foreground="{DynamicResource TextSecondary}" />
-                        </TextBlock>
-                        <TextBlock Classes="caption" Text="{Binding SubscriptionUpdatedLabel}" />
-                    </StackPanel>
-                    <Button Grid.Column="2" Classes="small" Command="{Binding UpdateSubscription}">
+            <!-- ===== Подписки: каждая со своим тарифом ===== -->
+            <StackPanel Spacing="8" IsVisible="{Binding HasSubscriptions}">
+                <Grid ColumnDefinitions="*,Auto">
+                    <TextBlock Classes="field" Text="{loc:T Profiles_Subscriptions}" VerticalAlignment="Center" />
+                    <Button Grid.Column="1" Classes="small" Command="{Binding UpdateSubscription}"
+                            IsVisible="{Binding HasManySubscriptions}">
                         <StackPanel Orientation="Horizontal" Spacing="7">
                             <Path Classes="icon" Data="{StaticResource Icon.Down}" />
-                            <TextBlock Text="{loc:T Profiles_UpdateSubscription}" />
+                            <TextBlock Text="{loc:T Profiles_UpdateAll}" />
                         </StackPanel>
                     </Button>
                 </Grid>
-            </Border>
+
+                <ItemsControl ItemsSource="{Binding Subscriptions}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Spacing="8" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="models:Subscription">
+                            <Border Classes="card sub" Classes.attention="{Binding NeedsAttention}" Padding="14,12">
+                                <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+                                    <Border Classes="key small">
+                                        <Path Classes="icon" Data="{StaticResource Icon.Link}" Width="15" Height="15" />
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Margin="12,0,10,0" VerticalAlignment="Center">
+                                        <TextBlock FontWeight="SemiBold" Text="{Binding Title}" TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Classes="caption" Text="{Binding UpdatedLabel}" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="2" VerticalAlignment="Center">
+                                        <Button Classes="ghost icon" ToolTip.Tip="{loc:T Profiles_UpdateOne}"
+                                                Command="{Binding #Root.((vm:ProfilesViewModel)DataContext).UpdateSubscription}"
+                                                CommandParameter="{Binding}">
+                                            <Path Classes="icon" Data="{StaticResource Icon.Down}" />
+                                        </Button>
+                                        <Button Classes="ghost icon remove" ToolTip.Tip="{loc:T Profiles_RemoveSubscription}"
+                                                Command="{Binding #Root.((vm:ProfilesViewModel)DataContext).RemoveSubscription}"
+                                                CommandParameter="{Binding}">
+                                            <Path Classes="icon" Data="{StaticResource Icon.Trash}" />
+                                        </Button>
+                                    </StackPanel>
+
+                                    <!-- Тариф: полоса трафика и срок. Нет данных от панели - строки нет -->
+                                    <StackPanel Grid.Row="1" Grid.ColumnSpan="3" Spacing="6" Margin="0,12,0,0"
+                                                IsVisible="{Binding HasTariff}">
+                                        <StackPanel Spacing="6" IsVisible="{Binding HasTraffic}">
+                                            <Grid ColumnDefinitions="*,Auto">
+                                                <TextBlock Classes="mono" FontSize="{StaticResource Size.Small}"
+                                                           Foreground="{DynamicResource Text}" Text="{Binding QuotaLabel}" />
+                                                <TextBlock Grid.Column="1" Classes="caption" Text="{Binding QuotaLeftLabel}"
+                                                           Classes.warning="{Binding IsQuotaLow}" />
+                                            </Grid>
+                                            <ProgressBar Classes="quota" Classes.low="{Binding IsQuotaLow}"
+                                                         Value="{Binding UsedShare}" IsVisible="{Binding HasQuota}" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Spacing="6" IsVisible="{Binding HasExpire}">
+                                            <Path Classes="icon" Data="{StaticResource Icon.Clock}" Width="12" Height="12"
+                                                  Stroke="{DynamicResource TextMuted}" VerticalAlignment="Center" />
+                                            <TextBlock Classes="caption" Text="{Binding ExpireLabel}" VerticalAlignment="Center"
+                                                       Classes.warning="{Binding IsExpiringSoon}"
+                                                       Classes.danger="{Binding IsExpired}" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
 
             <!-- ===== Пусто: первый шаг крупно ===== -->
             <Border Classes="card" Padding="24,28" IsVisible="{Binding !HasProfiles}">

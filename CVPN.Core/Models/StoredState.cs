@@ -31,5 +31,23 @@ public sealed class StoredState
 
         Rules = null;
         ActiveRoutingProfile ??= RoutingProfiles[0].Name;
+
+        MigrateSubscription();
+    }
+
+    /// <summary>
+    /// Была одна ссылка подписки в настройках - становится первой в списке.
+    /// Старые поля очищаются, чтобы перенос не повторялся.
+    /// </summary>
+    private void MigrateSubscription()
+    {
+        var url = Settings.SubscriptionUrl.Trim();
+        if (url.Length == 0) return;
+
+        if (Settings.Subscriptions.All(s => s.Url != url))
+            Settings.Subscriptions.Add(new Subscription { Url = url, Updated = Settings.SubscriptionUpdated });
+
+        Settings.SubscriptionUrl = "";
+        Settings.SubscriptionUpdated = null;
     }
 }

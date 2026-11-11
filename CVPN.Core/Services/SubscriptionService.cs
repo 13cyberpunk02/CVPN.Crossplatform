@@ -14,14 +14,15 @@ public static class SubscriptionService
 {
     private static readonly HttpClient Http = new() { Timeout = TimeSpan.FromSeconds(20) };
 
-    public static async Task<(List<ServerProfile> Profiles, string Error)> FetchAsync(
+    public static async Task<(List<ServerProfile> Profiles, string Error, SubscriptionInfo Info)> FetchAsync(
         string url, CancellationToken ct = default)
     {
         var profiles = new List<ServerProfile>();
 
-        if (string.IsNullOrWhiteSpace(url)) return (profiles, Loc.T("Sub_NoUrl"));
+        if (string.IsNullOrWhiteSpace(url)) return (profiles, Loc.T("Sub_NoUrl"), SubscriptionInfo.Empty);
 
         string body;
+        SubscriptionInfo info;
 
         try
         {
@@ -31,13 +32,16 @@ public static class SubscriptionService
 
             using var response = await Http.SendAsync(request, ct);
             if (!response.IsSuccessStatusCode)
-                return (profiles, Loc.T("Sub_HttpError", (int)response.StatusCode));
+                return (profiles, Loc.T("Sub_HttpError", (int)response.StatusCode), SubscriptionInfo.Empty);
+
+            // Тариф панели: потрачено, всего, до какого числа, и название подписки
+            info = SubscriptionInfo.Parse(Header(response, "subscription-userinfo"), Header(response, "profile-title"));
 
             body = await response.Content.ReadAsStringAsync(ct);
         }
         catch (Exception ex)
         {
-            return (profiles, Loc.T("Sub_LoadFailed", ex.Message));
+            return (profiles, Loc.T("Sub_LoadFailed", ex.Message), SubscriptionInfo.Empty);
         }
 
         foreach (var line in Decode(body)
@@ -51,8 +55,16 @@ public static class SubscriptionService
         }
 
         return profiles.Count > 0
-            ? (profiles, "")
-            : (profiles, Loc.T("Sub_NoServers"));
+            ? (profiles, "", info)
+            : (profiles, Loc.T("Sub_NoServers"), info);
+    }
+
+    /// <summary>Заголовок ответа или содержимого - панели кладут его и туда, и туда.</summary>
+    private static string? Header(HttpResponseMessage response, string name)
+    {
+        if (response.Headers.TryGetValues(name, out var values)) return string.Join(";", values);
+        if (response.Content.Headers.TryGetValues(name, out var content)) return string.Join(";", content);
+        return null;
     }
 
     /// <summary>Если тело - base64, разворачиваем; иначе возвращаем как есть.</summary>

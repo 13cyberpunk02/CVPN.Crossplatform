@@ -99,8 +99,14 @@ public sealed class AppSettings : ObservableObject
     }
 
     /// <summary>
-    /// Ссылка на подписку. Шифруется вместе с остальными секретами: в панелях
-    /// её обычно выдают с токеном доступа прямо в адресе.
+    /// Подписки провайдеров. Их может быть несколько - основная и запасная.
+    /// Ссылки шифруются внутри Subscription.
+    /// </summary>
+    public System.Collections.ObjectModel.ObservableCollection<Models.Subscription> Subscriptions { get; set; } = [];
+
+    /// <summary>
+    /// Старый формат: подписка была одна. Читается ради совместимости и при
+    /// загрузке переносится в Subscriptions (см. StoredState.Migrate).
     /// </summary>
     [System.Text.Json.Serialization.JsonConverter(typeof(Core.ProtectedStringConverter))]
     public string SubscriptionUrl

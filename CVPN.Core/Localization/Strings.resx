@@ -1490,4 +1490,49 @@ Restart CVPN now?</value>
   <data name="Profiles_QrFailed" xml:space="preserve">
     <value>Could not open the scanner: {0}</value>
   </data>
+  <data name="Sub_Removed" xml:space="preserve">
+    <value>Subscription "{0}" removed</value>
+  </data>
+  <data name="Sub_WarnExpired" xml:space="preserve">
+    <value>Subscription "{0}" has expired: renew it with your provider</value>
+  </data>
+  <data name="Sub_WarnExpiring" xml:space="preserve">
+    <value>Subscription "{0}" expires soon: {1} days left</value>
+  </data>
+  <data name="Profiles_Subscriptions" xml:space="preserve">
+    <value>Subscriptions</value>
+  </data>
+  <data name="Sub_WarnQuota" xml:space="preserve">
+    <value>Subscription "{0}" is almost out of traffic: {1}</value>
+  </data>
+  <data name="Profiles_UpdateOne" xml:space="preserve">
+    <value>Update subscription</value>
+  </data>
+  <data name="Sub_RemoveConfirm" xml:space="preserve">
+    <value>Remove subscription "{0}" and its servers ({1})?</value>
+  </data>
+  <data name="Profiles_UpdateAll" xml:space="preserve">
+    <value>Update all</value>
+  </data>
+  <data name="Sub_ExpiresToday" xml:space="preserve">
+    <value>until {0} · last day</value>
+  </data>
+  <data name="Sub_Quota" xml:space="preserve">
+    <value>{0} of {1}</value>
+  </data>
+  <data name="Sub_ExpiresIn" xml:space="preserve">
+    <value>until {0} · {1} days left</value>
+  </data>
+  <data name="Profiles_RemoveSubscription" xml:space="preserve">
+    <value>Remove the subscription and its servers</value>
+  </data>
+  <data name="Sub_Expired" xml:space="preserve">
+    <value>expired on {0}</value>
+  </data>
+  <data name="Sub_QuotaUnlimited" xml:space="preserve">
+    <value>{0} · unlimited</value>
+  </data>
+  <data name="Sub_QuotaLeft" xml:space="preserve">
+    <value>{0} left</value>
+  </data>
 </root>

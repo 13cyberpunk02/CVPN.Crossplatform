@@ -42,17 +42,20 @@ public sealed class ProfilesViewModel : PageViewModel
 
         ExportAll = new RelayCommand(async () => await ShowExportAllAsync(), () => Profiles.Count > 0);
         PingAll = new RelayCommand(async () => await PingAsync(), () => !IsBusy);
-        UpdateSubscription = new RelayCommand(async () => await UpdateSubscriptionAsync(), () => !IsBusy);
+        // Параметр - конкретная подписка; без параметра обновляются все
+        UpdateSubscription = new RelayCommand(
+            async p => await UpdateSubscriptionsAsync(p is Subscription one ? [one] : [.. Subscriptions]),
+            _ => !IsBusy);
+        RemoveSubscription = new RelayCommand(p =>
+        {
+            if (p is Subscription sub) _ = RemoveSubscriptionAsync(sub);
+        });
         AddFromText = new RelayCommand(async () => await AddFromFieldAsync(), () => !IsBusy);
         ScanQr = new RelayCommand(async () => await ScanQrAsync(), () => !IsBusy && CanScanQr);
         ToggleSort = new RelayCommand(() => SortFastest = !SortFastest);
 
         Profiles.CollectionChanged += (_, _) => Refresh();
-        Settings.PropertyChanged += (_, e) =>
-        {
-            if (e.PropertyName is nameof(AppSettings.SubscriptionUrl) or nameof(AppSettings.SubscriptionUpdated))
-                RaiseSubscription();
-        };
+        Subscriptions.CollectionChanged += (_, _) => RaiseSubscriptions();
         shell.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(MainViewModel.Active)) Raise(nameof(Selected));
@@ -136,22 +139,21 @@ public sealed class ProfilesViewModel : PageViewModel
 
     // ===================== подписка =====================
 
-    public bool HasSubscription => !string.IsNullOrWhiteSpace(Settings.SubscriptionUrl);
+    /// <summary>Подписки провайдеров - основная, запасная и сколько угодно ещё.</summary>
+    public System.Collections.ObjectModel.ObservableCollection<Subscription> Subscriptions => Settings.Subscriptions;
 
-    /// <summary>Адрес подписки без схемы и хвоста - целиком он длинный и ничего не говорит.</summary>
-    public string SubscriptionLabel =>
-        Uri.TryCreate(Settings.SubscriptionUrl, UriKind.Absolute, out var uri) ? uri.Host : Settings.SubscriptionUrl;
+    public bool HasSubscriptions => Subscriptions.Count > 0;
 
-    public string SubscriptionUpdatedLabel => Settings.SubscriptionUpdated is { } at
-        ? Loc.T("Profiles_SubscriptionUpdatedAt", at.ToLocalTime().ToString("g", Loc.Culture))
-        : Loc.T("Profiles_SubscriptionNever");
+    /// <summary>Подписок больше одной - есть смысл в кнопке «Обновить все».</summary>
+    public bool HasManySubscriptions => Subscriptions.Count > 1;
 
-    private void RaiseSubscription()
+    private void RaiseSubscriptions()
     {
-        Raise(nameof(HasSubscription));
-        Raise(nameof(SubscriptionLabel));
-        Raise(nameof(SubscriptionUpdatedLabel));
+        Raise(nameof(HasSubscriptions));
+        Raise(nameof(HasManySubscriptions));
     }
+
+    public ICommand RemoveSubscription { get; }
 
     public AppSettings Settings => Shell.Settings;
 
@@ -196,15 +198,39 @@ public sealed class ProfilesViewModel : PageViewModel
     /// </summary>
     public async Task StartupRefreshAsync()
     {
-        if (!Settings.AutoUpdateSubscription) return;
-        if (string.IsNullOrWhiteSpace(Settings.SubscriptionUrl)) return;
-
-        var last = Settings.SubscriptionUpdated;
-        if (last is not null && DateTimeOffset.Now - last.Value < TimeSpan.FromDays(1)) return;
+        if (Subscriptions.Count == 0) return;
 
         // Пауза, чтобы не соперничать со стартом за сеть
         await Task.Delay(TimeSpan.FromSeconds(8));
-        await UpdateSubscriptionAsync();
+
+        if (Settings.AutoUpdateSubscription)
+        {
+            var stale = Subscriptions
+                .Where(s => s.Updated is null || DateTimeOffset.Now - s.Updated.Value >= TimeSpan.FromDays(1))
+                .ToList();
+
+            if (stale.Count > 0) await UpdateSubscriptionsAsync(stale);
+        }
+
+        // Срок и трафик проверяем при каждом запуске - даже без обновления,
+        // по последним известным данным: кончиться подписка может и без сети
+        WarnAboutSubscriptions();
+    }
+
+    /// <summary>
+    /// Предупреждение о подписке, которой осталось меньше трёх дней или 10%
+    /// трафика: лучше узнать заранее, чем когда VPN молча перестанет работать.
+    /// </summary>
+    private void WarnAboutSubscriptions()
+    {
+        var problem = Subscriptions.FirstOrDefault(s => s.NeedsAttention);
+        if (problem is null) return;
+
+        Shell.Notify(problem.IsExpired
+            ? Loc.T("Sub_WarnExpired", problem.Title)
+            : problem.IsExpiringSoon
+                ? Loc.T("Sub_WarnExpiring", problem.Title, Math.Max(0, problem.DaysLeft))
+                : Loc.T("Sub_WarnQuota", problem.Title, problem.QuotaLeftLabel));
     }
 
     /// <summary>
@@ -298,8 +324,16 @@ public sealed class ProfilesViewModel : PageViewModel
 
         if (lines.Length == 1 && IsSubscriptionUrl(lines[0]))
         {
-            Settings.SubscriptionUrl = lines[0];
-            await UpdateSubscriptionAsync();
+            // Уже есть такая - просто обновляем, вторую копию не заводим
+            var url = lines[0];
+            var subscription = Subscriptions.FirstOrDefault(s => s.Url == url);
+            if (subscription is null)
+            {
+                subscription = new Subscription { Url = url };
+                Subscriptions.Add(subscription);
+            }
+
+            await UpdateSubscriptionsAsync([subscription]);
             return true;
         }
 
@@ -481,42 +515,74 @@ public sealed class ProfilesViewModel : PageViewModel
     }
 
     /// <summary>
-    /// Обновляет профили из подписки. Заменяются только пришедшие из неё:
-    /// созданные вручную остаются на месте.
+    /// Обновляет профили из подписок. У каждой заменяются только её серверы:
+    /// созданные вручную и пришедшие из других подписок остаются на месте.
     /// </summary>
-    private async Task UpdateSubscriptionAsync()
+    private async Task UpdateSubscriptionsAsync(IReadOnlyList<Subscription> targets)
     {
+        if (targets.Count == 0) return;
+
         IsBusy = true;
         Shell.Notify(Loc.T("Profiles_LoadingSubscription"));
 
         try
         {
-            var (fetched, error) = await SubscriptionService.FetchAsync(Settings.SubscriptionUrl);
-
-            if (error.Length > 0)
-            {
-                Shell.Notify(error);
-                return;
-            }
-
             var activeName = Shell.Active?.Name;
+            var loaded = 0;
+            var lastError = "";
 
-            foreach (var stale in Profiles.Where(p => p.Subscription == Settings.SubscriptionUrl).ToList())
-                Profiles.Remove(stale);
+            foreach (var subscription in targets)
+            {
+                var (fetched, error, info) = await SubscriptionService.FetchAsync(subscription.Url);
 
-            foreach (var profile in fetched) Profiles.Add(profile);
+                // Тариф показываем, даже если серверов нет: у закончившейся подписки
+                // панель часто отдаёт пустой список - и как раз тогда важно видеть срок
+                if (info != SubscriptionInfo.Empty) subscription.Apply(info);
+
+                if (error.Length > 0)
+                {
+                    lastError = $"{subscription.Title}: {error}";
+                    continue;
+                }
+
+                if (info == SubscriptionInfo.Empty) subscription.Apply(info);
+
+                foreach (var stale in Profiles.Where(p => p.Subscription == subscription.Url).ToList())
+                    Profiles.Remove(stale);
+
+                foreach (var profile in fetched) Profiles.Add(profile);
+                loaded += fetched.Count;
+            }
 
             // Возвращаем выбор на сервер с тем же именем, если он ещё есть
             Shell.Active = Profiles.FirstOrDefault(p => p.Name == activeName) ?? Profiles.FirstOrDefault();
-
-            Settings.SubscriptionUpdated = DateTimeOffset.Now;
-
-            Shell.Notify(Loc.T("Profiles_SubscriptionLoaded", fetched.Count));
             Shell.Persist();
+
+            Shell.Notify(lastError.Length > 0 ? lastError : Loc.T("Profiles_SubscriptionLoaded", loaded));
+            if (lastError.Length == 0) WarnAboutSubscriptions();
         }
         finally
         {
             IsBusy = false;
         }
+    }
+
+    /// <summary>Подписка удаляется вместе со своими серверами - после вопроса.</summary>
+    private async Task RemoveSubscriptionAsync(Subscription subscription)
+    {
+        var count = Profiles.Count(p => p.Subscription == subscription.Url);
+
+        if (!await Shell.Platform.Dialogs.ConfirmAsync(Loc.T("Sub_RemoveConfirm", subscription.Title, count)))
+            return;
+
+        foreach (var profile in Profiles.Where(p => p.Subscription == subscription.Url).ToList())
+            Profiles.Remove(profile);
+
+        Subscriptions.Remove(subscription);
+
+        if (Shell.Active is null || !Profiles.Contains(Shell.Active)) Shell.Active = Profiles.FirstOrDefault();
+        Shell.Persist();
+
+        Shell.Notify(Loc.T("Sub_Removed", subscription.Title));
     }
 }

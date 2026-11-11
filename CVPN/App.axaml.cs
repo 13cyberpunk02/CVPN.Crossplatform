@@ -189,6 +189,17 @@ public partial class App : Application
             new Services.ReleaseAsset("CVPN-1.2.0-portable.zip", "https://github.com", 88_953_583, null)
         ]));
 
+        // Две подписки: обычная и та, у которой кончается срок
+        const long gb = 1024L * 1024 * 1024;
+        var main = new Models.Subscription { Url = "https://panel.example.net/sub/demo" };
+        main.Apply(new Models.SubscriptionInfo("Example VPN · Premium", 3 * gb, 38 * gb, 100 * gb,
+            DateTimeOffset.Now.AddDays(34)));
+        var spare = new Models.Subscription { Url = "https://spare.example.org/s/demo" };
+        spare.Apply(new Models.SubscriptionInfo("", gb / 2, 46 * gb, 50 * gb, DateTimeOffset.Now.AddDays(2)));
+        shell.Settings.Subscriptions.Clear();
+        shell.Settings.Subscriptions.Add(main);
+        shell.Settings.Subscriptions.Add(spare);
+
         shell.Session.Begin(shell.Active?.Name ?? "Demo", DateTimeOffset.Now.AddSeconds(-5077));
         long lastUp = 0, lastDown = 0;
         for (var i = 0; i < 60; i++)
