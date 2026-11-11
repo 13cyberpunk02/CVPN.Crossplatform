@@ -119,6 +119,25 @@
             <Setter Property="BorderThickness" Value="3,1,1,1" />
         </Style>
 
+        <!-- Способы добавить сервер. Не WrapPanel: на Android после вставки он
+             иногда раскладывал все кнопки в одну точку до смены страницы.
+             На десктопе - одной строкой, на телефоне - по две в ряд -->
+        <Style Selector="UniformGrid.ways">
+            <Setter Property="Rows" Value="1" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="Margin" Value="-3" />
+        </Style>
+        <Style Selector="UniformGrid.ways > Button">
+            <Setter Property="Margin" Value="3" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector=".narrow UniformGrid.ways">
+            <Setter Property="Rows" Value="0" />
+            <Setter Property="Columns" Value="2" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+        </Style>
+
         <!-- Кнопки списка: справа от поиска на десктопе, отдельной строкой под ним на телефоне.
              Колонка и отступ - только в стилях: значение прямо в разметке сильнее стиля,
              и на телефоне кнопки прилипали к полю поиска -->
@@ -174,9 +193,8 @@
                     <TextBlock Classes="caption" Foreground="{DynamicResource TextFaint}" TextWrapping="Wrap"
                                Text="{loc:T Profiles_AddHint}" />
 
-                    <WrapPanel>
-                        <Button Classes="small" Command="{Binding PasteLink}" ToolTip.Tip="{loc:T Profiles_PasteHint}"
-                                Margin="0,0,6,6">
+                    <UniformGrid Classes="ways">
+                        <Button Classes="small" Command="{Binding PasteLink}" ToolTip.Tip="{loc:T Profiles_PasteHint}">
                             <StackPanel Orientation="Horizontal" Spacing="7">
                                 <Path Classes="icon" Data="{StaticResource Icon.Clipboard}" />
                                 <TextBlock Text="{loc:T Profiles_Paste}" />
@@ -184,25 +202,25 @@
                         </Button>
                         <!-- Камера - только на телефоне: ссылки часто показывают QR-кодом -->
                         <Button Classes="small" Command="{Binding ScanQr}" ToolTip.Tip="{loc:T Profiles_ScanQrHint}"
-                                Margin="0,0,6,6" IsVisible="{Binding CanScanQr}">
+                                IsVisible="{Binding CanScanQr}">
                             <StackPanel Orientation="Horizontal" Spacing="7">
                                 <Path Classes="icon" Data="{StaticResource Icon.Qr}" />
                                 <TextBlock Text="{loc:T Profiles_ScanQr}" />
                             </StackPanel>
                         </Button>
-                        <Button Classes="small" Command="{Binding Create}" Margin="0,0,6,6">
+                        <Button Classes="small" Command="{Binding Create}">
                             <StackPanel Orientation="Horizontal" Spacing="7">
                                 <Path Classes="icon" Data="{StaticResource Icon.Edit}" />
                                 <TextBlock Text="{loc:T Profiles_Manual}" />
                             </StackPanel>
                         </Button>
-                        <Button Classes="small" Command="{Binding ImportFile}" Margin="0,0,6,6">
+                        <Button Classes="small" Command="{Binding ImportFile}">
                             <StackPanel Orientation="Horizontal" Spacing="7">
                                 <Path Classes="icon" Data="{StaticResource Icon.Folder}" />
                                 <TextBlock Text="{loc:T Profiles_FromFile}" />
                             </StackPanel>
                         </Button>
-                    </WrapPanel>
+                    </UniformGrid>
                 </StackPanel>
             </Border>
 
