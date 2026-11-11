@@ -24,16 +24,64 @@ public class MainActivity : AvaloniaMainActivity
     /// <summary>Текущая активность - для системных окон согласия. null, пока приложение в фоне.</summary>
     public static MainActivity? Current { get; private set; }
 
+    /// <summary>Плитка в шторке попросила подключиться - выполняем, когда приложение готово.</summary>
+    private static bool _connectRequested;
+
+    /// <summary>Подписка плитки на состояние туннеля - одна на процесс.</summary>
+    private static bool _tileHooked;
+
     protected override void OnCreate(Bundle? savedInstanceState)
     {
         base.OnCreate(savedInstanceState);
         Current = this;
+        TakeConnectRequest(Intent);
+    }
+
+    // SingleTop: приложение уже открыто - новый запрос приходит сюда, а не в OnCreate
+    protected override void OnNewIntent(Intent? intent)
+    {
+        base.OnNewIntent(intent);
+        TakeConnectRequest(intent);
     }
 
     protected override void OnResume()
     {
         base.OnResume();
         Current = this;
+
+        HookTile();
+
+        // Подключаемся после OnResume: системному окну согласия на VPN нужна видимая активность
+        if (_connectRequested && App.Shell is { } shell)
+        {
+            _connectRequested = false;
+            shell.Dispatch(shell.ConnectFromOutside);
+        }
+    }
+
+    private static void TakeConnectRequest(Intent? intent)
+    {
+        if (intent?.GetBooleanExtra(CvpnTileService.ConnectExtra, false) != true) return;
+
+        _connectRequested = true;
+        intent.RemoveExtra(CvpnTileService.ConnectExtra);
+    }
+
+    /// <summary>
+    /// Плитка в шторке обновляется сама, только пока шторка открыта. Остальное
+    /// время просим систему обновить её при каждой смене состояния туннеля.
+    /// </summary>
+    private void HookTile()
+    {
+        if (_tileHooked || App.Shell is not { } shell) return;
+
+        _tileHooked = true;
+        var context = ApplicationContext!;
+        shell.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName is nameof(ViewModels.MainViewModel.State) or nameof(ViewModels.MainViewModel.Active))
+                CvpnTileService.RequestUpdate(context);
+        };
     }
 
     protected override void OnDestroy()

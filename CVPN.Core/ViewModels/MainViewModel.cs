@@ -515,6 +515,24 @@ public sealed class MainViewModel : ObservableObject
 #endif
 
     /// <summary>
+    /// Подключиться по просьбе снаружи - из плитки в шторке Android. Если туннель
+    /// уже поднят или поднимается, ничего не делает: повторное нажатие не должно
+    /// его ронять.
+    /// </summary>
+    public void ConnectFromOutside()
+    {
+        if (State is TunnelState.Connected or TunnelState.Connecting) return;
+        if (ToggleConnection.CanExecute(null)) ToggleConnection.Execute(null);
+    }
+
+    /// <summary>Переключить из плитки: подключено - отключиться, иначе подключиться.</summary>
+    public void ToggleFromOutside()
+    {
+        if (State == TunnelState.Connecting) return;
+        if (ToggleConnection.CanExecute(null)) ToggleConnection.Execute(null);
+    }
+
+    /// <summary>
     /// Перед установкой обновления: туннель снимается штатно - с возвратом прокси
     /// и kill switch, - а настройки сохраняются. Иначе установщик застал бы
     /// запущенное ядро и занятые файлы.
