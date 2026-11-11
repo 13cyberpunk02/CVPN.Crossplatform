@@ -174,13 +174,14 @@
         <Style Selector="Panel#Pulse.failing Ellipse">
             <Setter Property="Stroke" Value="{DynamicResource Danger}" />
         </Style>
-        <!-- Спокойное дыхание: ~1,8 с на вдох и столько же на выдох -->
+        <!-- Спокойное дыхание: ~1,6 с на вдох и столько же на выдох. Внизу гаснет полностью -
+             тогда видно только бегущий хвост кольца, на пике горит весь круг -->
         <Style Selector="Panel#Pulse:not(.connecting)">
             <Style.Animations>
-                <Animation Duration="0:0:1.8" IterationCount="Infinite" PlaybackDirection="Alternate"
+                <Animation Duration="0:0:1.6" IterationCount="Infinite" PlaybackDirection="Alternate"
                            Easing="SineEaseInOut">
                     <KeyFrame Cue="0%">
-                        <Setter Property="Opacity" Value="0.08" />
+                        <Setter Property="Opacity" Value="0" />
                     </KeyFrame>
                     <KeyFrame Cue="100%">
                         <Setter Property="Opacity" Value="1" />
@@ -261,18 +262,39 @@
             <Ellipse x:Name="SweepRing" StrokeThickness="2.5" Margin="2" />
         </Panel>
 
-        <!-- Обводка кнопки цвета состояния: размытый ореол и чёткая линия ровно по краю.
-             Лежит под кнопкой - внутренняя половина ореола скрыта, снаружи видно сияние -->
-        <Panel x:Name="Pulse" Width="196" Height="196" IsHitTestVisible="False"
+        <!-- Дышащая обводка цвета состояния - ровно поверх градиентного кольца (194 px).
+             Три слоя: широкий мягкий ореол, плотное свечение и сама линия. На пике весь
+             круг горит целиком, на спаде гаснет полностью. Лежит под кнопкой: внутренняя
+             половина ореола скрыта, наружу идёт сияние.
+             Панель шире кольца с запасом: размытие обрезается по границам элемента,
+             и без запаса сияние не выходило бы наружу -->
+        <Panel x:Name="Pulse" Width="274" Height="274" IsHitTestVisible="False"
                Classes.connected="{Binding IsConnected}"
                Classes.connecting="{Binding IsConnecting}"
                Classes.failing="{Binding IsFailing}">
-            <Ellipse StrokeThickness="10" Margin="6">
-                <Ellipse.Effect>
-                    <BlurEffect Radius="10" />
-                </Ellipse.Effect>
-            </Ellipse>
-            <Ellipse StrokeThickness="2" Margin="5" />
+            <!-- Внешнее сияние вокруг всего круга: именно оно делает «вдох» заметным -->
+            <Panel Width="274" Height="274">
+                <Ellipse Width="228" Height="228" StrokeThickness="22" Opacity="0.7">
+                    <Ellipse.Effect>
+                        <BlurEffect Radius="18" />
+                    </Ellipse.Effect>
+                </Ellipse>
+            </Panel>
+            <Panel Width="274" Height="274">
+                <Ellipse Width="194" Height="194" StrokeThickness="30" Opacity="0.8">
+                    <Ellipse.Effect>
+                        <BlurEffect Radius="26" />
+                    </Ellipse.Effect>
+                </Ellipse>
+            </Panel>
+            <Panel Width="274" Height="274">
+                <Ellipse Width="194" Height="194" StrokeThickness="10">
+                    <Ellipse.Effect>
+                        <BlurEffect Radius="8" />
+                    </Ellipse.Effect>
+                </Ellipse>
+            </Panel>
+            <Ellipse Width="194" Height="194" StrokeThickness="3.5" />
         </Panel>
 
         <!-- Кнопка -->

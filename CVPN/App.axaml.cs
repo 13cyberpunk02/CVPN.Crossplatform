@@ -142,11 +142,12 @@ public partial class App : Application
             .FirstOrDefault(a => a.StartsWith("--snapshot=", StringComparison.Ordinal));
         if (arg is null || _topLevel is not Window window) return;
 
-        // Формат: путь.png[|ширина[|высота]]
+        // Формат: путь.png[|ширина[|высота[|задержка, мс]]] - задержка нужна, чтобы поймать кадр анимации
         var parts = arg["--snapshot=".Length..].Split('|');
         var spec = parts[0];
         var width = parts.Length > 1 && int.TryParse(parts[1], out var w) ? w : 980;
         var height = parts.Length > 2 && int.TryParse(parts[2], out var h) ? h : width < 720 ? 820 : 660;
+        var delay = parts.Length > 3 && int.TryParse(parts[3], out var ms) ? ms : 1200;
 
         window.Width = width;
         window.Height = height;
@@ -155,7 +156,7 @@ public partial class App : Application
 
         window.Opened += async (_, _) =>
         {
-            await Task.Delay(1200);
+            await Task.Delay(delay);
 
             // --scroll-end: показать низ длинной страницы - окно не бывает выше экрана
             if (scrollEnd)
