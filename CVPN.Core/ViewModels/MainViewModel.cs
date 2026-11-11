@@ -500,6 +500,113 @@ public sealed class MainViewModel : ObservableObject
             await Task.Delay(TimeSpan.FromSeconds(2));
             await MeasureAsync();
         });
+
+        StartWatchdog();
+    }
+
+    // ===================== сторож подключения =====================
+
+    private IUiTimer? _watchdog;
+    private int _watchFailures;
+    private bool _watchBusy;
+
+    /// <summary>Перезапусков упавшего ядра подряд. Обнуляется, когда связь снова есть.</summary>
+    private int _restarts;
+
+    /// <summary>Об отказе всех серверов сказали - не повторяем, пока связь не вернётся.</summary>
+    private bool _allDownReported;
+
+    private void StartWatchdog()
+    {
+        StopWatchdog();
+        if (!Settings.AutoReconnect) return;
+
+        _watchFailures = 0;
+        _allDownReported = false;
+        _watchdog = Platform.Ui.CreateTimer(Failover.CheckInterval, () => _ = WatchAsync());
+        _watchdog.Start();
+    }
+
+    private void StopWatchdog()
+    {
+        _watchdog?.Stop();
+        _watchdog = null;
+    }
+
+    /// <summary>
+    /// Проверка: ходит ли трафик через текущий сервер. Меряет само ядро -
+    /// значит, проверяется вся цепочка, а не только то, что сервер жив.
+    /// </summary>
+    private async Task WatchAsync()
+    {
+        if (_watchBusy || _stats is null || State != TunnelState.Connected) return;
+
+        _watchBusy = true;
+        try
+        {
+            var ms = await _stats.MeasureDelayAsync();
+
+            if (ms >= 0)
+            {
+                _watchFailures = 0;
+                _restarts = 0;
+                _allDownReported = false;
+                if (Active is not null) Active.LatencyMs = ms;
+                return;
+            }
+
+            _watchFailures++;
+            Append($"[cvpn] watchdog: the server did not answer ({_watchFailures}/{Failover.FailuresBeforeSwitch})");
+
+            if (_watchFailures < Failover.FailuresBeforeSwitch) return;
+
+            _watchFailures = 0;
+            await SwitchToLiveServerAsync();
+        }
+        finally
+        {
+            _watchBusy = false;
+        }
+    }
+
+    /// <summary>
+    /// Текущий сервер не отвечает - меряем остальные через ядро и переходим на
+    /// самый быстрый. Автовыбор быстрейшего ядро делает само, тогда только пишем в лог.
+    /// </summary>
+    private async Task SwitchToLiveServerAsync()
+    {
+        if (_stats is null) return;
+
+        if (Settings.AutoSelectFastest && Profiles.Count > 1)
+        {
+            Append("[cvpn] watchdog: auto-select is on, the core picks another server itself");
+            return;
+        }
+
+        var tags = ConfigBuilder.BuildTags([.. Profiles]);
+        var stats = _stats;
+
+        var measured = await Task.WhenAll(tags
+            .Where(t => !ReferenceEquals(t.Key, Active))
+            .Select(async t => (Profile: t.Key, DelayMs: await stats.MeasureDelayAsync(t.Value))));
+
+        var replacement = Failover.PickReplacement(Active, measured);
+
+        if (replacement is null)
+        {
+            // Не ответил никто - скорее всего, пропал сам интернет. Метаться
+            // между серверами бессмысленно: ждём, сторож проверит ещё раз
+            Append("[cvpn] watchdog: no server answers, waiting for the network");
+            if (!_allDownReported) Notify(Loc.T("Watch_AllDown"));
+            _allDownReported = true;
+            return;
+        }
+
+        var failed = Active?.Name ?? "";
+        Append($"[cvpn] watchdog: {failed} is down, switching to {replacement.Name}");
+        Notify(Loc.T("Watch_Switched", failed, replacement.Name));
+
+        await SelectServerAsync(replacement);
     }
 
 #if DEBUG
@@ -550,6 +657,9 @@ public sealed class MainViewModel : ObservableObject
         _adapterRetryUsed = false;
         _adapterErrorSeen = false;
 
+        // Отключение руками - сторож не должен поднимать туннель обратно
+        _restarts = 0;
+
         Platform.SystemProxy.Restore();
         _uptimeTimer.Stop();
         if (Active is not null) Active.LatencyMs = -1;
@@ -567,6 +677,7 @@ public sealed class MainViewModel : ObservableObject
 
     private async Task TeardownAsync()
     {
+        StopWatchdog();
         await ByeDpiPage.StopAsync();
 
         if (Platform.KillSwitch.IsActive)
@@ -709,6 +820,26 @@ public sealed class MainViewModel : ObservableObject
             await Task.Delay(TimeSpan.FromSeconds(3));
             await ConnectAsync(retry: true);
 
+            return;
+        }
+
+        // Сторож: ядро упало посреди работы - поднимаем заново, с растущей паузой.
+        // Несколько неудач подряд - сдаёмся и показываем ошибку, а не крутимся вечно
+        if (Settings.AutoReconnect && _restarts < Failover.MaxRestarts && Active is not null)
+        {
+            _restarts++;
+
+            Append($"[cvpn] core stopped (code {exit.Code}), restarting: attempt {_restarts} of {Failover.MaxRestarts}");
+            Notify(Loc.T("Watch_Restarting", _restarts, Failover.MaxRestarts));
+            State = TunnelState.Connecting;
+
+            await TeardownAsync();
+            await Task.Delay(Failover.RestartDelay(_restarts));
+
+            // Пока ждали, пользователь мог нажать «Отключить»
+            if (State != TunnelState.Connecting) return;
+
+            await ConnectAsync(retry: true);
             return;
         }
 

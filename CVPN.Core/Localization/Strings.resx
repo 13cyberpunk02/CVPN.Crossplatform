@@ -1535,4 +1535,19 @@ Restart CVPN now?</value>
   <data name="Sub_QuotaLeft" xml:space="preserve">
     <value>{0} left</value>
   </data>
+  <data name="Watch_Restarting" xml:space="preserve">
+    <value>The core stopped, restarting (attempt {0} of {1})</value>
+  </data>
+  <data name="Watch_AllDown" xml:space="preserve">
+    <value>No server is answering. The internet seems to be down - CVPN keeps checking.</value>
+  </data>
+  <data name="Watch_Switched" xml:space="preserve">
+    <value>Server "{0}" is not answering - switched to "{1}"</value>
+  </data>
+  <data name="Settings_AutoReconnectHint" xml:space="preserve">
+    <value>If the server stops answering, switch to another working one; if the core stops, start it again</value>
+  </data>
+  <data name="Settings_AutoReconnect" xml:space="preserve">
+    <value>Keep the connection alive</value>
+  </data>
 </root>

@@ -99,6 +99,16 @@ public sealed class AppSettings : ObservableObject
     }
 
     /// <summary>
+    /// Следить за подключением: сервер перестал отвечать - перейти на другой,
+    /// ядро упало - перезапустить. По умолчанию включено.
+    /// </summary>
+    public bool AutoReconnect
+    {
+        get;
+        set => Set(ref field, value);
+    } = true;
+
+    /// <summary>
     /// Подписки провайдеров. Их может быть несколько - основная и запасная.
     /// Ссылки шифруются внутри Subscription.
     /// </summary>

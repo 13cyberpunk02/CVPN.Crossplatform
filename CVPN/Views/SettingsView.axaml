@@ -172,6 +172,15 @@
                         <ToggleSwitch IsChecked="{Binding Settings.AutoConnect}" />
                     </Grid>
 
+                    <Border Classes="divider" />
+                    <Grid Classes="row" ColumnDefinitions="*,Auto">
+                        <StackPanel>
+                            <TextBlock Text="{loc:T Settings_AutoReconnect}" />
+                            <TextBlock Classes="caption" Text="{loc:T Settings_AutoReconnectHint}" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <ToggleSwitch IsChecked="{Binding Settings.AutoReconnect}" />
+                    </Grid>
+
                     <StackPanel IsVisible="{Binding ShowAutoStart}">
                         <Border Classes="divider" />
                         <Grid Classes="row" ColumnDefinitions="*,Auto">

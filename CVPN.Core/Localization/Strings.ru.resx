@@ -1535,4 +1535,19 @@
   <data name="Sub_QuotaLeft" xml:space="preserve">
     <value>осталось {0}</value>
   </data>
+  <data name="Watch_Restarting" xml:space="preserve">
+    <value>Ядро остановилось, перезапускаю (попытка {0} из {1})</value>
+  </data>
+  <data name="Watch_AllDown" xml:space="preserve">
+    <value>Ни один сервер не отвечает. Похоже, пропал интернет - CVPN продолжит проверять.</value>
+  </data>
+  <data name="Watch_Switched" xml:space="preserve">
+    <value>Сервер «{0}» не отвечает - переключился на «{1}»</value>
+  </data>
+  <data name="Settings_AutoReconnectHint" xml:space="preserve">
+    <value>Сервер перестал отвечать - перейти на другой живой сервер; ядро остановилось - запустить его снова</value>
+  </data>
+  <data name="Settings_AutoReconnect" xml:space="preserve">
+    <value>Восстанавливать подключение</value>
+  </data>
 </root>
