@@ -80,6 +80,8 @@
         <Style Selector="ProgressBar.share">
             <Setter Property="Height" Value="3" />
             <Setter Property="MinHeight" Value="3" />
+            <!-- У Fluent у полосы есть минимальная ширина - на узком экране она вылезала на плашки -->
+            <Setter Property="MinWidth" Value="0" />
             <Setter Property="CornerRadius" Value="2" />
             <Setter Property="Minimum" Value="0" />
             <Setter Property="Maximum" Value="1" />
@@ -93,21 +95,61 @@
             <Setter Property="Foreground" Value="{DynamicResource Warning}" />
         </Style>
 
+        <!-- Плашки трафика: стрелка и число с воздухом, у каждой свой цвет - как на главной -->
+        <Style Selector="Border.traffic">
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="9,4" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Border.traffic TextBlock">
+            <Setter Property="FontFamily" Value="{StaticResource Font.Mono}" />
+            <Setter Property="FontSize" Value="{StaticResource Size.Caption}" />
+            <Setter Property="Foreground" Value="{DynamicResource Text}" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Border.traffic Path.icon">
+            <Setter Property="Width" Value="12" />
+            <Setter Property="Height" Value="12" />
+            <Setter Property="StrokeThickness" Value="2" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Border.traffic.down">
+            <Setter Property="Background" Value="{DynamicResource Tint.Accent}" />
+        </Style>
+        <Style Selector="Border.traffic.down Path.icon">
+            <Setter Property="Stroke" Value="{DynamicResource Accent}" />
+        </Style>
+        <Style Selector="Border.traffic.up">
+            <Setter Property="Background" Value="{DynamicResource Tint.Upload}" />
+        </Style>
+        <Style Selector="Border.traffic.up Path.icon">
+            <Setter Property="Stroke" Value="{DynamicResource Upload}" />
+        </Style>
+
         <!-- Действия строки: на десктопе справа от полоски доли, на телефоне - отдельной строкой -->
         <Style Selector="StackPanel.rowActions">
-            <Setter Property="Grid.Row" Value="1" />
-            <Setter Property="Grid.Column" Value="2" />
+            <Setter Property="Grid.Row" Value="0" />
+            <Setter Property="Grid.Column" Value="3" />
             <Setter Property="HorizontalAlignment" Value="Right" />
-            <Setter Property="Margin" Value="16,8,0,0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="16,0,0,0" />
         </Style>
         <Style Selector=".narrow StackPanel.rowActions">
-            <Setter Property="Grid.Row" Value="2" />
+            <Setter Property="Grid.Row" Value="1" />
+            <Setter Property="Grid.Column" Value="0" />
+            <Setter Property="Grid.ColumnSpan" Value="4" />
+            <Setter Property="Margin" Value="0,10,0,0" />
+        </Style>
+        <Style Selector="Grid.trafficRow">
+            <Setter Property="Grid.Column" Value="1" />
+            <Setter Property="Grid.ColumnSpan" Value="2" />
+            <Setter Property="Margin" Value="12,10,0,0" />
+        </Style>
+        <!-- На телефоне вторая строка начинается от края карточки, а не от текста -->
+        <Style Selector=".narrow Grid.trafficRow">
             <Setter Property="Grid.Column" Value="0" />
             <Setter Property="Grid.ColumnSpan" Value="3" />
-            <Setter Property="Margin" Value="0,9,0,0" />
-        </Style>
-        <Style Selector=".narrow ProgressBar.share">
-            <Setter Property="Grid.ColumnSpan" Value="2" />
+            <Setter Property="Margin" Value="0,10,0,0" />
         </Style>
     </UserControl.Styles>
 
@@ -154,17 +196,28 @@
                 </Grid>
             </Border>
             <Border Classes="tile">
-                <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
-                    <Border Grid.RowSpan="2" Classes="badge small neutral">
+                <!-- Как остальные плитки: значок, значение, подпись. Приём и отдача - в строку,
+                     с промежутком, а не столбиком стрелка к стрелке -->
+                <Grid ColumnDefinitions="Auto,*">
+                    <Border Classes="badge small neutral">
                         <Path Classes="icon" Data="{StaticResource Icon.Chart}" />
                     </Border>
-                    <StackPanel Grid.Column="1" Margin="10,0,0,0" Orientation="Horizontal" Spacing="5">
-                        <Path Classes="icon meta" Data="{StaticResource Icon.Down}" Stroke="{DynamicResource Accent}" />
-                        <TextBlock Classes="mono" Foreground="{DynamicResource Text}" Text="{Binding TotalDownloadLabel}" />
-                    </StackPanel>
-                    <StackPanel Grid.Row="1" Grid.Column="1" Margin="10,2,0,0" Orientation="Horizontal" Spacing="5">
-                        <Path Classes="icon meta" Data="{StaticResource Icon.Up}" Stroke="{DynamicResource Upload}" />
-                        <TextBlock Classes="mono" Foreground="{DynamicResource Text}" Text="{Binding TotalUploadLabel}" />
+                    <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
+                        <WrapPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="4" Margin="0,0,12,4">
+                                <Path Classes="icon meta" Data="{StaticResource Icon.Down}" Stroke="{DynamicResource Accent}"
+                                      StrokeThickness="2" />
+                                <TextBlock Classes="mono" FontWeight="SemiBold" Foreground="{DynamicResource Text}"
+                                           Text="{Binding TotalDownloadLabel}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="4" Margin="0,0,0,4">
+                                <Path Classes="icon meta" Data="{StaticResource Icon.Up}" Stroke="{DynamicResource Upload}"
+                                      StrokeThickness="2" />
+                                <TextBlock Classes="mono" FontWeight="SemiBold" Foreground="{DynamicResource Text}"
+                                           Text="{Binding TotalUploadLabel}" />
+                            </StackPanel>
+                        </WrapPanel>
+                        <TextBlock Classes="caption" Text="{loc:T Connections_Traffic}" />
                     </StackPanel>
                 </Grid>
             </Border>
@@ -250,28 +303,37 @@
                                 </WrapPanel>
                             </StackPanel>
 
-                            <!-- Трафик и время: цифры столбиком, как на главной -->
-                            <StackPanel Grid.Column="2" Margin="12,0,0,0" VerticalAlignment="Center" Spacing="2">
-                                <StackPanel Orientation="Horizontal" Spacing="4" HorizontalAlignment="Right">
-                                    <Path Classes="icon meta" Data="{StaticResource Icon.Down}" Stroke="{DynamicResource Accent}" />
-                                    <TextBlock Classes="mono" FontSize="{StaticResource Size.Caption}"
-                                               Foreground="{DynamicResource Text}" Text="{Binding DownloadLabel}" />
+                            <!-- Длительность - в углу карточки, отдельно от трафика -->
+                            <Border Grid.Column="2" Classes="tag neutral" Padding="7,2" Margin="12,0,0,0"
+                                    VerticalAlignment="Top">
+                                <StackPanel Orientation="Horizontal" Spacing="5">
+                                    <Path Classes="icon meta" Data="{StaticResource Icon.Clock}" Width="11" Height="11"
+                                          Stroke="{DynamicResource TextMuted}" />
+                                    <TextBlock FontFamily="{StaticResource Font.Mono}" Text="{Binding DurationLabel}" />
                                 </StackPanel>
-                                <StackPanel Orientation="Horizontal" Spacing="4" HorizontalAlignment="Right">
-                                    <Path Classes="icon meta" Data="{StaticResource Icon.Up}" Stroke="{DynamicResource Upload}" />
-                                    <TextBlock Classes="mono" FontSize="{StaticResource Size.Caption}" Text="{Binding UploadLabel}" />
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" Spacing="4" HorizontalAlignment="Right">
-                                    <Path Classes="icon meta" Data="{StaticResource Icon.Clock}" />
-                                    <TextBlock Classes="caption" Foreground="{DynamicResource TextFaint}"
-                                               FontFamily="{StaticResource Font.Mono}" Text="{Binding DurationLabel}" />
-                                </StackPanel>
-                            </StackPanel>
+                            </Border>
 
-                            <!-- Доля от самого тяжёлого соединения -->
-                            <ProgressBar Grid.Row="1" Grid.Column="1" Classes="share" VerticalAlignment="Center"
-                                         Classes.direct="{Binding IsDirect}" Classes.byedpi="{Binding IsByeDpi}"
-                                         Margin="12,8,0,0" Value="{Binding Share}" />
+                            <!-- Вторая строка: приём и отдача - рядом, каждый в своей плашке; полоска доли
+                                 тянется между ними и кнопками -->
+                            <Grid Grid.Row="1" Classes="trafficRow"
+                                  ColumnDefinitions="Auto,Auto,*,Auto" RowDefinitions="Auto,Auto">
+                                <Border Classes="traffic down">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <Path Classes="icon" Data="{StaticResource Icon.Down}" />
+                                        <TextBlock Text="{Binding DownloadLabel}" />
+                                    </StackPanel>
+                                </Border>
+                                <Border Grid.Column="1" Classes="traffic up" Margin="8,0,0,0">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <Path Classes="icon" Data="{StaticResource Icon.Up}" />
+                                        <TextBlock Text="{Binding UploadLabel}" />
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Доля от самого тяжёлого соединения -->
+                                <ProgressBar Grid.Column="2" Classes="share" VerticalAlignment="Center"
+                                             Classes.direct="{Binding IsDirect}" Classes.byedpi="{Binding IsByeDpi}"
+                                             Margin="14,0,0,0" Value="{Binding Share}" />
 
                             <!-- Предлагаем противоположное тому, что происходит сейчас:
                                  для прокси - «напрямую», для прямого - «через прокси» -->
@@ -309,6 +371,7 @@
                                     <Path Classes="icon" Data="{StaticResource Icon.X}" />
                                 </Button>
                             </StackPanel>
+                            </Grid>
                         </Grid>
                     </Border>
                 </DataTemplate>
