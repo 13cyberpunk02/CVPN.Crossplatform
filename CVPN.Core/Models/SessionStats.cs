@@ -70,12 +70,14 @@ public sealed class SessionStats : ObservableObject
     [JsonIgnore]
     public bool HasData => Started is not null;
 
-    public void Begin(string server)
+    /// <param name="server">Имя сервера.</param>
+    /// <param name="started">Начало сессии; по умолчанию - сейчас.</param>
+    public void Begin(string server, DateTimeOffset? started = null)
     {
         _upload = _download = _peakUpload = _peakDownload = 0;
 
         Server = server;
-        Started = DateTimeOffset.Now;
+        Started = started ?? DateTimeOffset.Now;
 
         RaiseAll();
     }

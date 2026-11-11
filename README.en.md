@@ -9,6 +9,7 @@
 Windows · Linux · Android
 
 [![Release](https://img.shields.io/github/v/release/13cyberpunk02/CVPN.Crossplatform)](https://github.com/13cyberpunk02/CVPN.Crossplatform/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/13cyberpunk02/CVPN.Crossplatform/total?color=2ea8f0)](https://github.com/13cyberpunk02/CVPN.Crossplatform/releases)
 [![Tests](https://github.com/13cyberpunk02/CVPN.Crossplatform/actions/workflows/tests.yml/badge.svg)](https://github.com/13cyberpunk02/CVPN.Crossplatform/actions/workflows/tests.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
@@ -18,7 +19,7 @@ Windows · Linux · Android
 
 <p align="center">
   <img src="docs/screenshots/connection-dark.png" width="49%" alt="Connection, dark theme" />
-  <img src="docs/screenshots/profiles-light.png" width="49%" alt="Profiles, light theme" />
+  <img src="docs/screenshots/routing-light.png" width="49%" alt="Routing, light theme" />
 </p>
 
 CVPN builds a sing-box configuration from your server profiles and routing rules, runs the
@@ -38,22 +39,25 @@ version are read as is.
 - **Profiles:** `vless://`, `anytls://`, `naive+https://` links, subscriptions, importing a
   sing-box configuration from a file, export and sharing, latency check for all servers.
 - **Routing:** rules by geosite, geoip, domain, suffix, keyword, process and your own `.srs`
-  rule sets. Actions: via proxy, direct, via ByeDPI, block. Several rule sets and a
-  "where will this domain go" check.
+  rule sets. Actions: via proxy, direct, via ByeDPI, block. One-tap quick rules (ads,
+  Russian sites, YouTube, Telegram), several rule sets and a "where will this site go" check.
 - **ByeDPI** built in: sites routed "via ByeDPI" go straight to the internet, with the start
   of the connection disguised from DPI.
 - **Modes:** TUN (all system traffic) or system proxy.
 - **Kill switch:** Windows Firewall, nftables on Linux, the system "Always-on VPN" on Android.
 - **Tunnel service:** TUN without running the app as administrator (a Windows service,
   a systemd unit).
-- **Monitoring:** active connections with the rule each one matched, speed, session totals,
-  core log.
+- **Monitoring:** a speed chart for the last minute and session totals; active connections
+  with search and the rule each one matched; a core log with search, level filter, pause
+  and line copying.
+- **In-app updates:** a new version downloads, is checked against its SHA-256 and installs
+  itself on Windows, Linux (AppImage, .deb) and Android.
 - **Comfort:** auto-select the fastest server, auto-connect, start with the system, tray
   icon, dark and light themes, English and Russian.
 
 <p align="center">
-  <img src="docs/screenshots/routing-dark.png" width="49%" alt="Routing" />
-  <img src="docs/screenshots/settings-light.png" width="49%" alt="Settings" />
+  <img src="docs/screenshots/connections-dark.png" width="49%" alt="Connections" />
+  <img src="docs/screenshots/logs-light.png" width="49%" alt="Logs" />
 </p>
 
 ## Install
@@ -70,12 +74,16 @@ You don't need to install .NET: it is bundled.
 | Linux x64, archive | `CVPN-<version>-linux-x64.tar.gz` | Unpack, run `./CVPN` |
 | Android 6+ (arm64) | `CVPN-<version>-android-arm64.apk` | Open the file on the phone, allow installation |
 
+After that CVPN updates itself: "Settings → Updates → Update" (from version 1.2.0 on).
+Only an unpacked `tar.gz` cannot update itself: for it the button opens the release page.
+
 ## Quick start
 
-1. **Profiles**: paste a server link and press "Parse link", or enter a subscription URL.
+1. **Profiles**: copy a server link or a subscription URL and press "Paste from clipboard".
 2. **Connection**: pick a server and press the dial.
 3. **Routing**, optionally: what goes direct, what via the proxy, what via ByeDPI.
-   Rules are checked top to bottom; a separate setting at the bottom covers everything else.
+   You can start with the quick rules. Rules are checked top to bottom; a separate setting
+   at the bottom covers everything else.
 
 TUN mode captures all system traffic and needs privileges. Without them, use system proxy
 mode: turn off "TUN mode" in the settings.
@@ -108,12 +116,20 @@ TUN needs administrator rights. Three options:
 
 ### Android
 
+<p align="center">
+  <img src="docs/screenshots/phone-connection.png" width="32%" alt="Connection on a phone" />
+  <img src="docs/screenshots/phone-routing.png" width="32%" alt="Routing on a phone" />
+  <img src="docs/screenshots/phone-logs.png" width="32%" alt="Logs on a phone" />
+</p>
+
 - On the first connection the system asks for VPN permission.
 - **Kill switch** is enabled in Android settings: "Network → VPN → CVPN → Always-on VPN"
   and "Block connections without VPN".
 - ByeDPI and the core are built in; no paths to set.
 - arm64 only, which covers almost every phone from recent years.
 - NaiveProxy is not available on Android, same as in the official sing-box build.
+- On the first in-app update Android asks to let CVPN install apps; the settings open by
+  themselves.
 
 ## Data
 
@@ -203,7 +219,8 @@ non-Latin characters, that is the Mono AOT compiler: set a Latin temp folder,
 **Debugging.** `CVPN_DATA_DIR=<folder>` sets a custom data folder. In a Debug build:
 `--page=<connection|profiles|routing|connections|logs|byedpi|settings>`,
 `--theme=dark|light`, `--snapshot=file.png[|width[|height]]` and `--scroll-end` render
-the window to a PNG and exit.
+the window to a PNG and exit, `--demo` fills in made-up traffic, connections and log lines
+for screenshots.
 
 </details>
 

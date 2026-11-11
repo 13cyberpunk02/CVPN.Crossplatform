@@ -497,6 +497,18 @@ public sealed class MainViewModel : ObservableObject
         });
     }
 
+#if DEBUG
+    /// <summary>Отладочный снимок: показать подключённое состояние без ядра.</summary>
+    public void ShowDemoConnected(long up, long down)
+    {
+        State = TunnelState.Connected;
+        Uptime = "01:24:37";
+        (Upload, UploadUnit) = ByteFormat.Rate(up);
+        (Download, DownloadUnit) = ByteFormat.Rate(down);
+        if (Active is not null) Active.LatencyMs = 84;
+    }
+#endif
+
     /// <summary>
     /// Перед установкой обновления: туннель снимается штатно - с возвратом прокси
     /// и kill switch, - а настройки сохраняются. Иначе установщик застал бы

@@ -188,7 +188,8 @@ public partial class App : Application
             new Services.ReleaseAsset("CVPN-1.2.0-portable.zip", "https://github.com", 88_953_583, null)
         ]));
 
-        shell.Session.Begin("Amsterdam - Reality");
+        shell.Session.Begin(shell.Active?.Name ?? "Demo", DateTimeOffset.Now.AddSeconds(-5077));
+        long lastUp = 0, lastDown = 0;
         for (var i = 0; i < 60; i++)
         {
             var wave = Math.Sin(i / 6.0) * 0.5 + 0.5;
@@ -198,7 +199,10 @@ public partial class App : Application
 
             shell.Session.Add(up, down);
             shell.Traffic.Push(up, down);
+            (lastUp, lastDown) = (up, down);
         }
+
+        shell.ShowDemoConnected(lastUp, lastDown);
 
         foreach (var line in (string[])
         [
