@@ -75,26 +75,27 @@
             </Style.Animations>
         </Style>
 
-        <!-- Ядро круга - кнопка. При наведении чуть приближается -->
+        <!-- Ядро круга - объёмная кнопка: выпуклая заливка, скос по краю, тень под ней
+             и внутренняя тень снизу. При наведении чуть приближается и светлеет -->
         <Style Selector="Button#Core">
-            <Setter Property="Background" Value="{DynamicResource Surface}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource Line}" />
-            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Background" Value="{DynamicResource DialFace}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource DialRim}" />
+            <Setter Property="BorderThickness" Value="1.5" />
             <Setter Property="CornerRadius" Value="92" />
             <Setter Property="Padding" Value="0" />
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
         <Style Selector="Button#Core:pointerover">
-            <Setter Property="Background" Value="{DynamicResource SurfaceRaised}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource LineHover}" />
+            <Setter Property="Background" Value="{DynamicResource DialFaceHover}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource DialRim}" />
             <Setter Property="RenderTransform" Value="scale(1.03)" />
         </Style>
         <Style Selector="Button#Core:pressed">
             <Setter Property="RenderTransform" Value="scale(0.97)" />
         </Style>
         <Style Selector="Button#Core /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="BoxShadow" Value="0 10 30 0 #33000000" />
+            <Setter Property="BoxShadow" Value="{DynamicResource DialShadow}" />
         </Style>
 
         <Style Selector="TextBlock#Metric.connected">
@@ -245,6 +246,10 @@
             </Arc.RenderTransform>
         </Arc>
 
+        <!-- Дорожка и дуга - тоже трубка: неподвижный свет сверху, тень снизу -->
+        <Ellipse Width="216" Height="216" StrokeThickness="6" Stroke="{DynamicResource RingShade}"
+                 IsHitTestVisible="False" />
+
         <!-- Градиентное кольцо вокруг кнопки: вращается всегда, цвет и скорость - по состоянию.
              Под ним размытая копия - мягкое свечение того же цвета -->
         <Panel x:Name="Sweep" Width="198" Height="198" IsHitTestVisible="False"
@@ -254,13 +259,18 @@
             <Panel.RenderTransform>
                 <RotateTransform />
             </Panel.RenderTransform>
-            <Ellipse x:Name="SweepGlow" StrokeThickness="7">
+            <Ellipse x:Name="SweepGlow" StrokeThickness="8">
                 <Ellipse.Effect>
                     <BlurEffect Radius="12" />
                 </Ellipse.Effect>
             </Ellipse>
-            <Ellipse x:Name="SweepRing" StrokeThickness="2.5" Margin="2" />
+            <Ellipse x:Name="SweepRing" StrokeThickness="5" Margin="2" />
         </Panel>
+
+        <!-- Объём кольца: свет не вращается вместе с ним, поэтому кольцо читается как
+             трубка, которая крутится под неподвижной лампой -->
+        <Ellipse Width="194" Height="194" StrokeThickness="5" Stroke="{DynamicResource RingShade}"
+                 IsHitTestVisible="False" />
 
         <!-- Дышащая обводка цвета состояния - ровно поверх градиентного кольца (194 px).
              Три слоя: широкий мягкий ореол, плотное свечение и сама линия. На пике весь
@@ -297,8 +307,15 @@
             <Ellipse Width="194" Height="194" StrokeThickness="3.5" />
         </Panel>
 
-        <!-- Кнопка -->
+        <!-- Кнопка в слое с 3D-поворотом: при наведении наклоняется вслед за курсором
+             (см. ConnectDial.axaml.cs). Блик стекла наклоняется вместе с ней -->
+        <Panel x:Name="Tilt" Width="184" Height="184">
+            <Panel.RenderTransform>
+                <Rotate3DTransform Depth="520" />
+            </Panel.RenderTransform>
+
         <Button x:Name="Core" Width="184" Height="184" Click="OnCoreClick" HorizontalAlignment="Center"
+                PointerMoved="OnCorePointerMoved" PointerExited="OnCorePointerExited"
                 ToolTip.Tip="{Binding Active.Endpoint, FallbackValue=''}">
             <StackPanel Width="164">
                 <!-- Значок страны: картинкой, потому что не каждая ОС рисует флаги-эмодзи -->
@@ -333,5 +350,10 @@
                            Classes.connected="{Binding IsConnected}" />
             </StackPanel>
         </Button>
+
+            <!-- Блик выпуклого стекла сверху. Не перехватывает нажатия -->
+            <Ellipse Width="150" Height="84" VerticalAlignment="Top" Margin="0,5,0,0"
+                     Fill="{DynamicResource DialSheen}" IsHitTestVisible="False" />
+        </Panel>
     </Panel>
 </UserControl>

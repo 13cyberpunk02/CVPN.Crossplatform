@@ -114,6 +114,38 @@
                 <GradientStop Offset="1" Color="#002DD4A7" />
             </RadialGradientBrush>
 
+            <!-- Объёмная кнопка подключения: выпуклая линза, свет сверху слева -->
+            <RadialGradientBrush x:Key="DialFace" Center="50%,35%" GradientOrigin="36%,22%" RadiusX="78%" RadiusY="78%">
+                <GradientStop Offset="0" Color="#FF2A4057" />
+                <GradientStop Offset="0.55" Color="#FF172535" />
+                <GradientStop Offset="1" Color="#FF0B131C" />
+            </RadialGradientBrush>
+            <RadialGradientBrush x:Key="DialFaceHover" Center="50%,35%" GradientOrigin="36%,22%" RadiusX="78%" RadiusY="78%">
+                <GradientStop Offset="0" Color="#FF324B66" />
+                <GradientStop Offset="0.55" Color="#FF1C2D40" />
+                <GradientStop Offset="1" Color="#FF0D1721" />
+            </RadialGradientBrush>
+            <!-- Скос по краю: светлый сверху, тёмный снизу -->
+            <LinearGradientBrush x:Key="DialRim" StartPoint="50%,0%" EndPoint="50%,100%">
+                <GradientStop Offset="0" Color="#59FFFFFF" />
+                <GradientStop Offset="0.5" Color="#0DFFFFFF" />
+                <GradientStop Offset="1" Color="#99000000" />
+            </LinearGradientBrush>
+            <!-- Блик стекла в верхней части кнопки -->
+            <RadialGradientBrush x:Key="DialSheen" Center="50%,15%" GradientOrigin="50%,15%" RadiusX="55%" RadiusY="85%">
+                <GradientStop Offset="0" Color="#26FFFFFF" />
+                <GradientStop Offset="0.6" Color="#0AFFFFFF" />
+                <GradientStop Offset="1" Color="#00FFFFFF" />
+            </RadialGradientBrush>
+            <!-- Затенение кольца-трубки: неподвижный свет над вращающимся кольцом -->
+            <LinearGradientBrush x:Key="RingShade" StartPoint="50%,0%" EndPoint="50%,100%">
+                <GradientStop Offset="0" Color="#73FFFFFF" />
+                <GradientStop Offset="0.42" Color="#00FFFFFF" />
+                <GradientStop Offset="0.58" Color="#00000000" />
+                <GradientStop Offset="1" Color="#99000000" />
+            </LinearGradientBrush>
+            <BoxShadows x:Key="DialShadow">0 18 36 0 #80000000, inset 0 -10 20 0 #66000000, inset 0 3 8 0 #1FFFFFFF</BoxShadows>
+
             <!-- Акцент Fluent - для контролов, которые мы не перерисовываем -->
             <Color x:Key="SystemAccentColor">#FF2EA8F0</Color>
             <Color x:Key="SystemAccentColorLight1">#FF55BAF4</Color>
@@ -292,6 +324,35 @@
                 <GradientStop Offset="0" Color="#4D1FB58A" />
                 <GradientStop Offset="1" Color="#001FB58A" />
             </RadialGradientBrush>
+
+            <!-- Объёмная кнопка подключения: выпуклая линза, свет сверху слева -->
+            <RadialGradientBrush x:Key="DialFace" Center="50%,35%" GradientOrigin="36%,22%" RadiusX="78%" RadiusY="78%">
+                <GradientStop Offset="0" Color="#FFFFFFFF" />
+                <GradientStop Offset="0.55" Color="#FFF3F7FB" />
+                <GradientStop Offset="1" Color="#FFD6E1EB" />
+            </RadialGradientBrush>
+            <RadialGradientBrush x:Key="DialFaceHover" Center="50%,35%" GradientOrigin="36%,22%" RadiusX="78%" RadiusY="78%">
+                <GradientStop Offset="0" Color="#FFFFFFFF" />
+                <GradientStop Offset="0.55" Color="#FFF8FBFD" />
+                <GradientStop Offset="1" Color="#FFDEE8F0" />
+            </RadialGradientBrush>
+            <LinearGradientBrush x:Key="DialRim" StartPoint="50%,0%" EndPoint="50%,100%">
+                <GradientStop Offset="0" Color="#FFFFFFFF" />
+                <GradientStop Offset="0.5" Color="#14000000" />
+                <GradientStop Offset="1" Color="#40002040" />
+            </LinearGradientBrush>
+            <RadialGradientBrush x:Key="DialSheen" Center="50%,15%" GradientOrigin="50%,15%" RadiusX="55%" RadiusY="85%">
+                <GradientStop Offset="0" Color="#E6FFFFFF" />
+                <GradientStop Offset="0.6" Color="#40FFFFFF" />
+                <GradientStop Offset="1" Color="#00FFFFFF" />
+            </RadialGradientBrush>
+            <LinearGradientBrush x:Key="RingShade" StartPoint="50%,0%" EndPoint="50%,100%">
+                <GradientStop Offset="0" Color="#99FFFFFF" />
+                <GradientStop Offset="0.42" Color="#00FFFFFF" />
+                <GradientStop Offset="0.58" Color="#00000000" />
+                <GradientStop Offset="1" Color="#4D002040" />
+            </LinearGradientBrush>
+            <BoxShadows x:Key="DialShadow">0 16 32 0 #330A3550, inset 0 -10 18 0 #1F0A3550, inset 0 3 6 0 #FFFFFFFF</BoxShadows>
 
             <!-- Акцент Fluent - для контролов, которые мы не перерисовываем -->
             <Color x:Key="SystemAccentColor">#FF0A84D6</Color>
