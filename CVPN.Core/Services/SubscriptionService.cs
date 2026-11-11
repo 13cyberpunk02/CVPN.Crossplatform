@@ -14,6 +14,14 @@ public static class SubscriptionService
 {
     private static readonly HttpClient Http = new() { Timeout = TimeSpan.FromSeconds(20) };
 
+    /// <summary>
+    /// Как приложение представляется панели. Панели выбирают формат ответа по
+    /// User-Agent: увидев «sing-box», «clash» или «hiddify», они отдают готовый
+    /// конфиг этого клиента вместо списка ссылок, а разбирается только список.
+    /// Поэтому имена других клиентов здесь упоминать нельзя.
+    /// </summary>
+    public static string UserAgent => $"CVPN/{UpdateChecker.CurrentVersion.ToString(3)}";
+
     public static async Task<(List<ServerProfile> Profiles, string Error, SubscriptionInfo Info)> FetchAsync(
         string url, CancellationToken ct = default)
     {
@@ -27,8 +35,7 @@ public static class SubscriptionService
         try
         {
             using var request = new HttpRequestMessage(HttpMethod.Get, url);
-            // Некоторые панели отдают разный формат в зависимости от клиента
-            request.Headers.TryAddWithoutValidation("User-Agent", "CVPN/1.0 (sing-box)");
+            request.Headers.TryAddWithoutValidation("User-Agent", UserAgent);
 
             using var response = await Http.SendAsync(request, ct);
             if (!response.IsSuccessStatusCode)

@@ -115,4 +115,18 @@ public class SubscriptionTests
         Assert.Equal(updated, sub.Updated);
         Assert.Equal("", state.Settings.SubscriptionUrl);
     }
+
+    [Theory]
+    [InlineData("sing")]
+    [InlineData("box")]
+    [InlineData("clash")]
+    [InlineData("hiddify")]
+    [InlineData("v2ray")]
+    [InlineData("SFA")]
+    public void Панель_не_принимает_приложение_за_другой_клиент(string client)
+    {
+        // Иначе панель отдаст конфиг этого клиента вместо списка ссылок
+        Assert.DoesNotContain(client, SubscriptionService.UserAgent, StringComparison.OrdinalIgnoreCase);
+        Assert.StartsWith("CVPN/", SubscriptionService.UserAgent);
+    }
 }
