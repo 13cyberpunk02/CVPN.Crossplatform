@@ -164,6 +164,45 @@
             </Style.Animations>
         </Style>
 
+        <!-- ===== обводка кнопки: разгорается и гаснет целиком ===== -->
+        <Style Selector="Panel#Pulse Ellipse">
+            <Setter Property="Stroke" Value="{DynamicResource Accent}" />
+        </Style>
+        <Style Selector="Panel#Pulse.connected Ellipse">
+            <Setter Property="Stroke" Value="{DynamicResource Connected}" />
+        </Style>
+        <Style Selector="Panel#Pulse.failing Ellipse">
+            <Setter Property="Stroke" Value="{DynamicResource Danger}" />
+        </Style>
+        <!-- Спокойное дыхание: ~1,8 с на вдох и столько же на выдох -->
+        <Style Selector="Panel#Pulse:not(.connecting)">
+            <Style.Animations>
+                <Animation Duration="0:0:1.8" IterationCount="Infinite" PlaybackDirection="Alternate"
+                           Easing="SineEaseInOut">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="0.08" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="1" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <!-- Подключение: пульс чаще - идёт работа -->
+        <Style Selector="Panel#Pulse.connecting">
+            <Style.Animations>
+                <Animation Duration="0:0:0.7" IterationCount="Infinite" PlaybackDirection="Alternate"
+                           Easing="SineEaseInOut">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="0.15" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="1" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+
         <Style Selector="Line.tick">
             <Setter Property="Stroke" Value="{DynamicResource LineStrong}" />
             <Setter Property="StrokeThickness" Value="1" />
@@ -220,6 +259,20 @@
                 </Ellipse.Effect>
             </Ellipse>
             <Ellipse x:Name="SweepRing" StrokeThickness="2.5" Margin="2" />
+        </Panel>
+
+        <!-- Обводка кнопки цвета состояния: размытый ореол и чёткая линия ровно по краю.
+             Лежит под кнопкой - внутренняя половина ореола скрыта, снаружи видно сияние -->
+        <Panel x:Name="Pulse" Width="196" Height="196" IsHitTestVisible="False"
+               Classes.connected="{Binding IsConnected}"
+               Classes.connecting="{Binding IsConnecting}"
+               Classes.failing="{Binding IsFailing}">
+            <Ellipse StrokeThickness="10" Margin="6">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="10" />
+                </Ellipse.Effect>
+            </Ellipse>
+            <Ellipse StrokeThickness="2" Margin="5" />
         </Panel>
 
         <!-- Кнопка -->

@@ -201,7 +201,9 @@ public sealed class CvpnVpnService : VpnService
         var notification = builder
             .SetContentTitle("CVPN")!
             .SetContentText(Loc.T("State_Connected"))!
-            .SetSmallIcon(Resource.Drawable.Icon)!
+            .SetSmallIcon(Resource.Drawable.ic_stat_cvpn)!
+            // Лазурный акцент значка и заголовка в шторке - цвет приложения
+            .SetColor(global::Android.Graphics.Color.ParseColor("#2EA8F0"))!
             .SetContentIntent(open)!
             .SetOngoing(true)!
             .Build()!;

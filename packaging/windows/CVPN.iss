@@ -72,6 +72,10 @@ Filename: "{sys}\sc.exe"; Parameters: "description CVPNTunnel ""Туннель C
 ; перед копированием файлов её останавливает PrepareToInstall. Службы нет - sc вернёт ошибку
 Filename: "{sys}\sc.exe"; Parameters: "start CVPNTunnel"; Flags: runhidden
 
+; Прежний WPF-клиент лежал по тому же пути с другой иконкой, и Windows продолжала
+; показывать её из кэша на панели задач и в меню «Пуск». Сбрасываем кэш значков
+Filename: "{sys}\ie4uinit.exe"; Parameters: "-show"; Flags: runhidden skipifdoesntexist
+
 Filename: "{app}\{#AppExe}"; Description: "Запустить {#AppName}"; Flags: nowait postinstall skipifsilent
 
 [UninstallRun]
