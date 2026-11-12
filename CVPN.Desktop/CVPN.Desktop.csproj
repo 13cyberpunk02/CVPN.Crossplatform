@@ -23,9 +23,13 @@
     <ProjectReference Include="..\CVPN.Service\CVPN.Service.csproj" ReferenceOutputAssembly="false" Private="false" />
   </ItemGroup>
 
-  <!-- Linux: юнит systemd и скрипт установки службы лежат рядом с приложением -->
+  <!-- Linux: скрипт установки службы лежит рядом с приложением, в linux/.
+       Путь задан через Link явно: LinkBase действует только на файлы вне проекта,
+       и папка уезжала в пакет как «Linux» - на Windows регистр не важен, а на
+       Linux приложение её не находило -->
   <ItemGroup>
-    <None Include="Linux\**" CopyToOutputDirectory="PreserveNewest" LinkBase="linux" />
+    <None Update="Linux\**" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest"
+          Link="linux\%(Filename)%(Extension)" />
   </ItemGroup>
 
   <Target Name="CopyServiceOutput" AfterTargets="Build">

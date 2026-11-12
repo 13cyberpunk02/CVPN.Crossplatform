@@ -91,6 +91,18 @@ fi
 EOF
 chmod 755 "$DEB/DEBIAN/prerm"
 
+# До 1.2.3 скрипт службы лежал в Linux/ вместо linux/, и обходной путь был
+# ссылкой linux -> Linux. Ссылку убираем: иначе dpkg положит новый скрипт
+# через неё в старую папку и тут же удалит его вместе с ней
+cat > "$DEB/DEBIAN/preinst" <<'EOF'
+#!/bin/sh
+set -e
+if [ -L /opt/cvpn/app/linux ]; then
+    rm -f /opt/cvpn/app/linux
+fi
+EOF
+chmod 755 "$DEB/DEBIAN/preinst"
+
 dpkg-deb --root-owner-group --build "$DEB" "$OUT/cvpn_${VERSION}_amd64.deb"
 
 echo "== AppImage =="
